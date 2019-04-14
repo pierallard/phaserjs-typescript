@@ -1,6 +1,7 @@
 import Sprite = Phaser.Sprite;
 import {BLOCKTIME, TILE_SIZE, TIME} from "./game_state/Play";
-import {Ground, GROUND_SIZE} from "./Ground";
+import {COLOR, Ground, GROUND_SIZE} from "./Ground";
+import {BagItem, BagItemKey} from "./BagItem";
 
 export default class Player {
   private static ANIMATION_LEFT = 'LEFT';
@@ -18,10 +19,12 @@ export default class Player {
   private pressedKeys: Phaser.Key[] = [];
   private isProcessing: boolean = false;
   private ground: Ground;
+  private bag: BagItem[];
 
   constructor(ground: Ground) {
     this.ground = ground;
     this.position = ground.getPlayerPosition();
+    this.bag = [];
   }
 
   create(game: Phaser.Game) {
@@ -82,6 +85,10 @@ export default class Player {
     }
   }
 
+  public getPosition(): PIXI.Point {
+    return this.position;
+  }
+
   private runAnimation(game: Phaser.Game, animationName: string, gapX: number, gapY: number) {
     this.isProcessing = true;
     this.sprite.animations.play(animationName);
@@ -92,11 +99,13 @@ export default class Player {
     }, TIME, Phaser.Easing.Default, true);
     game.time.events.add(TIME, () => {
       this.isProcessing = false;
+      this.ground.act(this, newPosition);
       this.pressedKeys.shift();
       this.position.x += gapX;
       this.position.y += gapY;
       this.sprite.x = Player.getPosition(this.position).x;
       this.sprite.y = Player.getPosition(this.position).y;
+
       this.sprite.animations.stop();
       if (animationName === Player.ANIMATION_LEFT) {
         this.sprite.frame = 103;
@@ -138,7 +147,7 @@ export default class Player {
     })
   }
 
-  private static getPosition(point: PIXI.Point) {
+  static getPosition(point: PIXI.Point) {
     return new PIXI.Point((point.x + 0.5) * TILE_SIZE, (point.y + 0.5) * TILE_SIZE);
   }
 
@@ -159,6 +168,35 @@ export default class Player {
     if (point.y >= GROUND_SIZE) {
       return false;
     }
-    return this.ground.isCellAccessible(point);
+    return this.ground.isCellAccessible(this, point);
+  }
+
+  hasAllChips() {
+    return false;
+  }
+
+  hasKey(color: COLOR) {
+    console.log(this.getKeyIndex(color));
+    return this.getKeyIndex(color) >= 0;
+  }
+
+  addItem(bagItemKey: BagItemKey) {
+    this.bag.push(bagItemKey);
+  }
+
+  removeKey(color: COLOR) {
+    const index = this.getKeyIndex(color);
+    this.bag.splice(index, 1);
+  }
+
+  getKeyIndex(color: COLOR) {
+    for (let i = 0; i < this.bag.length; i++) {
+      const bagItem = this.bag[i];
+      if (bagItem instanceof BagItemKey && bagItem.getColor() === color) {
+        return i;
+      }
+    }
+
+    return -1;
   }
 }
