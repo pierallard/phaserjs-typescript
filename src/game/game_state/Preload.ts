@@ -13,8 +13,10 @@ export default class Preload extends Phaser.State {
     }
 
     private loadImages() {
+        this.game.load.spritesheet('chips', 'assets/images/chips.png', 12, 12)
     }
 
     private loadFonts() {
+        this.game.load.bitmapFont('font', 'assets/fonts/font.png', 'assets/fonts/font.xml');
     }
 }
