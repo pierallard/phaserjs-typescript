@@ -2,11 +2,12 @@
 
 import Boot from "./game/game_state/Boot";
 import Preload from "./game/game_state/Preload";
-import Play, {TILE_SIZE} from "./game/game_state/Play";
+import Play from "./game/game_state/Play";
 
 export const SCALE = 5;
-const GAME_WIDTH = 9 * TILE_SIZE * SCALE;
-const GAME_HEIGHT = 9 * TILE_SIZE * SCALE;
+export const PIXELS_WIDTH = 102;
+const GAME_WIDTH = PIXELS_WIDTH * SCALE + 58 * SCALE;
+const GAME_HEIGHT = PIXELS_WIDTH * SCALE;
 
 class SimpleGame extends Phaser.Game {
     constructor() {

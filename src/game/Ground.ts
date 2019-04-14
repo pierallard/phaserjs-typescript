@@ -1,6 +1,6 @@
 import {TILE_SIZE, TIME} from "./game_state/Play";
 import Player from "./Player";
-import {BagItem, BagItemKey} from "./BagItem";
+import {BagItemKey} from "./BagItem";
 
 export const GROUND_SIZE = 32;
 
@@ -75,7 +75,10 @@ class ChipCell extends EmptyCell {
   }
 
   act(player: Player) {
-    this.sprite.frame = 0;
+    if (this.sprite.frame !== 0) {
+      this.sprite.frame = 0;
+      player.addChip();
+    }
   }
 }
 
@@ -250,6 +253,8 @@ export class Ground {
         }
       }
     }
+
+    return new PIXI.Point(0, 0);
   }
 
   isCellAccessible(player: Player, point: PIXI.Point) {

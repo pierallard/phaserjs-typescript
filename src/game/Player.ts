@@ -2,6 +2,7 @@ import Sprite = Phaser.Sprite;
 import {BLOCKTIME, TILE_SIZE, TIME} from "./game_state/Play";
 import {COLOR, Ground, GROUND_SIZE} from "./Ground";
 import {BagItem, BagItemKey} from "./BagItem";
+import Menu from "./Menu";
 
 export default class Player {
   private static ANIMATION_LEFT = 'LEFT';
@@ -10,6 +11,7 @@ export default class Player {
   private static ANIMATION_DOWN = 'DOWN';
   private sprite: Sprite;
   private position: PIXI.Point;
+  private chips: number;
 
   private leftKey: Phaser.Key;
   private rightKey: Phaser.Key;
@@ -20,11 +22,14 @@ export default class Player {
   private isProcessing: boolean = false;
   private ground: Ground;
   private bag: BagItem[];
+  private menu: Menu;
 
-  constructor(ground: Ground) {
+  constructor(ground: Ground, menu: Menu) {
     this.ground = ground;
+    this.menu = menu;
     this.position = ground.getPlayerPosition();
     this.bag = [];
+    this.chips = 0;
   }
 
   create(game: Phaser.Game) {
@@ -83,10 +88,6 @@ export default class Player {
         }
       }
     }
-  }
-
-  public getPosition(): PIXI.Point {
-    return this.position;
   }
 
   private runAnimation(game: Phaser.Game, animationName: string, gapX: number, gapY: number) {
@@ -154,7 +155,7 @@ export default class Player {
   }
 
   render(game: Phaser.Game) {
-    //game.debug.cameraInfo(game.camera, 32, 32);
+    //game.debug.cameraInfo(game.camera, 0, 10);
   }
 
   private isCellAccessible(point: PIXI.Point) {
@@ -206,5 +207,10 @@ export default class Player {
     }
 
     return -1;
+  }
+
+  addChip() {
+    this.chips++;
+    this.menu.updateChips(this.chips);
   }
 }
