@@ -20,8 +20,8 @@ export default class Player {
   private ground: Ground;
 
   constructor(ground: Ground) {
-    this.position = new PIXI.Point(GROUND_SIZE / 2, GROUND_SIZE / 2);
     this.ground = ground;
+    this.position = ground.getPlayerPosition();
   }
 
   create(game: Phaser.Game) {
