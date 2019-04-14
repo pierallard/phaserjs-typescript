@@ -5,10 +5,10 @@ import {BagItem, BagItemKey} from "./BagItem";
 export const GROUND_SIZE = 32;
 
 export enum COLOR {
-  RED,
-  BLUE,
-  YELLOW,
-  GREEN
+  RED = 'RED',
+  BLUE = 'BLUE',
+  YELLOW = 'YELLOW',
+  GREEN = 'GREEN'
 }
 
 class Cell {
@@ -73,6 +73,10 @@ class ChipCell extends EmptyCell {
 
     this.sprite.frame = 74;
   }
+
+  act(player: Player) {
+    this.sprite.frame = 0;
+  }
 }
 
 abstract class DoorCell extends EmptyCell {
@@ -86,8 +90,10 @@ abstract class DoorCell extends EmptyCell {
   }
 
   act(player: Player) {
-    this.sprite.frame = 0;
-    player.removeKey(this.color);
+    if (this.sprite.frame !== 0) {
+      this.sprite.frame = 0;
+      player.removeKey(this.color);
+    }
   }
 }
 
@@ -124,6 +130,12 @@ class GreenDoorCell extends DoorCell {
 
     this.color = COLOR.GREEN;
     this.sprite.frame = 69;
+  }
+
+  act(player: Player) {
+    if (this.sprite.frame !== 0) {
+      this.sprite.frame = 0;
+    }
   }
 }
 

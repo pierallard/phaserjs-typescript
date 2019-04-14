@@ -60,26 +60,26 @@ export default class Player {
         if (this.isCellAccessible(new PIXI.Point(this.position.x - 1, this.position.y))) {
           this.runAnimation(game, Player.ANIMATION_LEFT, -1, 0);
         } else {
-          this.runBlocked(game, Player.ANIMATION_LEFT);
+          this.runBlocked(game, Player.ANIMATION_LEFT, this.leftKey);
         }
       } else if (key === this.rightKey) {
         if (this.isCellAccessible(new PIXI.Point(this.position.x + 1, this.position.y))) {
           this.runAnimation(game, Player.ANIMATION_RIGHT, 1, 0);
         } else {
-          this.runBlocked(game, Player.ANIMATION_RIGHT);
+          this.runBlocked(game, Player.ANIMATION_RIGHT, this.rightKey);
         }
 
       } else if (key === this.upKey) {
         if (this.isCellAccessible(new PIXI.Point(this.position.x, this.position.y - 1))) {
           this.runAnimation(game, Player.ANIMATION_UP, 0, -1);
         } else {
-          this.runBlocked(game, Player.ANIMATION_UP);
+          this.runBlocked(game, Player.ANIMATION_UP, this.upKey);
         }
       } else if (key === this.downKey) {
         if (this.isCellAccessible(new PIXI.Point(this.position.x, this.position.y + 1))) {
           this.runAnimation(game, Player.ANIMATION_DOWN, 0, 1);
         } else {
-          this.runBlocked(game, Player.ANIMATION_DOWN);
+          this.runBlocked(game, Player.ANIMATION_DOWN, this.downKey);
         }
       }
     }
@@ -119,7 +119,7 @@ export default class Player {
     }, this)
   }
 
-  private runBlocked(game: Phaser.Game, animationName: string) {
+  private runBlocked(game: Phaser.Game, animationName: string, key: Phaser.Key) {
     if (animationName === Player.ANIMATION_LEFT) {
       this.sprite.frame = 113;
     } else if (animationName === Player.ANIMATION_RIGHT) {
@@ -143,7 +143,9 @@ export default class Player {
     });
     game.time.events.add(BLOCKTIME, () => {
       this.isProcessing = false;
-      this.pressedKeys.shift();
+      while (this.pressedKeys.length && this.pressedKeys[0] === key) {
+        this.pressedKeys.shift();
+      }
     })
   }
 
@@ -176,6 +178,7 @@ export default class Player {
   }
 
   hasKey(color: COLOR) {
+    console.log('has key ', color, '?');
     console.log(this.getKeyIndex(color));
     return this.getKeyIndex(color) >= 0;
   }
@@ -185,6 +188,9 @@ export default class Player {
   }
 
   removeKey(color: COLOR) {
+    if (!this.hasKey(color)) {
+      console.log('OOPS');
+    }
     const index = this.getKeyIndex(color);
     this.bag.splice(index, 1);
   }
@@ -192,7 +198,9 @@ export default class Player {
   getKeyIndex(color: COLOR) {
     for (let i = 0; i < this.bag.length; i++) {
       const bagItem = this.bag[i];
+      console.log(bagItem, color);
       if (bagItem instanceof BagItemKey && bagItem.getColor() === color) {
+        console.log('ok !');
         return i;
       }
     }
