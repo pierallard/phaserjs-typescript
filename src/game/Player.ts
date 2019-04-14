@@ -1,6 +1,6 @@
 import Sprite = Phaser.Sprite;
 import {BLOCKTIME, TILE_SIZE, TIME} from "./game_state/Play";
-import {GROUND_SIZE} from "./Ground";
+import {Ground, GROUND_SIZE} from "./Ground";
 
 export default class Player {
   private static ANIMATION_LEFT = 'LEFT';
@@ -17,9 +17,11 @@ export default class Player {
 
   private pressedKeys: Phaser.Key[] = [];
   private isProcessing: boolean = false;
+  private ground: Ground;
 
-  constructor() {
+  constructor(ground: Ground) {
     this.position = new PIXI.Point(GROUND_SIZE / 2, GROUND_SIZE / 2);
+    this.ground = ground;
   }
 
   create(game: Phaser.Game) {
@@ -137,7 +139,7 @@ export default class Player {
   }
 
   private static getPosition(point: PIXI.Point) {
-    return new PIXI.Point((point.x - 0.5) * TILE_SIZE, (point.y - 0.5) * TILE_SIZE);
+    return new PIXI.Point((point.x + 0.5) * TILE_SIZE, (point.y + 0.5) * TILE_SIZE);
   }
 
   render(game: Phaser.Game) {
@@ -145,18 +147,18 @@ export default class Player {
   }
 
   private isCellAccessible(point: PIXI.Point) {
-    if (point.x <= 0) {
+    if (point.x < 0) {
       return false;
     }
-    if (point.x > GROUND_SIZE) {
+    if (point.x >= GROUND_SIZE) {
       return false;
     }
-    if (point.y <= 0) {
+    if (point.y < 0) {
       return false;
     }
-    if (point.y > GROUND_SIZE) {
+    if (point.y >= GROUND_SIZE) {
       return false;
     }
-    return true;
+    return this.ground.isCellAccessible(point);
   }
 }

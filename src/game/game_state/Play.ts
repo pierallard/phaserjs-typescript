@@ -11,8 +11,8 @@ export default class Play extends Phaser.State {
 
   constructor() {
     super();
-    this.player = new Player();
     this.ground = new Ground();
+    this.player = new Player(this.ground);
   }
 
   public create(game: Phaser.Game) {
