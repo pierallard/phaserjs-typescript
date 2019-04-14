@@ -4,7 +4,7 @@ import Boot from "./game/game_state/Boot";
 import Preload from "./game/game_state/Preload";
 import Play from "./game/game_state/Play";
 
-export const SCALE = 2;
+export const SCALE = 5;
 const GAME_WIDTH = 1200;
 const GAME_HEIGHT = 800;
 
