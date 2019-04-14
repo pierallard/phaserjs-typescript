@@ -1,5 +1,6 @@
 import Sprite = Phaser.Sprite;
-import {TILE_SIZE, TIME} from "./game_state/Play";
+import {BLOCKTIME, TILE_SIZE, TIME} from "./game_state/Play";
+import {GROUND_SIZE} from "./Ground";
 
 export default class Player {
   private static ANIMATION_LEFT = 'LEFT';
@@ -18,7 +19,7 @@ export default class Player {
   private isProcessing: boolean = false;
 
   constructor() {
-    this.position = new PIXI.Point(16, 16);
+    this.position = new PIXI.Point(GROUND_SIZE / 2, GROUND_SIZE / 2);
   }
 
   create(game: Phaser.Game) {
@@ -51,13 +52,30 @@ export default class Player {
     if (this.pressedKeys.length && !this.isProcessing) {
       const key = this.pressedKeys[0];
       if (key === this.leftKey) {
-        this.runAnimation(game, Player.ANIMATION_LEFT, -1, 0);
+        if (this.isCellAccessible(new PIXI.Point(this.position.x - 1, this.position.y))) {
+          this.runAnimation(game, Player.ANIMATION_LEFT, -1, 0);
+        } else {
+          this.runBlocked(game, Player.ANIMATION_LEFT);
+        }
       } else if (key === this.rightKey) {
-        this.runAnimation(game, Player.ANIMATION_RIGHT, 1, 0);
+        if (this.isCellAccessible(new PIXI.Point(this.position.x + 1, this.position.y))) {
+          this.runAnimation(game, Player.ANIMATION_RIGHT, 1, 0);
+        } else {
+          this.runBlocked(game, Player.ANIMATION_RIGHT);
+        }
+
       } else if (key === this.upKey) {
-        this.runAnimation(game, Player.ANIMATION_UP, 0, -1);
+        if (this.isCellAccessible(new PIXI.Point(this.position.x, this.position.y - 1))) {
+          this.runAnimation(game, Player.ANIMATION_UP, 0, -1);
+        } else {
+          this.runBlocked(game, Player.ANIMATION_UP);
+        }
       } else if (key === this.downKey) {
-        this.runAnimation(game, Player.ANIMATION_DOWN, 0, 1);
+        if (this.isCellAccessible(new PIXI.Point(this.position.x, this.position.y + 1))) {
+          this.runAnimation(game, Player.ANIMATION_DOWN, 0, 1);
+        } else {
+          this.runBlocked(game, Player.ANIMATION_DOWN);
+        }
       }
     }
   }
@@ -66,7 +84,7 @@ export default class Player {
     this.isProcessing = true;
     this.sprite.animations.play(animationName);
     const newPosition = new PIXI.Point(this.position.x + gapX, this.position.y + gapY);
-    game.add.tween(this.sprite).to( {
+    game.add.tween(this.sprite).to({
       x: Player.getPosition(newPosition).x,
       y: Player.getPosition(newPosition).y
     }, TIME, Phaser.Easing.Default, true);
@@ -90,11 +108,55 @@ export default class Player {
     }, this)
   }
 
+  private runBlocked(game: Phaser.Game, animationName: string) {
+    if (animationName === Player.ANIMATION_LEFT) {
+      this.sprite.frame = 113;
+    } else if (animationName === Player.ANIMATION_RIGHT) {
+      this.sprite.frame = 145;
+    } else if (animationName === Player.ANIMATION_UP) {
+      this.sprite.frame = 108;
+    } else if (animationName === Player.ANIMATION_DOWN) {
+      this.sprite.frame = 140;
+    }
+    this.isProcessing = true;
+    game.time.events.add(BLOCKTIME / 2, () => {
+      if (animationName === Player.ANIMATION_LEFT) {
+        this.sprite.frame = 103;
+      } else if (animationName === Player.ANIMATION_RIGHT) {
+        this.sprite.frame = 135;
+      } else if (animationName === Player.ANIMATION_UP) {
+        this.sprite.frame = 98;
+      } else if (animationName === Player.ANIMATION_DOWN) {
+        this.sprite.frame = 130;
+      }
+    });
+    game.time.events.add(BLOCKTIME, () => {
+      this.isProcessing = false;
+      this.pressedKeys.shift();
+    })
+  }
+
   private static getPosition(point: PIXI.Point) {
     return new PIXI.Point((point.x - 0.5) * TILE_SIZE, (point.y - 0.5) * TILE_SIZE);
   }
 
   render(game: Phaser.Game) {
     //game.debug.cameraInfo(game.camera, 32, 32);
+  }
+
+  private isCellAccessible(point: PIXI.Point) {
+    if (point.x <= 0) {
+      return false;
+    }
+    if (point.x > GROUND_SIZE) {
+      return false;
+    }
+    if (point.y <= 0) {
+      return false;
+    }
+    if (point.y > GROUND_SIZE) {
+      return false;
+    }
+    return true;
   }
 }

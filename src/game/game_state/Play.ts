@@ -1,8 +1,9 @@
 import Player from "../Player";
-import {Ground} from "../Ground";
+import {Ground, GROUND_SIZE} from "../Ground";
 
 export const TILE_SIZE = 12;
 export const TIME = Phaser.Timer.SECOND / 3;
+export const BLOCKTIME = TIME / 1.5;
 
 export default class Play extends Phaser.State {
   private player: Player;
@@ -15,7 +16,7 @@ export default class Play extends Phaser.State {
   }
 
   public create(game: Phaser.Game) {
-    game.world.setBounds(0, 0, 32 * TILE_SIZE, 32 * TILE_SIZE);
+    game.world.setBounds(0, 0, GROUND_SIZE * TILE_SIZE, GROUND_SIZE * TILE_SIZE);
     this.ground.create(game);
     this.player.create(game);
   }
