@@ -1,6 +1,6 @@
-import {TILE_SIZE, TIME} from "./game_state/Play";
-import Player from "./Player";
-import {BagItemKey} from "./BagItem";
+import {TILE_SIZE, TIME} from "../game_state/Play";
+import Player from "../Player";
+import {BagItemKey} from "../BagItem";
 
 export const GROUND_SIZE = 32;
 
@@ -197,38 +197,12 @@ class GreenKeyCell extends KeyCell {
   }
 }
 
-export class Level {
-  private map = [
-    '                                ',
-    '                                ',
-    '                                ',
-    '                                ',
-    '                                ',
-    '                                ',
-    '                                ',
-    '                                ',
-    '          XXXXX XXXXX           ',
-    '          X   XXX   X           ',
-    '          X c XEX c X           ',
-    '        XXXXXGXDXGXXXXX         ',
-    '        X y B     R y X         ',
-    '        X c Xb   rX c X         ',
-    '        XXXXXc P cXXXXX         ',
-    '        X c Xb   rX c X         ',
-    '        X   R  c  B   X         ',
-    '        XXXXXXYXYXXXXXX         ',
-    '            X  X  X             ',
-    '            X cXc X             ',
-    '            X  Xg X             ',
-    '            XXXXXXX             '
-  ];
-
+export abstract class Level {
+  protected map = [];
+  protected chipsNeeded: number;
   private cells: Cell[][] = [];
-  private chipsNeeded: number;
 
   create(game: Phaser.Game) {
-    this.chipsNeeded = 1;
-
     for (let y = 0; y < GROUND_SIZE; y++) {
       this.cells[y] = [];
       for (let x = 0; x < GROUND_SIZE; x++) {

@@ -1,6 +1,6 @@
 import Sprite = Phaser.Sprite;
 import {BLOCKTIME, TILE_SIZE, TIME} from "./game_state/Play";
-import {COLOR, Level, GROUND_SIZE} from "./Level";
+import {COLOR, Level, GROUND_SIZE} from "./levels/Level";
 import {BagItem, BagItemKey} from "./BagItem";
 
 export default class Player {

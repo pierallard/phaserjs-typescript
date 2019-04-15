@@ -1,4 +1,4 @@
-import {COLOR} from "./Level";
+import {COLOR} from "./levels/Level";
 
 export class BagItem {
 

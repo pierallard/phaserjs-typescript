@@ -1,8 +1,8 @@
 import {PIXELS_WIDTH} from "../app";
 import BitmapText = Phaser.BitmapText;
-import {Level} from "./Level";
 import Player from "./Player";
 import {TIME} from "./game_state/Play";
+import {Level} from "./levels/Level";
 
 export default class Menu {
   private chipsLeftBitmap: BitmapText;

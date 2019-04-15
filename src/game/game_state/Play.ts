@@ -1,7 +1,8 @@
 import Player from "../Player";
-import {Level, GROUND_SIZE} from "../Level";
+import {Level, GROUND_SIZE} from "../levels/Level";
 import {PIXELS_WIDTH} from "../../app";
 import Menu from "../Menu";
+import Level001 from "../levels/Level001";
 
 export const TILE_SIZE = 12;
 export const TIME = Phaser.Timer.SECOND / 4;
@@ -14,7 +15,7 @@ export default class Play extends Phaser.State {
 
   constructor() {
     super();
-    this.level = new Level();
+    this.level = new Level001();
     this.player = new Player(this.level);
     this.menu = new Menu(this.level, this.player);
   }
