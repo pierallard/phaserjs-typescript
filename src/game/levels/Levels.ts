@@ -1,11 +1,6 @@
-import {Level} from "./Level";
-
-export default class Level001 extends Level {
-
-  constructor() {
-    super();
-
-    this.map = [
+export const LEVELS = [
+  {
+    map: [
       '                                ',
       '                                ',
       '                                ',
@@ -28,8 +23,30 @@ export default class Level001 extends Level {
       '            X cXc X             ',
       '            X  Xg X             ',
       '            XXXXXXX             '
-    ];
-
-    this.chipsNeeded = 11;
+    ],
+    chips: 1
+  },
+  {
+    map: [
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '         XXXXXXX                ',
+      '         X  c  X                ',
+      '         X     X                ',
+      '         X  X  XXXXXXXXXX       ',
+      '       XXX  X1  ww     cX       ',
+      '       XED  XX1 ww ppP  X       ',
+      '       XXX  X1  ww     cX       ',
+      '         X  X  XXXXXXXXXX       ',
+      '         X     X                ',
+      '         X  c  X                ',
+      '         XXXXXXX                ',
+    ],
+    chips: 2
   }
-}
+];

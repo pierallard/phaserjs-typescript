@@ -2,7 +2,6 @@ import Player from "../Player";
 import {Level, GROUND_SIZE} from "../levels/Level";
 import {PIXELS_WIDTH} from "../../app";
 import Menu from "../Menu";
-import Level001 from "../levels/Level001";
 
 export const TILE_SIZE = 12;
 export const TIME = Phaser.Timer.SECOND / 4;
@@ -12,10 +11,12 @@ export default class Play extends Phaser.State {
   private player: Player;
   private level: Level;
   private menu: Menu;
+  private levelNumber: number;
 
-  constructor() {
+  constructor(game: Phaser.Game, levelNumber: number = 1) {
     super();
-    this.level = new Level001();
+    this.levelNumber = levelNumber;
+    this.level = Level.getFromNumber(this.levelNumber);
     this.player = new Player(this.level);
     this.menu = new Menu(this.level, this.player);
   }
@@ -32,9 +33,37 @@ export default class Play extends Phaser.State {
   public update(game: Phaser.Game) {
     this.player.update(game);
     this.menu.update(game);
+    if (this.hasFinished()) {
+      this.state.add('Level' + (this.levelNumber + 1), new Play(game, this.levelNumber + 1));
+      this.state.start('Level' + (this.levelNumber + 1));
+    } else if (this.isDead()) {
+      this.state.states[this.state.current] = new Play(game, this.levelNumber);
+      this.state.restart(true)
+    }
   }
 
   public render(game: Phaser.Game) {
     this.player.render(game);
+  }
+
+  private hasFinished(): boolean {
+    return (
+      this.player.getPosition().x === this.level.getEndPosition().x &&
+      this.player.getPosition().y === this.level.getEndPosition().y
+    );
+  }
+
+  private isDead() {
+    const deadPositions = this.level.getDeadPositions();
+    for (let i = 0; i < deadPositions.length; i++) {
+      if (
+        this.player.getPosition().x === deadPositions[i].x &&
+        this.player.getPosition().y === deadPositions[i].y
+      ) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

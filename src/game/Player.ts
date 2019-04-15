@@ -24,12 +24,14 @@ export default class Player {
 
   constructor(level: Level) {
     this.level = level;
-    this.position = level.getPlayerPosition();
     this.bag = [];
     this.chips = 0;
   }
 
   create(game: Phaser.Game) {
+    this.position = this.level.getPlayerPosition();
+    this.pressedKeys = [];
+    this.isProcessing = false;
     this.sprite = game.add.sprite(Player.getPosition(this.position).x, Player.getPosition(this.position).y, 'chips', 130);
     this.sprite.anchor.set(0.5, 0.5);
     this.leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
@@ -178,8 +180,6 @@ export default class Player {
   }
 
   hasKey(color: COLOR) {
-    console.log('has key ', color, '?');
-    console.log(this.getKeyIndex(color));
     return this.getKeyIndex(color) >= 0;
   }
 
@@ -198,9 +198,7 @@ export default class Player {
   getKeyIndex(color: COLOR) {
     for (let i = 0; i < this.bag.length; i++) {
       const bagItem = this.bag[i];
-      console.log(bagItem, color);
       if (bagItem instanceof BagItemKey && bagItem.getColor() === color) {
-        console.log('ok !');
         return i;
       }
     }
@@ -218,5 +216,9 @@ export default class Player {
 
   canExit() {
     return this.chips >= this.level.getChipsNeeded();
+  }
+
+  getPosition(): PIXI.Point {
+    return this.position;
   }
 }

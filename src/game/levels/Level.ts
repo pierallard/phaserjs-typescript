@@ -1,6 +1,7 @@
 import {TILE_SIZE, TIME} from "../game_state/Play";
 import Player from "../Player";
 import {BagItemKey} from "../BagItem";
+import {LEVELS} from "./Levels";
 
 export const GROUND_SIZE = 32;
 
@@ -11,7 +12,7 @@ export enum COLOR {
   GREEN = 'GREEN'
 }
 
-class Cell {
+abstract class Cell {
   protected sprite: Phaser.Sprite;
 
   constructor(game: Phaser.Game, x: number, y: number) {
@@ -23,6 +24,10 @@ class Cell {
   }
 
   act(player: Player) {
+  }
+
+  isDead() {
+    return false;
   }
 }
 
@@ -158,6 +163,7 @@ abstract class KeyCell extends EmptyCell {
 
   act(player: Player) {
     this.keySprite.destroy();
+
     player.addItem(new BagItemKey(this.color));
   }
 }
@@ -197,7 +203,20 @@ class GreenKeyCell extends KeyCell {
   }
 }
 
-export abstract class Level {
+class WaterCell extends Cell {
+  constructor(game: Phaser.Game, x: number, y: number) {
+    super(game, x, y);
+
+    this.sprite.animations.add('DEFAULT', [24, 25, 26], Phaser.Timer.SECOND * 3 / TIME, true);
+    this.sprite.animations.play('DEFAULT');
+  }
+
+  isDead() {
+    return true;
+  }
+}
+
+export class Level {
   protected map = [];
   protected chipsNeeded: number;
   private cells: Cell[][] = [];
@@ -219,11 +238,19 @@ export abstract class Level {
           case 'y': this.cells[y][x] = new YellowKeyCell(game, x, y); break;
           case 'r': this.cells[y][x] = new RedKeyCell(game, x, y); break;
           case 'g': this.cells[y][x] = new GreenKeyCell(game, x, y); break;
-          case ' ':
-          default: this.cells[y][x] = new EmptyCell(game, x, y);
+          case 'w': this.cells[y][x] = new WaterCell(game, x, y); break;
+          case ' ': this.cells[y][x] = new EmptyCell(game, x, y); break;
+          default:
+            console.log('Unable to create cell from ' + this.letterAt(new PIXI.Point(x, y)));
+            this.cells[y][x] = new EmptyCell(game, x, y);
         }
       }
     }
+  }
+
+  constructor(map: string[], chipsNeeded: number) {
+    this.map = map;
+    this.chipsNeeded = chipsNeeded;
   }
 
   getChipsNeeded(): number {
@@ -255,5 +282,38 @@ export abstract class Level {
 
   act(player: Player, position: PIXI.Point) {
     this.cells[position.y][position.x].act(player);
+  }
+
+  static getFromNumber(levelNumber: number): Level {
+    console.log(levelNumber);
+    return new Level(
+      LEVELS[levelNumber].map,
+      LEVELS[levelNumber].chips
+    );
+  }
+
+  getEndPosition(): PIXI.Point {
+    for (let y = 0; y < GROUND_SIZE; y++) {
+      for (let x = 0; x < GROUND_SIZE; x++) {
+        if (this.letterAt(new PIXI.Point(x, y)) === 'E') {
+          return new PIXI.Point(x, y);
+        }
+      }
+    }
+
+    return new PIXI.Point(0, 0);
+  }
+
+  getDeadPositions(): PIXI.Point[] {
+    let result = [];
+    for (let y = 0; y < this.cells.length; y++) {
+      for (let x = 0; x < this.cells[y].length; x++) {
+        if (this.cells[y][x].isDead()) {
+          result.push(new PIXI.Point(x, y));
+        }
+      }
+    }
+
+    return result;
   }
 }
