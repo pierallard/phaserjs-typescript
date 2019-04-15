@@ -62,8 +62,12 @@ class ExitDoor extends Cell {
     this.sprite.frame = 70;
   }
 
-  isAccessible(player: Player) {
-    return player.hasAllChips();
+  isAccessible(player: Player): boolean {
+    return player.canExit();
+  }
+
+  act(player: Player) {
+    this.sprite.frame = 0;
   }
 }
 
@@ -223,7 +227,7 @@ export class Level {
   private chipsNeeded: number;
 
   create(game: Phaser.Game) {
-    this.chipsNeeded = 11;
+    this.chipsNeeded = 1;
 
     for (let y = 0; y < GROUND_SIZE; y++) {
       this.cells[y] = [];

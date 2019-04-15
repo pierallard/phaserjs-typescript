@@ -177,10 +177,6 @@ export default class Player {
     return this.level.isCellAccessible(this, point);
   }
 
-  hasAllChips() {
-    return false;
-  }
-
   hasKey(color: COLOR) {
     console.log('has key ', color, '?');
     console.log(this.getKeyIndex(color));
@@ -218,5 +214,9 @@ export default class Player {
 
   getChips(): number {
     return this.chips;
+  }
+
+  canExit() {
+    return this.chips >= this.level.getChipsNeeded();
   }
 }
