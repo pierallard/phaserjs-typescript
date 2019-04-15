@@ -193,7 +193,7 @@ class GreenKeyCell extends KeyCell {
   }
 }
 
-export class Ground {
+export class Level {
   private map = [
     '                                ',
     '                                ',
@@ -220,8 +220,11 @@ export class Ground {
   ];
 
   private cells: Cell[][] = [];
+  private chipsNeeded: number;
 
   create(game: Phaser.Game) {
+    this.chipsNeeded = 11;
+
     for (let y = 0; y < GROUND_SIZE; y++) {
       this.cells[y] = [];
       for (let x = 0; x < GROUND_SIZE; x++) {
@@ -243,6 +246,10 @@ export class Ground {
         }
       }
     }
+  }
+
+  getChipsNeeded(): number {
+    return this.chipsNeeded;
   }
 
   getPlayerPosition(): PIXI.Point {

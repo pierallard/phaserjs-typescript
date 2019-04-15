@@ -1,8 +1,7 @@
 import Sprite = Phaser.Sprite;
 import {BLOCKTIME, TILE_SIZE, TIME} from "./game_state/Play";
-import {COLOR, Ground, GROUND_SIZE} from "./Ground";
+import {COLOR, Level, GROUND_SIZE} from "./Level";
 import {BagItem, BagItemKey} from "./BagItem";
-import Menu from "./Menu";
 
 export default class Player {
   private static ANIMATION_LEFT = 'LEFT';
@@ -20,14 +19,12 @@ export default class Player {
 
   private pressedKeys: Phaser.Key[] = [];
   private isProcessing: boolean = false;
-  private ground: Ground;
+  private level: Level;
   private bag: BagItem[];
-  private menu: Menu;
 
-  constructor(ground: Ground, menu: Menu) {
-    this.ground = ground;
-    this.menu = menu;
-    this.position = ground.getPlayerPosition();
+  constructor(level: Level) {
+    this.level = level;
+    this.position = level.getPlayerPosition();
     this.bag = [];
     this.chips = 0;
   }
@@ -102,7 +99,7 @@ export default class Player {
     }, TIME, Phaser.Easing.Default, true);
     game.time.events.add(TIME, () => {
       this.isProcessing = false;
-      this.ground.act(this, newPosition);
+      this.level.act(this, newPosition);
       this.pressedKeys.shift();
       this.position.x += gapX;
       this.position.y += gapY;
@@ -177,7 +174,7 @@ export default class Player {
     if (point.y >= GROUND_SIZE) {
       return false;
     }
-    return this.ground.isCellAccessible(this, point);
+    return this.level.isCellAccessible(this, point);
   }
 
   hasAllChips() {
@@ -217,6 +214,9 @@ export default class Player {
 
   addChip() {
     this.chips++;
-    this.menu.updateChips(this.chips);
+  }
+
+  getChips(): number {
+    return this.chips;
   }
 }

@@ -1,15 +1,24 @@
 import {PIXELS_WIDTH} from "../app";
 import BitmapText = Phaser.BitmapText;
+import {Level} from "./Level";
+import Player from "./Player";
+import {TIME} from "./game_state/Play";
 
 export default class Menu {
-  private chipsLeft: number;
   private chipsLeftBitmap: BitmapText;
+  private level: Level;
+  private player: Player;
+  private chipsLeft: number;
+  private changeTime: number;
 
-  constructor() {
-    this.chipsLeft = 11;
+  constructor(level: Level, player: Player) {
+    this.level = level;
+    this.player = player;
   }
 
   create(game: Phaser.Game) {
+    this.chipsLeft = this.getChipsLeft();
+
     const menu = game.add.sprite(PIXELS_WIDTH, 0, 'menu');
     menu.fixedToCamera = true;
 
@@ -27,13 +36,34 @@ export default class Menu {
     this.chipsLeftBitmap.fixedToCamera = true;
   }
 
+  update(game: Phaser.Game) {
+    if (this.changeTime && game.time.now >= this.changeTime) {
+      if (this.chipsLeftBitmap.alpha === 0) {
+        this.chipsLeftBitmap.alpha = 1;
+      } else {
+        this.chipsLeftBitmap.alpha = 0;
+      }
+      this.changeTime = game.time.now + TIME * 2;
+    }
+    const oldChipsLeft = this.chipsLeft;
+    if (oldChipsLeft !== this.getChipsLeft()) {
+      this.chipsLeft = this.getChipsLeft();
+      this.chipsLeftBitmap.setText(' ' + Menu.pad(this.chipsLeft, 3));
+      if (this.chipsLeft === 0) {
+        this.changeTime = game.time.now + TIME * 2;
+      } else {
+        this.changeTime = null;
+        this.chipsLeftBitmap.alpha = 1;
+      }
+    }
+  }
+
   private static pad(n, width, z = '0') {
     n = n + '';
     return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
   }
 
-  updateChips(chips: number) {
-    const remaining = Math.max(this.chipsLeft - chips, 0);
-    this.chipsLeftBitmap.setText(' ' + Menu.pad(remaining, 3));
+  private getChipsLeft(): number {
+    return Math.max(this.level.getChipsNeeded() - this.player.getChips(), 0)
   }
 }
