@@ -23,11 +23,14 @@ abstract class Cell {
     return true;
   }
 
-  act(player: Player) {
+  animateEnd(player: Player) {
   }
 
   isDead() {
     return false;
+  }
+
+  animateBegin(player: Player) {
   }
 }
 
@@ -71,7 +74,7 @@ class ExitDoor extends Cell {
     return player.canExit();
   }
 
-  act(player: Player) {
+  animateBegin(player: Player) {
     this.sprite.frame = 0;
   }
 }
@@ -83,7 +86,7 @@ class ChipCell extends EmptyCell {
     this.sprite.frame = 74;
   }
 
-  act(player: Player) {
+  animateEnd(player: Player) {
     if (this.sprite.frame !== 0) {
       this.sprite.frame = 0;
       player.addChip();
@@ -101,7 +104,7 @@ abstract class DoorCell extends EmptyCell {
     return player.hasKey(this.color);
   }
 
-  act(player: Player) {
+  animateBegin(player: Player) {
     if (this.sprite.frame !== 0) {
       this.sprite.frame = 0;
       player.removeKey(this.color);
@@ -144,7 +147,7 @@ class GreenDoorCell extends DoorCell {
     this.sprite.frame = 69;
   }
 
-  act(player: Player) {
+  animateBegin(player: Player) {
     if (this.sprite.frame !== 0) {
       this.sprite.frame = 0;
     }
@@ -161,7 +164,7 @@ abstract class KeyCell extends EmptyCell {
     this.keySprite = game.add.sprite(x * TILE_SIZE, y * TILE_SIZE, 'chips');
   }
 
-  act(player: Player) {
+  animateEnd(player: Player) {
     this.keySprite.destroy();
 
     player.addItem(new BagItemKey(this.color));
@@ -216,10 +219,75 @@ class WaterCell extends Cell {
   }
 }
 
+abstract class GameObject {
+  protected cells: Cell[][];
+  protected sprite: Phaser.Sprite;
+  protected position: PIXI.Point;
+
+  constructor(game: Phaser.Game, x: number, y: number, cells: Cell[][]) {
+    this.cells = cells;
+    this.sprite = game.add.sprite(x * TILE_SIZE, y * TILE_SIZE, 'chips');
+    this.position = new PIXI.Point(x, y);
+  }
+
+  getPosition() {
+    return this.position;
+  }
+
+  act(game: Phaser.Game, player: Player, endPosition: PIXI.Point) {
+  }
+
+  isAccessible(player: Player, endPosition: PIXI.Point): boolean {
+    return true;
+  }
+}
+
+class Pack extends GameObject {
+  constructor(game: Phaser.Game, x: number, y: number, cells: Cell[][]) {
+    super(game, x, y, cells);
+
+    this.sprite.frame = 19 + 64;
+  }
+
+  act(game: Phaser.Game, player: Player, endPosition: PIXI.Point) {
+    const newPosition = new PIXI.Point(
+      this.position.x + this.diff(player, endPosition).x,
+      this.position.y + this.diff(player, endPosition).y
+    );
+    game.add.tween(this.sprite).to({
+      x: newPosition.x * TILE_SIZE,
+      y: newPosition.y * TILE_SIZE
+    }, TIME, Phaser.Easing.Default, true);
+    game.time.events.add(TIME, () => {
+      this.position = newPosition;
+      this.sprite.x = this.position.x * TILE_SIZE;
+      this.sprite.y = this.position.y * TILE_SIZE;
+    });
+  }
+
+  isAccessible(player: Player, endPosition: PIXI.Point) {
+    const newPosition = new PIXI.Point(
+      this.position.x + this.diff(player, endPosition).x,
+      this.position.y + this.diff(player, endPosition).y
+    );
+
+    return this.cells[newPosition.y][newPosition.x].isAccessible(player);
+  }
+
+  private diff(player: Player, endPosition: PIXI.Point): PIXI.Point {
+    const playerPosition = player.getPosition();
+    return new PIXI.Point(
+      endPosition.x - playerPosition.x,
+      endPosition.y - playerPosition.y
+    );
+  }
+}
+
 export class Level {
   protected map = [];
   protected chipsNeeded: number;
   private cells: Cell[][] = [];
+  private objects: GameObject[] = [];
 
   create(game: Phaser.Game) {
     for (let y = 0; y < GROUND_SIZE; y++) {
@@ -240,6 +308,7 @@ export class Level {
           case 'g': this.cells[y][x] = new GreenKeyCell(game, x, y); break;
           case 'w': this.cells[y][x] = new WaterCell(game, x, y); break;
           case ' ': this.cells[y][x] = new EmptyCell(game, x, y); break;
+          case 'p': this.cells[y][x] = new EmptyCell(game, x, y); this.objects.push(new Pack(game, x, y, this.cells)); break;
           default:
             console.log('Unable to create cell from ' + this.letterAt(new PIXI.Point(x, y)));
             this.cells[y][x] = new EmptyCell(game, x, y);
@@ -269,8 +338,18 @@ export class Level {
     return new PIXI.Point(0, 0);
   }
 
-  isCellAccessible(player: Player, point: PIXI.Point) {
-    return this.cells[point.y][point.x].isAccessible(player);
+  isCellAccessible(player: Player, endPosition: PIXI.Point) {
+    if (!this.cells[endPosition.y][endPosition.x].isAccessible(player)) {
+      return false;
+    }
+    for (let i = 0; i < this.objects.length; i++) {
+      if (this.objects[i].getPosition().x === endPosition.x && this.objects[i].getPosition().y === endPosition.y) {
+        console.log('ask is accessible');
+        return this.objects[i].isAccessible(player, endPosition);
+      }
+    }
+
+    return true;
   }
 
   private letterAt(point: PIXI.Point) {
@@ -280,8 +359,17 @@ export class Level {
     return this.map[point.y][point.x];
   }
 
-  act(player: Player, position: PIXI.Point) {
-    this.cells[position.y][position.x].act(player);
+  animateEnd(game: Phaser.Game, player: Player, endPosition: PIXI.Point) {
+    this.cells[endPosition.y][endPosition.x].animateEnd(player);
+  }
+
+  animateBegin(game: Phaser.Game, player: Player, endPosition: PIXI.Point) {
+    this.cells[endPosition.y][endPosition.x].animateBegin(player);
+    for (let i = 0; i < this.objects.length; i++) {
+      if (this.objects[i].getPosition().x === endPosition.x && this.objects[i].getPosition().y === endPosition.y) {
+        this.objects[i].act(game, player, endPosition);
+      }
+    }
   }
 
   static getFromNumber(levelNumber: number): Level {

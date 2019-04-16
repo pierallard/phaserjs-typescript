@@ -95,13 +95,14 @@ export default class Player {
       this.sprite.animations.play(animationName);
     }
     const newPosition = new PIXI.Point(this.position.x + gapX, this.position.y + gapY);
+    this.level.animateBegin(game, this, newPosition);
     game.add.tween(this.sprite).to({
       x: Player.getPosition(newPosition).x,
       y: Player.getPosition(newPosition).y
     }, TIME, Phaser.Easing.Default, true);
     game.time.events.add(TIME, () => {
       this.isProcessing = false;
-      this.level.act(this, newPosition);
+      this.level.animateEnd(game, this, newPosition);
       this.pressedKeys.shift();
       this.position.x += gapX;
       this.position.y += gapY;
