@@ -14,6 +14,7 @@ export default class Preload extends Phaser.State {
 
     private loadImages() {
       this.game.load.spritesheet('chips', 'assets/images/chips.png', 12, 12);
+      this.game.load.spritesheet('chips2', 'assets/images/chips2.png', 24, 24);
       this.game.load.image('menu', 'assets/images/menu.png');
     }
 

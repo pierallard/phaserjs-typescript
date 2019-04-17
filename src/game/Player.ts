@@ -2,6 +2,7 @@ import Sprite = Phaser.Sprite;
 import {BLOCKTIME, TILE_SIZE, TIME} from "./game_state/Play";
 import {COLOR, Level, GROUND_SIZE} from "./levels/Level";
 import {BagItem, BagItemKey} from "./BagItem";
+import Point from "./Point";
 
 export default class Player {
   private static ANIMATION_LEFT = 'LEFT';
@@ -9,7 +10,7 @@ export default class Player {
   private static ANIMATION_UP = 'UP';
   private static ANIMATION_DOWN = 'DOWN';
   private sprite: Sprite;
-  private position: PIXI.Point;
+  private position: Point;
   private chips: number;
 
   private leftKey: Phaser.Key;
@@ -61,26 +62,26 @@ export default class Player {
     if (this.pressedKeys.length && !this.isProcessing) {
       const key = this.pressedKeys[0];
       if (key === this.leftKey) {
-        if (this.isCellAccessible(new PIXI.Point(this.position.x - 1, this.position.y))) {
+        if (this.isCellAccessible(new Point(this.position.x - 1, this.position.y))) {
           this.runAnimation(game, Player.ANIMATION_LEFT, -1, 0);
         } else {
           this.runBlocked(game, Player.ANIMATION_LEFT, this.leftKey);
         }
       } else if (key === this.rightKey) {
-        if (this.isCellAccessible(new PIXI.Point(this.position.x + 1, this.position.y))) {
+        if (this.isCellAccessible(new Point(this.position.x + 1, this.position.y))) {
           this.runAnimation(game, Player.ANIMATION_RIGHT, 1, 0);
         } else {
           this.runBlocked(game, Player.ANIMATION_RIGHT, this.rightKey);
         }
 
       } else if (key === this.upKey) {
-        if (this.isCellAccessible(new PIXI.Point(this.position.x, this.position.y - 1))) {
+        if (this.isCellAccessible(new Point(this.position.x, this.position.y - 1))) {
           this.runAnimation(game, Player.ANIMATION_UP, 0, -1);
         } else {
           this.runBlocked(game, Player.ANIMATION_UP, this.upKey);
         }
       } else if (key === this.downKey) {
-        if (this.isCellAccessible(new PIXI.Point(this.position.x, this.position.y + 1))) {
+        if (this.isCellAccessible(new Point(this.position.x, this.position.y + 1))) {
           this.runAnimation(game, Player.ANIMATION_DOWN, 0, 1);
         } else {
           this.runBlocked(game, Player.ANIMATION_DOWN, this.downKey);
@@ -94,7 +95,7 @@ export default class Player {
     if (this.sprite.animations.currentAnim !== this.sprite.animations.getAnimation(animationName)) {
       this.sprite.animations.play(animationName);
     }
-    const newPosition = new PIXI.Point(this.position.x + gapX, this.position.y + gapY);
+    const newPosition = new Point(this.position.x + gapX, this.position.y + gapY);
     this.level.animateBegin(game, this, newPosition);
     game.add.tween(this.sprite).to({
       x: Player.getPosition(newPosition).x,
@@ -162,9 +163,10 @@ export default class Player {
 
   render(game: Phaser.Game) {
     //game.debug.cameraInfo(game.camera, 0, 10);
+    game.debug.text(this.getPosition().x + ',' + this.getPosition().y, 0, 10);
   }
 
-  private isCellAccessible(point: PIXI.Point) {
+  private isCellAccessible(point: Point) {
     if (point.x < 0) {
       return false;
     }
@@ -177,7 +179,7 @@ export default class Player {
     if (point.y >= GROUND_SIZE) {
       return false;
     }
-    return this.level.isCellAccessible(this, point);
+    return this.level.canPlayerGoTo(this, point);
   }
 
   hasKey(color: COLOR) {
@@ -219,7 +221,7 @@ export default class Player {
     return this.chips >= this.level.getChipsNeeded();
   }
 
-  getPosition(): PIXI.Point {
+  getPosition(): Point {
     return this.position;
   }
 }

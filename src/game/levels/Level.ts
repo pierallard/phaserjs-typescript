@@ -1,7 +1,15 @@
-import {TILE_SIZE, TIME} from "../game_state/Play";
 import Player from "../Player";
-import {BagItemKey} from "../BagItem";
 import {LEVELS} from "./Levels";
+import Point from "../Point";
+import {GameObject, Pack} from "../game_objects/GameObject";
+import {
+  BlockCell, BlueDoorCell, BlueKeyCell, Cell, ChipCell, EmptyCell, ExitCell, ExitDoor, GreenDoorCell, GreenKeyCell,
+  RedDoorCell,
+  RedKeyCell, WaterCell,
+  YellowDoorCell, YellowKeyCell
+} from "../cells/Cell";
+import Game = Phaser.Game;
+import {TILE_SIZE, TIME} from "../game_state/Play";
 
 export const GROUND_SIZE = 32;
 
@@ -10,277 +18,6 @@ export enum COLOR {
   BLUE = 'BLUE',
   YELLOW = 'YELLOW',
   GREEN = 'GREEN'
-}
-
-abstract class Cell {
-  protected sprite: Phaser.Sprite;
-
-  constructor(game: Phaser.Game, x: number, y: number) {
-    this.sprite = game.add.sprite(x * TILE_SIZE, y * TILE_SIZE, 'chips');
-  }
-
-  isAccessible(player: Player) {
-    return true;
-  }
-
-  animateEnd(player: Player) {
-  }
-
-  isDead() {
-    return false;
-  }
-
-  animateBegin(player: Player) {
-  }
-}
-
-class EmptyCell extends Cell {
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y);
-
-    this.sprite.frame = 0;
-  }
-}
-
-class BlockCell extends Cell {
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y);
-
-    this.sprite.frame = 14 + 32;
-  }
-
-  isAccessible(player: Player) {
-    return false;
-  }
-}
-
-class ExitCell extends Cell {
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y);
-
-    this.sprite.animations.add('DEFAULT', [71, 72, 73], Phaser.Timer.SECOND * 3 / TIME, true);
-    this.sprite.animations.play('DEFAULT');
-  }
-}
-
-class ExitDoor extends Cell {
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y);
-
-    this.sprite.frame = 70;
-  }
-
-  isAccessible(player: Player): boolean {
-    return player.canExit();
-  }
-
-  animateBegin(player: Player) {
-    this.sprite.frame = 0;
-  }
-}
-
-class ChipCell extends EmptyCell {
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y);
-
-    this.sprite.frame = 74;
-  }
-
-  animateEnd(player: Player) {
-    if (this.sprite.frame !== 0) {
-      this.sprite.frame = 0;
-      player.addChip();
-    }
-  }
-}
-
-abstract class DoorCell extends EmptyCell {
-  protected color: COLOR;
-
-  isAccessible(player: Player) {
-    if (this.sprite.frame === 0) {
-      return true;
-    }
-    return player.hasKey(this.color);
-  }
-
-  animateBegin(player: Player) {
-    if (this.sprite.frame !== 0) {
-      this.sprite.frame = 0;
-      player.removeKey(this.color);
-    }
-  }
-}
-
-class BlueDoorCell extends DoorCell {
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y);
-
-    this.color = COLOR.BLUE;
-    this.sprite.frame = 67;
-  }
-}
-
-class YellowDoorCell extends DoorCell {
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y);
-
-    this.color = COLOR.YELLOW;
-    this.sprite.frame = 68;
-  }
-}
-
-class RedDoorCell extends DoorCell {
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y);
-
-    this.color = COLOR.RED;
-    this.sprite.frame = 66;
-  }
-}
-
-class GreenDoorCell extends DoorCell {
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y);
-
-    this.color = COLOR.GREEN;
-    this.sprite.frame = 69;
-  }
-
-  animateBegin(player: Player) {
-    if (this.sprite.frame !== 0) {
-      this.sprite.frame = 0;
-    }
-  }
-}
-
-abstract class KeyCell extends EmptyCell {
-  protected keySprite: Phaser.Sprite;
-  protected color: COLOR;
-
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y);
-
-    this.keySprite = game.add.sprite(x * TILE_SIZE, y * TILE_SIZE, 'chips');
-  }
-
-  animateEnd(player: Player) {
-    this.keySprite.destroy();
-
-    player.addItem(new BagItemKey(this.color));
-  }
-}
-
-class BlueKeyCell extends KeyCell {
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y);
-
-    this.color = COLOR.BLUE;
-    this.keySprite.frame = 76;
-  }
-}
-
-class YellowKeyCell extends KeyCell {
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y);
-
-    this.color = COLOR.YELLOW;
-    this.keySprite.frame = 77;
-  }
-}
-class RedKeyCell extends KeyCell {
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y);
-
-    this.color = COLOR.RED;
-    this.keySprite.frame = 75;
-  }
-}
-
-class GreenKeyCell extends KeyCell {
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y);
-
-    this.color = COLOR.GREEN;
-    this.keySprite.frame = 78;
-  }
-}
-
-class WaterCell extends Cell {
-  constructor(game: Phaser.Game, x: number, y: number) {
-    super(game, x, y);
-
-    this.sprite.animations.add('DEFAULT', [24, 25, 26], Phaser.Timer.SECOND * 3 / TIME, true);
-    this.sprite.animations.play('DEFAULT');
-  }
-
-  isDead() {
-    return true;
-  }
-}
-
-abstract class GameObject {
-  protected cells: Cell[][];
-  protected sprite: Phaser.Sprite;
-  protected position: PIXI.Point;
-
-  constructor(game: Phaser.Game, x: number, y: number, cells: Cell[][]) {
-    this.cells = cells;
-    this.sprite = game.add.sprite(x * TILE_SIZE, y * TILE_SIZE, 'chips');
-    this.position = new PIXI.Point(x, y);
-  }
-
-  getPosition() {
-    return this.position;
-  }
-
-  act(game: Phaser.Game, player: Player, endPosition: PIXI.Point) {
-  }
-
-  isAccessible(player: Player, endPosition: PIXI.Point): boolean {
-    return true;
-  }
-}
-
-class Pack extends GameObject {
-  constructor(game: Phaser.Game, x: number, y: number, cells: Cell[][]) {
-    super(game, x, y, cells);
-
-    this.sprite.frame = 19 + 64;
-  }
-
-  act(game: Phaser.Game, player: Player, endPosition: PIXI.Point) {
-    const newPosition = new PIXI.Point(
-      this.position.x + this.diff(player, endPosition).x,
-      this.position.y + this.diff(player, endPosition).y
-    );
-    game.add.tween(this.sprite).to({
-      x: newPosition.x * TILE_SIZE,
-      y: newPosition.y * TILE_SIZE
-    }, TIME, Phaser.Easing.Default, true);
-    game.time.events.add(TIME, () => {
-      this.position = newPosition;
-      this.sprite.x = this.position.x * TILE_SIZE;
-      this.sprite.y = this.position.y * TILE_SIZE;
-    });
-  }
-
-  isAccessible(player: Player, endPosition: PIXI.Point) {
-    const newPosition = new PIXI.Point(
-      this.position.x + this.diff(player, endPosition).x,
-      this.position.y + this.diff(player, endPosition).y
-    );
-
-    return this.cells[newPosition.y][newPosition.x].isAccessible(player);
-  }
-
-  private diff(player: Player, endPosition: PIXI.Point): PIXI.Point {
-    const playerPosition = player.getPosition();
-    return new PIXI.Point(
-      endPosition.x - playerPosition.x,
-      endPosition.y - playerPosition.y
-    );
-  }
 }
 
 export class Level {
@@ -326,26 +63,41 @@ export class Level {
     return this.chipsNeeded;
   }
 
-  getPlayerPosition(): PIXI.Point {
+  getPlayerPosition(): Point {
     for (let y = 0; y < GROUND_SIZE; y++) {
       for (let x = 0; x < GROUND_SIZE; x++) {
         if (this.letterAt(new PIXI.Point(x, y)) === 'P') {
-          return new PIXI.Point(x, y);
+          return new Point(x, y);
         }
       }
     }
 
-    return new PIXI.Point(0, 0);
+    return new Point(0, 0);
   }
 
-  isCellAccessible(player: Player, endPosition: PIXI.Point) {
-    if (!this.cells[endPosition.y][endPosition.x].isAccessible(player)) {
+  canPlayerGoTo(player: Player, endPosition: Point) {
+    if (!this.cells[endPosition.y][endPosition.x].canPlayerGoTo(player)) {
       return false;
     }
     for (let i = 0; i < this.objects.length; i++) {
-      if (this.objects[i].getPosition().x === endPosition.x && this.objects[i].getPosition().y === endPosition.y) {
-        console.log('ask is accessible');
-        return this.objects[i].isAccessible(player, endPosition);
+      if (this.objects[i].getPosition().equals(endPosition)) {
+        console.log('ask player accessible for ' + this.objects[i].getPosition().x + ', ' + this.objects[i].getPosition().y);
+        return this.objects[i].canPlayerGoTo(player, endPosition, this);
+      }
+    }
+
+    return true;
+  }
+
+  canPackGoTo(player: Player, endPosition: Point) {
+    if (!this.cells[endPosition.y][endPosition.x].canPlayerGoTo(player)) {
+      return false;
+    }
+
+    for (let i = 0; i < this.objects.length; i++) {
+      if (this.objects[i].getPosition().equals(endPosition)) {
+        console.log('ask pack accessible for ' + this.objects[i].getPosition().x + ', ' + this.objects[i].getPosition().y);
+        return this.objects[i].canPackGoTo(player, endPosition, this);
       }
     }
 
@@ -359,15 +111,15 @@ export class Level {
     return this.map[point.y][point.x];
   }
 
-  animateEnd(game: Phaser.Game, player: Player, endPosition: PIXI.Point) {
+  animateEnd(game: Phaser.Game, player: Player, endPosition: Point) {
     this.cells[endPosition.y][endPosition.x].animateEnd(player);
   }
 
-  animateBegin(game: Phaser.Game, player: Player, endPosition: PIXI.Point) {
+  animateBegin(game: Phaser.Game, player: Player, endPosition: Point) {
     this.cells[endPosition.y][endPosition.x].animateBegin(player);
     for (let i = 0; i < this.objects.length; i++) {
-      if (this.objects[i].getPosition().x === endPosition.x && this.objects[i].getPosition().y === endPosition.y) {
-        this.objects[i].act(game, player, endPosition);
+      if (this.objects[i].getPosition().equals(endPosition)) {
+        this.objects[i].act(game, player, endPosition, this);
       }
     }
   }
@@ -380,28 +132,44 @@ export class Level {
     );
   }
 
-  getEndPosition(): PIXI.Point {
+  getEndPosition(): Point {
     for (let y = 0; y < GROUND_SIZE; y++) {
       for (let x = 0; x < GROUND_SIZE; x++) {
         if (this.letterAt(new PIXI.Point(x, y)) === 'E') {
-          return new PIXI.Point(x, y);
+          return new Point(x, y);
         }
       }
     }
 
-    return new PIXI.Point(0, 0);
+    return new Point(0, 0);
   }
 
-  getDeadPositions(): PIXI.Point[] {
+  getDeadPositions(): Point[] {
     let result = [];
     for (let y = 0; y < this.cells.length; y++) {
       for (let x = 0; x < this.cells[y].length; x++) {
         if (this.cells[y][x].isDead()) {
-          result.push(new PIXI.Point(x, y));
+          result.push(new Point(x, y));
         }
       }
     }
 
     return result;
+  }
+
+  getCellAt(endPosition: Point): Cell {
+    return this.cells[endPosition.y][endPosition.x];
+  }
+
+  destroyObject(param: GameObject) {
+    const i = this.objects.indexOf(param);
+
+    this.objects.splice(i, 1);
+  }
+
+  static animateWaterAt(game: Game, endPosition: Point) {
+    const water = game.add.sprite((endPosition.x - 0.5) * TILE_SIZE, (endPosition.y - 0.5) * TILE_SIZE, 'chips2');
+    water.animations.add('DEFAULT', [0, 1, 2, 3, 4, 5]);
+    water.animations.play('DEFAULT', Phaser.Timer.SECOND * 3 / TIME, false, true);
   }
 }

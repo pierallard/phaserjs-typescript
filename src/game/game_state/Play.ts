@@ -48,18 +48,14 @@ export default class Play extends Phaser.State {
 
   private hasFinished(): boolean {
     return (
-      this.player.getPosition().x === this.level.getEndPosition().x &&
-      this.player.getPosition().y === this.level.getEndPosition().y
+      this.player.getPosition().equals(this.level.getEndPosition())
     );
   }
 
   private isDead() {
     const deadPositions = this.level.getDeadPositions();
     for (let i = 0; i < deadPositions.length; i++) {
-      if (
-        this.player.getPosition().x === deadPositions[i].x &&
-        this.player.getPosition().y === deadPositions[i].y
-      ) {
+      if (this.player.getPosition().equals(deadPositions[i])) {
         return true;
       }
     }
