@@ -45,6 +45,7 @@ export default class Player {
     this.sprite.animations.add(Player.ANIMATION_RIGHT, [133, 134, 135, 136, 137, 136, 135, 134], Phaser.Timer.SECOND * 4 / TIME, true);
     this.sprite.animations.add(Player.ANIMATION_UP, [96, 97, 98, 99, 100, 99, 98, 97], Phaser.Timer.SECOND * 4 / TIME, true);
     this.sprite.animations.add(Player.ANIMATION_DOWN, [128, 129, 130, 131, 132, 131, 130, 129], Phaser.Timer.SECOND * 4 / TIME, true);
+    this.sprite.animations.add('DEFAULT', [130]);
 
     game.camera.follow(this.sprite);
   }
@@ -99,6 +100,7 @@ export default class Player {
   private runAnimation(game: Phaser.Game, animationName: string, gapX: number, gapY: number) {
     const iceSpeed = TIME / 2;
     this.isProcessing = true;
+    console.log(this.sprite.animations.currentAnim);
     if (this.sprite.animations.currentAnim !== this.sprite.animations.getAnimation(animationName)) {
       this.sprite.animations.play(animationName);
     }

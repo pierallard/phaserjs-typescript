@@ -69,8 +69,8 @@ export const LEVELS = [
       '        X2X1II  w FFFX8X        ',
       '        X2XXXX    XXXX8X        ',
       '        X66666888666668X        ',
-      '        XXXXXX7c77XXXXXX        ',
-      '             X7777X             ',
+      '        XXXXXX8c88XXXXXX        ',
+      '             X8888X             ',
       '             XXXXXX             '
     ],
     chips: 4
