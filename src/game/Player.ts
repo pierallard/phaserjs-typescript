@@ -12,6 +12,7 @@ export default class Player {
   private sprite: Sprite;
   private position: Point;
   private chips: number;
+  private dead: boolean = false;
 
   private leftKey: Phaser.Key;
   private rightKey: Phaser.Key;
@@ -48,6 +49,10 @@ export default class Player {
   }
 
   update(game: Phaser.Game) {
+    if (this.dead) {
+      return;
+    }
+    
     if (this.leftKey.justDown) {
       this.pressedKeys.push(this.leftKey);
     } else if (this.rightKey.justDown) {

@@ -38,7 +38,7 @@ export default class Play extends Phaser.State {
       this.state.start('Level' + (this.levelNumber + 1));
     } else if (this.isDead()) {
       this.player.destroy();
-      game.time.events.add(TIME * 2, () => {
+      game.time.events.add(TIME * 3, () => {
         this.state.states[this.state.current] = new Play(game, this.levelNumber);
         this.state.restart(true);
       })
@@ -57,6 +57,7 @@ export default class Play extends Phaser.State {
 
   private isDead() {
     const deadPositions = this.level.getDeadPositions();
+    console.log(deadPositions);
     for (let i = 0; i < deadPositions.length; i++) {
       if (this.player.getPosition().equals(deadPositions[i])) {
         return true;

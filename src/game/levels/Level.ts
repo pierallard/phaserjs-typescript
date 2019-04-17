@@ -1,7 +1,7 @@
 import Player from "../Player";
 import {LEVELS} from "./Levels";
 import Point from "../Point";
-import {GameObject, Pack} from "../game_objects/GameObject";
+import {Bug, GameObject, Pack} from "../game_objects/GameObject";
 import {
   BlockCell, BlueDoorCell, BlueKeyCell, Cell, ChipCell, EmptyCell, ExitCell, ExitDoor, GreenDoorCell, GreenKeyCell,
   RedDoorCell,
@@ -44,7 +44,9 @@ export class Level {
           case 'r': this.cells[y][x] = new RedKeyCell(game, x, y); break;
           case 'g': this.cells[y][x] = new GreenKeyCell(game, x, y); break;
           case 'w': this.cells[y][x] = new WaterCell(game, x, y); break;
+          case 'P':
           case ' ': this.cells[y][x] = new EmptyCell(game, x, y); break;
+          case '1': this.cells[y][x] = new EmptyCell(game, x, y); this.objects.push(new Bug(game, x, y, this.cells)); break;
           case 'p': this.cells[y][x] = new EmptyCell(game, x, y); this.objects.push(new Pack(game, x, y, this.cells)); break;
           default:
             console.log('Unable to create cell from ' + this.letterAt(new PIXI.Point(x, y)));
@@ -113,6 +115,12 @@ export class Level {
 
   animateEnd(game: Phaser.Game, player: Player, endPosition: Point) {
     this.cells[endPosition.y][endPosition.x].animateEnd(game, player, endPosition);
+
+    for (let i = 0; i < this.objects.length; i++) {
+      if (this.objects[i].getPosition().equals(endPosition)) {
+        this.objects[i].animateEnd(player, endPosition, this, game);
+      }
+    }
   }
 
   animateBegin(game: Phaser.Game, player: Player, endPosition: Point) {
@@ -154,6 +162,12 @@ export class Level {
       }
     }
 
+    for (let i = 0; i < this.objects.length; i++) {
+      if (this.objects[i].isToxic()) {
+        result.push(this.objects[i].getPosition());
+      }
+    }
+
     return result;
   }
 
@@ -171,5 +185,11 @@ export class Level {
     const water = game.add.sprite((endPosition.x - 0.5) * TILE_SIZE, (endPosition.y - 0.5) * TILE_SIZE, 'chips2');
     water.animations.add('DEFAULT', [0, 1, 2, 3, 4, 5]);
     water.animations.play('DEFAULT', Phaser.Timer.SECOND * 3 / TIME, false, true);
+  }
+
+  static animateFireAt(game: Game, endPosition: Point) {
+    const fire = game.add.sprite((endPosition.x - 0.5) * TILE_SIZE, (endPosition.y - 0.5) * TILE_SIZE, 'chips2');
+    fire.animations.add('DEFAULT', [6, 7, 8, 9, 10, 11]);
+    fire.animations.play('DEFAULT', Phaser.Timer.SECOND * 3 / TIME, false, true);
   }
 }

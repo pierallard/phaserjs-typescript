@@ -37,6 +37,10 @@ export abstract class GameObject {
   destroy() {
     this.sprite.destroy(true);
   }
+
+  isToxic(): boolean {
+    return false;
+  }
 }
 
 export class Pack extends GameObject {
@@ -92,5 +96,22 @@ export class Pack extends GameObject {
       endPosition.x - playerPosition.x,
       endPosition.y - playerPosition.y
     );
+  }
+}
+
+export class Bug extends GameObject {
+  constructor(game: Phaser.Game, x: number, y: number, cells: Cell[][]) {
+    super(game, x, y, cells);
+
+    this.sprite.frame = 32*5;
+  }
+
+  isToxic() {
+    return true;
+  }
+
+  animateEnd(player: Player, endPosition: Point, level: Level, game: Game) {
+    Level.animateFireAt(game, endPosition);
+    this.destroy();
   }
 }
