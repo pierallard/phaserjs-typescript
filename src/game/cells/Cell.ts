@@ -1,7 +1,9 @@
 import {TILE_SIZE, TIME} from "../game_state/Play";
 import {BagItemKey} from "../BagItem";
 import Player from "../Player";
-import {COLOR} from "../levels/Level";
+import {COLOR, Level} from "../levels/Level";
+import Game = Phaser.Game;
+import Point from "../Point";
 
 export abstract class Cell {
   protected sprite: Phaser.Sprite;
@@ -14,7 +16,7 @@ export abstract class Cell {
     return true;
   }
 
-  animateEnd(player: Player) {
+  animateEnd(game: Game, player: Player, endPosition: Point) {
   }
 
   isDead() {
@@ -23,13 +25,19 @@ export abstract class Cell {
 
   animateBegin(player: Player) {
   }
+
+  canPackGoTo(player: Player) {
+    return this.canPlayerGoTo(player);
+  }
 }
 
 export class EmptyCell extends Cell {
+  static EMPTY_CELL = 0;
+
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y);
 
-    this.sprite.frame = 0;
+    this.sprite.frame = EmptyCell.EMPTY_CELL;
   }
 }
 
@@ -66,7 +74,7 @@ export class ExitDoor extends Cell {
   }
 
   animateBegin(player: Player) {
-    this.sprite.frame = 0;
+    this.sprite.frame = EmptyCell.EMPTY_CELL;
   }
 }
 
@@ -77,9 +85,9 @@ export class ChipCell extends EmptyCell {
     this.sprite.frame = 74;
   }
 
-  animateEnd(player: Player) {
-    if (this.sprite.frame !== 0) {
-      this.sprite.frame = 0;
+  animateEnd(game: Game, player: Player, endPosition: Point) {
+    if (this.sprite.frame !== ChipCell.EMPTY_CELL) {
+      this.sprite.frame = EmptyCell.EMPTY_CELL;
       player.addChip();
     }
   }
@@ -89,15 +97,15 @@ abstract class DoorCell extends EmptyCell {
   protected color: COLOR;
 
   canPlayerGoTo(player: Player) {
-    if (this.sprite.frame === 0) {
+    if (this.sprite.frame === EmptyCell.EMPTY_CELL) {
       return true;
     }
     return player.hasKey(this.color);
   }
 
   animateBegin(player: Player) {
-    if (this.sprite.frame !== 0) {
-      this.sprite.frame = 0;
+    if (this.sprite.frame !== EmptyCell.EMPTY_CELL) {
+      this.sprite.frame = EmptyCell.EMPTY_CELL;
       player.removeKey(this.color);
     }
   }
@@ -155,7 +163,7 @@ abstract class KeyCell extends EmptyCell {
     this.keySprite = game.add.sprite(x * TILE_SIZE, y * TILE_SIZE, 'chips');
   }
 
-  animateEnd(player: Player) {
+  animateEnd(game: Game, player: Player, endPosition: Point) {
     this.keySprite.destroy();
 
     player.addItem(new BagItemKey(this.color));
@@ -200,6 +208,7 @@ export class GreenKeyCell extends KeyCell {
 
 export class WaterCell extends Cell {
   private static WATER_ANIMATION: number[] = [24, 25, 26];
+  private static DIRTY = 23;
 
   constructor(game: Phaser.Game, x: number, y: number) {
     super(game, x, y);
@@ -207,6 +216,18 @@ export class WaterCell extends Cell {
     this.sprite.frame = WaterCell.WATER_ANIMATION[0];
     this.sprite.animations.add('DEFAULT', WaterCell.WATER_ANIMATION, Phaser.Timer.SECOND * 3 / TIME, true);
     this.sprite.animations.play('DEFAULT');
+  }
+
+  isWater() {
+    return (WaterCell.WATER_ANIMATION.indexOf(<number> this.sprite.frame) !== -1);
+  }
+
+  animateEnd(game: Game, player: Player, endPosition: Point) {
+    if (this.sprite.frame === WaterCell.DIRTY) {
+      this.sprite.frame = EmptyCell.EMPTY_CELL;
+    } else if (this.isWater()) {
+      Level.animateWaterAt(game, endPosition);
+    }
   }
 
   isDead() {
@@ -217,8 +238,15 @@ export class WaterCell extends Cell {
     return false;
   }
 
+  canPackGoTo(player: Player) {
+    if (this.sprite.frame === WaterCell.DIRTY) {
+      return false;
+    }
+    return super.canPackGoTo(player);
+  }
+
   changeAfterPack() {
     this.sprite.animations.stop('DEFAULT');
-    this.sprite.frame = 23;
+    this.sprite.frame = WaterCell.DIRTY;
   }
 }

@@ -90,7 +90,7 @@ export class Level {
   }
 
   canPackGoTo(player: Player, endPosition: Point) {
-    if (!this.cells[endPosition.y][endPosition.x].canPlayerGoTo(player)) {
+    if (!this.cells[endPosition.y][endPosition.x].canPackGoTo(player)) {
       return false;
     }
 
@@ -112,7 +112,7 @@ export class Level {
   }
 
   animateEnd(game: Phaser.Game, player: Player, endPosition: Point) {
-    this.cells[endPosition.y][endPosition.x].animateEnd(player);
+    this.cells[endPosition.y][endPosition.x].animateEnd(game, player, endPosition);
   }
 
   animateBegin(game: Phaser.Game, player: Player, endPosition: Point) {

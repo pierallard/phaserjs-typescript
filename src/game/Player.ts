@@ -224,4 +224,8 @@ export default class Player {
   getPosition(): Point {
     return this.position;
   }
+
+  destroy() {
+    this.sprite.destroy(true);
+  }
 }

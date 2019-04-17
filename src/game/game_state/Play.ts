@@ -37,8 +37,11 @@ export default class Play extends Phaser.State {
       this.state.add('Level' + (this.levelNumber + 1), new Play(game, this.levelNumber + 1));
       this.state.start('Level' + (this.levelNumber + 1));
     } else if (this.isDead()) {
-      this.state.states[this.state.current] = new Play(game, this.levelNumber);
-      this.state.restart(true)
+      this.player.destroy();
+      game.time.events.add(TIME * 2, () => {
+        this.state.states[this.state.current] = new Play(game, this.levelNumber);
+        this.state.restart(true);
+      })
     }
   }
 
