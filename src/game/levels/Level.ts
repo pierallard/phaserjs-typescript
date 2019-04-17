@@ -46,7 +46,7 @@ export class Level {
           case 'y': this.cells[y][x] = new YellowKeyCell(game, x, y, groundGroup); break;
           case 'r': this.cells[y][x] = new RedKeyCell(game, x, y, groundGroup); break;
           case 'g': this.cells[y][x] = new GreenKeyCell(game, x, y, groundGroup); break;
-          case 'w': this.cells[y][x] = new WaterCell(game, x, y, groundGroup); break;
+          case 'W': this.cells[y][x] = new WaterCell(game, x, y, groundGroup); break;
           case 'P':
           case ' ': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
           case '1': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
@@ -143,7 +143,6 @@ export class Level {
   }
 
   static getFromNumber(levelNumber: number): Level {
-    console.log(levelNumber);
     return new Level(
       LEVELS[levelNumber].map,
       LEVELS[levelNumber].chips
