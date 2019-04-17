@@ -71,7 +71,7 @@ export const LEVELS = [
       '        X66666888666668X        ',
       '        XXXXXX7c77XXXXXX        ',
       '             X7777X             ',
-      '             XXXXXX'
+      '             XXXXXX             '
     ],
     chips: 4
   }

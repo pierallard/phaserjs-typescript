@@ -3,7 +3,8 @@ import {LEVELS} from "./Levels";
 import Point from "../Point";
 import {Bug, GameObject, Pack} from "../game_objects/GameObject";
 import {
-  BlockCell, BlueDoorCell, BlueKeyCell, Cell, ChipCell, EmptyCell, ExitCell, ExitDoor, GreenDoorCell, GreenKeyCell,
+  BlockCell, BlueDoorCell, BlueKeyCell, Cell, ChipCell, EmptyCell, ExitCell, ExitDoor, FireCell, GreenDoorCell,
+  GreenKeyCell,
   RedDoorCell,
   RedKeyCell, WaterCell,
   YellowDoorCell, YellowKeyCell
@@ -47,6 +48,7 @@ export class Level {
           case 'r': this.cells[y][x] = new RedKeyCell(game, x, y, groundGroup); break;
           case 'g': this.cells[y][x] = new GreenKeyCell(game, x, y, groundGroup); break;
           case 'W': this.cells[y][x] = new WaterCell(game, x, y, groundGroup); break;
+          case 'F': this.cells[y][x] = new FireCell(game, x, y, groundGroup); break;
           case 'P':
           case ' ': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
           case '1': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;

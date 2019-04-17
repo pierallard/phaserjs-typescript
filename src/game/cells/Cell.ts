@@ -215,6 +215,26 @@ export class GreenKeyCell extends KeyCell {
   }
 }
 
+export class FireCell extends Cell {
+  private static FIRE_ANIMATION: number[] = [32, 33, 34];
+
+  constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
+    super(game, x, y, groundGroup);
+
+    this.sprite.frame = FireCell.FIRE_ANIMATION[0];
+    this.sprite.animations.add('DEFAULT', FireCell.FIRE_ANIMATION, Phaser.Timer.SECOND * 3 / TIME, true);
+    this.sprite.animations.play('DEFAULT');
+  }
+
+  isDead() {
+    return true;
+  }
+
+  animateEnd(game: Game, player: Player, endPosition: Point, level: Level) {
+    level.animateFireAt(game, endPosition);
+  }
+}
+
 export class WaterCell extends Cell {
   private static WATER_ANIMATION: number[] = [24, 25, 26];
   private static DIRTY = 23;
