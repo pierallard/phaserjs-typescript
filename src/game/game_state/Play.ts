@@ -24,8 +24,13 @@ export default class Play extends Phaser.State {
   public create(game: Phaser.Game) {
     game.world.setBounds(0, 0, GROUND_SIZE * TILE_SIZE, GROUND_SIZE * TILE_SIZE);
     game.camera.width = PIXELS_WIDTH;
-
-    this.level.create(game);
+    const groundGroup = game.add.group(null, 'Ground');
+    const objectGroup = game.add.group(null, 'Objects');
+    const effectsGroup = game.add.group(null, 'Effects');
+    game.add.existing(groundGroup);
+    game.add.existing(objectGroup);
+    game.add.existing(effectsGroup);
+    this.level.create(game, groundGroup, objectGroup, effectsGroup);
     this.player.create(game);
     this.menu.create(game);
   }
@@ -33,6 +38,7 @@ export default class Play extends Phaser.State {
   public update(game: Phaser.Game) {
     this.player.update(game);
     this.menu.update(game);
+    this.level.update(game);
     if (this.hasFinished()) {
       this.state.add('Level' + (this.levelNumber + 1), new Play(game, this.levelNumber + 1));
       this.state.start('Level' + (this.levelNumber + 1));
@@ -57,7 +63,6 @@ export default class Play extends Phaser.State {
 
   private isDead() {
     const deadPositions = this.level.getDeadPositions();
-    console.log(deadPositions);
     for (let i = 0; i < deadPositions.length; i++) {
       if (this.player.getPosition().equals(deadPositions[i])) {
         return true;

@@ -52,7 +52,7 @@ export default class Player {
     if (this.dead) {
       return;
     }
-    
+
     if (this.leftKey.justDown) {
       this.pressedKeys.push(this.leftKey);
     } else if (this.rightKey.justDown) {
@@ -162,7 +162,7 @@ export default class Player {
     })
   }
 
-  static getPosition(point: PIXI.Point) {
+  private static getPosition(point: PIXI.Point) {
     return new PIXI.Point((point.x + 0.5) * TILE_SIZE, (point.y + 0.5) * TILE_SIZE);
   }
 

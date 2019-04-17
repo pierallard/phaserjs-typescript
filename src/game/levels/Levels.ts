@@ -40,7 +40,7 @@ export const LEVELS = [
       '         X     X                ',
       '         X  X  XXXXXXXXXX       ',
       '       XXX  X1  ww     cX       ',
-      '       XED  XX1 ww ppP  X       ',
+      '       XEP  XX1 ww ppP  X       ',
       '       XXX  X1  ww     cX       ',
       '         X  X  XXXXXXXXXX       ',
       '         X     X                ',

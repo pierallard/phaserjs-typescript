@@ -10,6 +10,7 @@ import {
 } from "../cells/Cell";
 import Game = Phaser.Game;
 import {TILE_SIZE, TIME} from "../game_state/Play";
+import Group = Phaser.Group;
 
 export const GROUND_SIZE = 32;
 
@@ -25,32 +26,41 @@ export class Level {
   protected chipsNeeded: number;
   private cells: Cell[][] = [];
   private objects: GameObject[] = [];
+  private effectsGroup: Group;
 
-  create(game: Phaser.Game) {
+  create(game: Phaser.Game, groundGroup: Group, objectGroup: Group, effectsGroup: Group) {
+    this.effectsGroup = effectsGroup;
     for (let y = 0; y < GROUND_SIZE; y++) {
       this.cells[y] = [];
       for (let x = 0; x < GROUND_SIZE; x++) {
         switch(this.letterAt(new PIXI.Point(x, y))) {
-          case 'X': this.cells[y][x] = new BlockCell(game, x, y); break;
-          case 'E': this.cells[y][x] = new ExitCell(game, x, y); break;
-          case 'D': this.cells[y][x] = new ExitDoor(game, x, y); break;
-          case 'c': this.cells[y][x] = new ChipCell(game, x, y); break;
-          case 'B': this.cells[y][x] = new BlueDoorCell(game, x, y); break;
-          case 'Y': this.cells[y][x] = new YellowDoorCell(game, x, y); break;
-          case 'R': this.cells[y][x] = new RedDoorCell(game, x, y); break;
-          case 'G': this.cells[y][x] = new GreenDoorCell(game, x, y); break;
-          case 'b': this.cells[y][x] = new BlueKeyCell(game, x, y); break;
-          case 'y': this.cells[y][x] = new YellowKeyCell(game, x, y); break;
-          case 'r': this.cells[y][x] = new RedKeyCell(game, x, y); break;
-          case 'g': this.cells[y][x] = new GreenKeyCell(game, x, y); break;
-          case 'w': this.cells[y][x] = new WaterCell(game, x, y); break;
+          case 'X': this.cells[y][x] = new BlockCell(game, x, y, groundGroup); break;
+          case 'E': this.cells[y][x] = new ExitCell(game, x, y, groundGroup); break;
+          case 'D': this.cells[y][x] = new ExitDoor(game, x, y, groundGroup); break;
+          case 'c': this.cells[y][x] = new ChipCell(game, x, y, groundGroup); break;
+          case 'B': this.cells[y][x] = new BlueDoorCell(game, x, y, groundGroup); break;
+          case 'Y': this.cells[y][x] = new YellowDoorCell(game, x, y, groundGroup); break;
+          case 'R': this.cells[y][x] = new RedDoorCell(game, x, y, groundGroup); break;
+          case 'G': this.cells[y][x] = new GreenDoorCell(game, x, y, groundGroup); break;
+          case 'b': this.cells[y][x] = new BlueKeyCell(game, x, y, groundGroup); break;
+          case 'y': this.cells[y][x] = new YellowKeyCell(game, x, y, groundGroup); break;
+          case 'r': this.cells[y][x] = new RedKeyCell(game, x, y, groundGroup); break;
+          case 'g': this.cells[y][x] = new GreenKeyCell(game, x, y, groundGroup); break;
+          case 'w': this.cells[y][x] = new WaterCell(game, x, y, groundGroup); break;
           case 'P':
-          case ' ': this.cells[y][x] = new EmptyCell(game, x, y); break;
-          case '1': this.cells[y][x] = new EmptyCell(game, x, y); this.objects.push(new Bug(game, x, y, this.cells)); break;
-          case 'p': this.cells[y][x] = new EmptyCell(game, x, y); this.objects.push(new Pack(game, x, y, this.cells)); break;
+          case ' ': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
+          case '1': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
+          case 'p': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
           default:
             console.log('Unable to create cell from ' + this.letterAt(new PIXI.Point(x, y)));
-            this.cells[y][x] = new EmptyCell(game, x, y);
+            this.cells[y][x] = new EmptyCell(game, x, y, groundGroup);
+        }
+      }
+
+      for (let x = 0; x < GROUND_SIZE; x++) {
+        switch(this.letterAt(new PIXI.Point(x, y))) {
+          case '1': this.objects.push(new Bug(game, x, y, this.cells, objectGroup)); break;
+          case 'p': this.objects.push(new Pack(game, x, y, this.cells, objectGroup)); break;
         }
       }
     }
@@ -114,7 +124,7 @@ export class Level {
   }
 
   animateEnd(game: Phaser.Game, player: Player, endPosition: Point) {
-    this.cells[endPosition.y][endPosition.x].animateEnd(game, player, endPosition);
+    this.cells[endPosition.y][endPosition.x].animateEnd(game, player, endPosition, this);
 
     for (let i = 0; i < this.objects.length; i++) {
       if (this.objects[i].getPosition().equals(endPosition)) {
@@ -181,15 +191,21 @@ export class Level {
     this.objects.splice(i, 1);
   }
 
-  static animateWaterAt(game: Game, endPosition: Point) {
-    const water = game.add.sprite((endPosition.x - 0.5) * TILE_SIZE, (endPosition.y - 0.5) * TILE_SIZE, 'chips2');
+  animateWaterAt(game: Game, endPosition: Point) {
+    const water = game.add.sprite((endPosition.x - 0.5) * TILE_SIZE, (endPosition.y - 0.5) * TILE_SIZE, 'chips2', 0, this.effectsGroup);
     water.animations.add('DEFAULT', [0, 1, 2, 3, 4, 5]);
     water.animations.play('DEFAULT', Phaser.Timer.SECOND * 3 / TIME, false, true);
   }
 
-  static animateFireAt(game: Game, endPosition: Point) {
-    const fire = game.add.sprite((endPosition.x - 0.5) * TILE_SIZE, (endPosition.y - 0.5) * TILE_SIZE, 'chips2');
+  animateFireAt(game: Game, endPosition: Point) {
+    const fire = game.add.sprite((endPosition.x - 0.5) * TILE_SIZE, (endPosition.y - 0.5) * TILE_SIZE, 'chips2', 0, this.effectsGroup);
     fire.animations.add('DEFAULT', [6, 7, 8, 9, 10, 11]);
     fire.animations.play('DEFAULT', Phaser.Timer.SECOND * 3 / TIME, false, true);
+  }
+
+  update(game: Phaser.Game) {
+    this.objects.forEach((o) => {
+      o.update(game);
+    })
   }
 }
