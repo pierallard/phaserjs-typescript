@@ -205,7 +205,15 @@ export class Level {
 
   update(game: Phaser.Game) {
     this.objects.forEach((o) => {
-      o.update(game);
+      o.update(game, this);
     })
+  }
+
+  isFreeForBug(newPosition: Point) {
+    if (!this.cells[newPosition.y][newPosition.x].isFree()) {
+      return false;
+    }
+
+    return true;
   }
 }

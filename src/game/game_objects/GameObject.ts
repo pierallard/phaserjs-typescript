@@ -43,7 +43,7 @@ export abstract class GameObject {
     return false;
   }
 
-  update(game: Phaser.Game) {
+  update(game: Phaser.Game, level: Level) {
   }
 }
 
@@ -121,6 +121,10 @@ export class Bug extends GameObject {
     this.sens = SENS.UP;
 
     this.sprite.frame = 32*5;
+    this.sprite.animations.add(Player.ANIMATION_LEFT, [164, 165, 166, 167], Phaser.Timer.SECOND * 4 / TIME, true);
+    this.sprite.animations.add(Player.ANIMATION_RIGHT, [196, 197, 198, 199], Phaser.Timer.SECOND * 4 / TIME, true);
+    this.sprite.animations.add(Player.ANIMATION_UP, [160, 161, 162, 163], Phaser.Timer.SECOND * 4 / TIME, true);
+    this.sprite.animations.add(Player.ANIMATION_DOWN, [192, 193, 194, 195], Phaser.Timer.SECOND * 4 / TIME, true);
   }
 
   isToxic() {
@@ -128,14 +132,38 @@ export class Bug extends GameObject {
   }
 
   animateEnd(player: Player, endPosition: Point, level: Level, game: Game) {
-    level.animateFireAt(game, endPosition);
+    level.animateFireAt(game, player.getPosition());
     this.destroy();
   }
 
-  update(game: Game) {
+  update(game: Game, level: Level) {
     if (!this.isMoving) {
       this.isMoving = true;
-      const newPosition = this.getNewCell();
+      let sens = this.sens;
+      let newPosition = this.getNewCell(sens);
+      this.sens = Bug.ORDER[(Bug.ORDER.indexOf(this.sens) + 1) % Bug.ORDER.length];
+      if (!level.isFreeForBug(newPosition)) {
+        sens = Bug.ORDER[(Bug.ORDER.indexOf(sens) + 3) % Bug.ORDER.length];
+        newPosition = this.getNewCell(sens);
+        this.sens = Bug.ORDER[(Bug.ORDER.indexOf(this.sens) + 3) % Bug.ORDER.length];
+        if (!level.isFreeForBug(newPosition)) {
+          sens = Bug.ORDER[(Bug.ORDER.indexOf(sens) + 3) % Bug.ORDER.length];
+          newPosition = this.getNewCell(sens);
+          this.sens = Bug.ORDER[(Bug.ORDER.indexOf(this.sens) + 3) % Bug.ORDER.length];
+          if (!level.isFreeForBug(newPosition)) {
+            sens = Bug.ORDER[(Bug.ORDER.indexOf(sens) + 3) % Bug.ORDER.length];
+            newPosition = this.getNewCell(sens);
+            this.sens = Bug.ORDER[(Bug.ORDER.indexOf(this.sens) + 3) % Bug.ORDER.length];
+            if (!level.isFreeForBug(newPosition)) {
+              newPosition = this.getPosition();
+              this.sens = Bug.ORDER[(Bug.ORDER.indexOf(this.sens) + 3) % Bug.ORDER.length];
+            }
+          }
+        }
+      }
+
+      this.sprite.animations.play(this.getAnimationName());
+
       game.add.tween(this.sprite).to({
         x: newPosition.x * TILE_SIZE,
         y: newPosition.y * TILE_SIZE
@@ -145,13 +173,12 @@ export class Bug extends GameObject {
         this.position = newPosition;
         this.sprite.x = this.position.x * TILE_SIZE;
         this.sprite.y = this.position.y * TILE_SIZE;
-        this.sens = Bug.ORDER[(Bug.ORDER.indexOf(this.sens) + 1) % Bug.ORDER.length];
       }, this);
     }
   }
 
-  private getNewCell() {
-    switch (this.sens) {
+  private getNewCell(sens: SENS) {
+    switch (sens) {
       case SENS.UP: return this.position.add(new Point(-1, 0)); // try left
       case SENS.LEFT: return this.position.add(new Point(0, 1)); // try bottom
       case SENS.DOWN: return this.position.add(new Point(1, 0)); // try right
@@ -159,12 +186,12 @@ export class Bug extends GameObject {
     }
   }
 
-  private static sensToString(sens: SENS) {
-    switch(sens) {
-      case SENS.UP: return 'UP';
-      case SENS.DOWN: return 'DOWN';
-      case SENS.RIGHT: return 'RIGHT';
-      case SENS.LEFT: return 'LEFT';
+  private getAnimationName() {
+    switch (this.sens) {
+      case SENS.UP: return Player.ANIMATION_UP;
+      case SENS.LEFT: return Player.ANIMATION_LEFT;
+      case SENS.DOWN: return Player.ANIMATION_DOWN;
+      case SENS.RIGHT: return Player.ANIMATION_RIGHT;
     }
   }
 }

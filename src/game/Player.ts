@@ -5,10 +5,10 @@ import {BagItem, BagItemKey} from "./BagItem";
 import Point from "./Point";
 
 export default class Player {
-  private static ANIMATION_LEFT = 'LEFT';
-  private static ANIMATION_RIGHT = 'RIGHT';
-  private static ANIMATION_UP = 'UP';
-  private static ANIMATION_DOWN = 'DOWN';
+  static ANIMATION_LEFT = 'LEFT';
+  static ANIMATION_RIGHT = 'RIGHT';
+  static ANIMATION_UP = 'UP';
+  static ANIMATION_DOWN = 'DOWN';
   private sprite: Sprite;
   private position: Point;
   private chips: number;

@@ -24,7 +24,7 @@ export const LEVELS = [
       '            X  Xg X             ',
       '            XXXXXXX             '
     ],
-    chips: 1
+    chips: 11
   },
   {
     map: [
@@ -40,13 +40,13 @@ export const LEVELS = [
       '         X     X                ',
       '         X  X  XXXXXXXXXX       ',
       '       XXX  X1  ww     cX       ',
-      '       XEP  XX1 ww ppP  X       ',
+      '       XED  XX1 ww ppP  X       ',
       '       XXX  X1  ww     cX       ',
       '         X  X  XXXXXXXXXX       ',
       '         X     X                ',
       '         X  c  X                ',
       '         XXXXXXX                ',
     ],
-    chips: 2
+    chips: 4
   }
 ];

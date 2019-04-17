@@ -30,6 +30,10 @@ export abstract class Cell {
   canPackGoTo(player: Player) {
     return this.canPlayerGoTo(player);
   }
+
+  isFree(): boolean {
+    return true;
+  }
 }
 
 export class EmptyCell extends Cell {
@@ -50,6 +54,10 @@ export class BlockCell extends Cell {
   }
 
   canPlayerGoTo(player: Player) {
+    return false;
+  }
+
+  isFree() {
     return false;
   }
 }
