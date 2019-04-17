@@ -3,6 +3,7 @@ import {BLOCKTIME, TILE_SIZE, TIME} from "./game_state/Play";
 import {COLOR, Level, GROUND_SIZE} from "./levels/Level";
 import {BagItem, BagItemKey} from "./BagItem";
 import Point from "./Point";
+import {IceCell, IceCellBottomLeft, IceCellTopLeft} from "./cells/Cell";
 
 export default class Player {
   static ANIMATION_LEFT = 'LEFT';
@@ -96,38 +97,83 @@ export default class Player {
   }
 
   private runAnimation(game: Phaser.Game, animationName: string, gapX: number, gapY: number) {
+    const iceSpeed = TIME / 2;
     this.isProcessing = true;
     if (this.sprite.animations.currentAnim !== this.sprite.animations.getAnimation(animationName)) {
       this.sprite.animations.play(animationName);
     }
-    const newPosition = new Point(this.position.x + gapX, this.position.y + gapY);
+    let newPosition = new Point(this.position.x + gapX, this.position.y + gapY);
     this.level.animateBegin(game, this, newPosition);
-    game.add.tween(this.sprite).to({
-      x: Player.getPosition(newPosition).x,
-      y: Player.getPosition(newPosition).y
-    }, TIME, Phaser.Easing.Default, true);
-    game.time.events.add(TIME, () => {
-      this.isProcessing = false;
-      this.level.animateEnd(game, this, newPosition);
-      this.pressedKeys.shift();
-      this.position.x += gapX;
-      this.position.y += gapY;
-      this.sprite.x = Player.getPosition(this.position).x;
-      this.sprite.y = Player.getPosition(this.position).y;
-      if (!this.pressedKeys.length) {
-        this.sprite.animations.stop();
-        this.sprite.animations.currentAnim = null;
-        if (animationName === Player.ANIMATION_LEFT) {
-          this.sprite.frame = 103;
-        } else if (animationName === Player.ANIMATION_RIGHT) {
-          this.sprite.frame = 135;
-        } else if (animationName === Player.ANIMATION_UP) {
-          this.sprite.frame = 98;
-        } else if (animationName === Player.ANIMATION_DOWN) {
-          this.sprite.frame = 130;
+    const newCell = this.level.getCellAt(newPosition);
+    const currentCell = this.level.getCellAt(this.position);
+    if (currentCell instanceof IceCellBottomLeft || currentCell instanceof IceCellTopLeft) {
+      newPosition = currentCell.getNewPosition(this.position, newPosition);
+      game.add.tween(this.sprite).to({
+        x: Player.getPosition(newPosition).x,
+        y: Player.getPosition(newPosition).y
+      }, iceSpeed, Phaser.Easing.Default, true);
+      game.time.events.add(iceSpeed, () => {
+        this.isProcessing = false;
+        const animation = this.getAnimation(this.position, newPosition);
+        const gap = newPosition.remove(this.position);
+        this.level.animateEnd(game, this, newPosition);
+        this.position = newPosition;
+        this.sprite.x = Player.getPosition(this.position).x;
+        this.sprite.y = Player.getPosition(this.position).y;
+        this.runAnimation(game, animation, gap.x, gap.y);
+      }, this);
+    } else if (newCell instanceof IceCell) {
+      game.add.tween(this.sprite).to({
+        x: Player.getPosition(newPosition).x,
+        y: Player.getPosition(newPosition).y
+      }, iceSpeed, Phaser.Easing.Default, true);
+      game.time.events.add(iceSpeed, () => {
+        this.isProcessing = false;
+        this.level.animateEnd(game, this, newPosition);
+        this.position = newPosition;
+        this.sprite.x = Player.getPosition(this.position).x;
+        this.sprite.y = Player.getPosition(this.position).y;
+        this.runAnimation(game, animationName, gapX, gapY);
+      }, this);
+    } else {
+      game.add.tween(this.sprite).to({
+        x: Player.getPosition(newPosition).x,
+        y: Player.getPosition(newPosition).y
+      }, TIME, Phaser.Easing.Default, true);
+      game.time.events.add(TIME, () => {
+        this.isProcessing = false;
+        this.level.animateEnd(game, this, newPosition);
+        this.pressedKeys.shift();
+        this.position = newPosition;
+        this.sprite.x = Player.getPosition(this.position).x;
+        this.sprite.y = Player.getPosition(this.position).y;
+        if (!this.pressedKeys.length) {
+          this.sprite.animations.stop();
+          this.sprite.animations.currentAnim = null;
+          if (animationName === Player.ANIMATION_LEFT) {
+            this.sprite.frame = 103;
+          } else if (animationName === Player.ANIMATION_RIGHT) {
+            this.sprite.frame = 135;
+          } else if (animationName === Player.ANIMATION_UP) {
+            this.sprite.frame = 98;
+          } else if (animationName === Player.ANIMATION_DOWN) {
+            this.sprite.frame = 130;
+          }
         }
-      }
-    }, this)
+      }, this)
+    }
+  }
+
+  private getAnimation(begin: Point, end: Point) {
+    if (begin.x < end.x) {
+      return Player.ANIMATION_RIGHT;
+    } else if (begin.x > end.x) {
+      return Player.ANIMATION_LEFT;
+    } else if (begin.y < end.y) {
+      return Player.ANIMATION_DOWN;
+    } else {
+      return Player.ANIMATION_UP;
+    }
   }
 
   private runBlocked(game: Phaser.Game, animationName: string, key: Phaser.Key) {

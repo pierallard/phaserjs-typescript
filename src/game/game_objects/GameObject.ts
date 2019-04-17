@@ -110,7 +110,7 @@ export enum SENS {
   LEFT = 'LEFT'
 }
 
-export class Bug extends GameObject {
+export class Ant extends GameObject {
   static ORDER: SENS[] = [SENS.UP, SENS.LEFT, SENS.DOWN, SENS.RIGHT];
 
   private isMoving: boolean = false;
@@ -141,22 +141,22 @@ export class Bug extends GameObject {
       this.isMoving = true;
       let sens = this.sens;
       let newPosition = this.getNewCell(sens);
-      this.sens = Bug.ORDER[(Bug.ORDER.indexOf(this.sens) + 1) % Bug.ORDER.length];
+      this.sens = Ant.ORDER[(Ant.ORDER.indexOf(this.sens) + 1) % Ant.ORDER.length];
       if (!level.isFreeForBug(newPosition)) {
-        sens = Bug.ORDER[(Bug.ORDER.indexOf(sens) + 3) % Bug.ORDER.length];
+        sens = Ant.ORDER[(Ant.ORDER.indexOf(sens) + 3) % Ant.ORDER.length];
         newPosition = this.getNewCell(sens);
-        this.sens = Bug.ORDER[(Bug.ORDER.indexOf(this.sens) + 3) % Bug.ORDER.length];
+        this.sens = Ant.ORDER[(Ant.ORDER.indexOf(this.sens) + 3) % Ant.ORDER.length];
         if (!level.isFreeForBug(newPosition)) {
-          sens = Bug.ORDER[(Bug.ORDER.indexOf(sens) + 3) % Bug.ORDER.length];
+          sens = Ant.ORDER[(Ant.ORDER.indexOf(sens) + 3) % Ant.ORDER.length];
           newPosition = this.getNewCell(sens);
-          this.sens = Bug.ORDER[(Bug.ORDER.indexOf(this.sens) + 3) % Bug.ORDER.length];
+          this.sens = Ant.ORDER[(Ant.ORDER.indexOf(this.sens) + 3) % Ant.ORDER.length];
           if (!level.isFreeForBug(newPosition)) {
-            sens = Bug.ORDER[(Bug.ORDER.indexOf(sens) + 3) % Bug.ORDER.length];
+            sens = Ant.ORDER[(Ant.ORDER.indexOf(sens) + 3) % Ant.ORDER.length];
             newPosition = this.getNewCell(sens);
-            this.sens = Bug.ORDER[(Bug.ORDER.indexOf(this.sens) + 3) % Bug.ORDER.length];
+            this.sens = Ant.ORDER[(Ant.ORDER.indexOf(this.sens) + 3) % Ant.ORDER.length];
             if (!level.isFreeForBug(newPosition)) {
               newPosition = this.getPosition();
-              this.sens = Bug.ORDER[(Bug.ORDER.indexOf(this.sens) + 3) % Bug.ORDER.length];
+              this.sens = Ant.ORDER[(Ant.ORDER.indexOf(this.sens) + 3) % Ant.ORDER.length];
             }
           }
         }

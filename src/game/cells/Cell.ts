@@ -235,6 +235,54 @@ export class FireCell extends Cell {
   }
 }
 
+export class IceCell extends Cell {
+  constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
+    super(game, x, y, groundGroup);
+
+    this.sprite.frame = 17;
+  }
+}
+
+export class IceCellBottomLeft extends IceCell {
+  constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
+    super(game, x, y, groundGroup);
+
+    this.sprite.frame = 19;
+  }
+
+  getNewPosition(original: Point, end: Point) {
+    if (original.x > end.x) {
+      return original.add(new Point(0, -1));
+    } else if (original.y < end.y) {
+      return original.add(new Point(1, 0));
+    } else if (original.x < end.x) {
+      return original.add(new Point(-1, 0));
+    } else {
+      return original.add(new Point(0, 1));
+    }
+  }
+}
+
+export class IceCellTopLeft extends IceCell {
+  constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
+    super(game, x, y, groundGroup);
+
+    this.sprite.frame = 21;
+  }
+
+  getNewPosition(original: Point, end: Point) {
+    if (original.x > end.x) {
+      return original.add(new Point(0, 1));
+    } else if (original.y < end.y) {
+      return original.add(new Point(0, -1));
+    } else if (original.x < end.x) {
+      return original.add(new Point(-1, 0));
+    } else {
+      return original.add(new Point(1, 0));
+    }
+  }
+}
+
 export class WaterCell extends Cell {
   private static WATER_ANIMATION: number[] = [24, 25, 26];
   private static DIRTY = 23;

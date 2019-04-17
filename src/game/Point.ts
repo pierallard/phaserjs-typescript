@@ -9,4 +9,11 @@ export default class Point extends PIXI.Point {
       this.y + point.y
     );
   }
+
+  remove(point: Point) {
+    return new Point(
+      this.x - point.x,
+      this.y - point.y
+    );
+  }
 }

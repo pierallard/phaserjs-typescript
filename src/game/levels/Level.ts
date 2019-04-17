@@ -1,10 +1,10 @@
 import Player from "../Player";
 import {LEVELS} from "./Levels";
 import Point from "../Point";
-import {Bug, GameObject, Pack} from "../game_objects/GameObject";
+import {Ant, GameObject, Pack} from "../game_objects/GameObject";
 import {
   BlockCell, BlueDoorCell, BlueKeyCell, Cell, ChipCell, EmptyCell, ExitCell, ExitDoor, FireCell, GreenDoorCell,
-  GreenKeyCell,
+  GreenKeyCell, IceCell, IceCellBottomLeft, IceCellTopLeft,
   RedDoorCell,
   RedKeyCell, WaterCell,
   YellowDoorCell, YellowKeyCell
@@ -49,9 +49,12 @@ export class Level {
           case 'g': this.cells[y][x] = new GreenKeyCell(game, x, y, groundGroup); break;
           case 'W': this.cells[y][x] = new WaterCell(game, x, y, groundGroup); break;
           case 'F': this.cells[y][x] = new FireCell(game, x, y, groundGroup); break;
+          case 'I': this.cells[y][x] = new IceCell(game, x, y, groundGroup); break;
+          case '1': this.cells[y][x] = new IceCellBottomLeft(game, x, y, groundGroup); break;
+          case '7': this.cells[y][x] = new IceCellTopLeft(game, x, y, groundGroup); break;
           case 'P':
           case ' ': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
-          case '1': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
+          case 'a': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
           case 'p': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
           default:
             console.log('Unable to create cell from ' + this.letterAt(new PIXI.Point(x, y)));
@@ -61,7 +64,7 @@ export class Level {
 
       for (let x = 0; x < GROUND_SIZE; x++) {
         switch(this.letterAt(new PIXI.Point(x, y))) {
-          case '1': this.objects.push(new Bug(game, x, y, this.cells, objectGroup)); break;
+          case 'a': this.objects.push(new Ant(game, x, y, this.cells, objectGroup)); break;
           case 'p': this.objects.push(new Pack(game, x, y, this.cells, objectGroup)); break;
         }
       }
