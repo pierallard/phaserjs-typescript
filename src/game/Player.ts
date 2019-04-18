@@ -69,26 +69,26 @@ export default class Player {
       const key = this.pressedKeys[0];
       if (key === this.leftKey) {
         if (this.isCellAccessible(this.position.left())) {
-          this.runAnimation(game, SENS.LEFT, -1, 0);
+          this.runAnimation(game, SENS.LEFT, this.position.left());
         } else {
           this.runBlocked(game, SENS.LEFT, this.leftKey);
         }
       } else if (key === this.rightKey) {
         if (this.isCellAccessible(this.position.right())) {
-          this.runAnimation(game, SENS.RIGHT, 1, 0);
+          this.runAnimation(game, SENS.RIGHT, this.position.right());
         } else {
           this.runBlocked(game, SENS.RIGHT, this.rightKey);
         }
 
       } else if (key === this.upKey) {
         if (this.isCellAccessible(this.position.up())) {
-          this.runAnimation(game, SENS.UP, 0, -1);
+          this.runAnimation(game, SENS.UP, this.position.up());
         } else {
           this.runBlocked(game, SENS.UP, this.upKey);
         }
       } else if (key === this.downKey) {
         if (this.isCellAccessible(this.position.down())) {
-          this.runAnimation(game, SENS.DOWN, 0, 1);
+          this.runAnimation(game, SENS.DOWN, this.position.down());
         } else {
           this.runBlocked(game, SENS.DOWN, this.downKey);
         }
@@ -96,18 +96,19 @@ export default class Player {
     }
   }
 
-  private runAnimation(game: Phaser.Game, animationName: string, gapX: number, gapY: number) {
+  private runAnimation(game: Phaser.Game, animationName: string, newPosition: Point) {
     const iceSpeed = TIME / 2;
     this.isProcessing = true;
     if (this.sprite.animations.currentAnim !== this.sprite.animations.getAnimation(animationName)) {
       this.sprite.animations.play(animationName);
     }
-    let newPosition = new Point(this.position.x + gapX, this.position.y + gapY);
     this.level.animateBegin(game, this, newPosition);
     const newCell = this.level.getCellAt(newPosition);
     const currentCell = this.level.getCellAt(this.position);
-    if (currentCell instanceof IceCellBottomLeft || currentCell instanceof IceCellTopLeft) {
-      newPosition = currentCell.getNewPosition(this.position, newPosition);
+    if (newCell instanceof IceCell || currentCell instanceof IceCellBottomLeft || currentCell instanceof IceCellTopLeft) {
+      if (currentCell instanceof IceCellBottomLeft || currentCell instanceof IceCellTopLeft) {
+        newPosition = currentCell.getNewPosition(this.position, newPosition);
+      }
       const animation = this.getAnimation(this.position, newPosition);
       if (this.sprite.animations.currentAnim !== this.sprite.animations.getAnimation(animation)) {
         this.sprite.animations.play(animation);
@@ -123,20 +124,7 @@ export default class Player {
         this.position = newPosition;
         this.sprite.x = Player.getPosition(this.position).x;
         this.sprite.y = Player.getPosition(this.position).y;
-        this.runAnimation(game, animation, gap.x, gap.y);
-      }, this);
-    } else if (newCell instanceof IceCell) {
-      game.add.tween(this.sprite).to({
-        x: Player.getPosition(newPosition).x,
-        y: Player.getPosition(newPosition).y
-      }, iceSpeed, Phaser.Easing.Default, true);
-      game.time.events.add(iceSpeed, () => {
-        this.isProcessing = false;
-        this.level.animateEnd(game, this, newPosition);
-        this.position = newPosition;
-        this.sprite.x = Player.getPosition(this.position).x;
-        this.sprite.y = Player.getPosition(this.position).y;
-        this.runAnimation(game, animationName, gapX, gapY);
+        this.runAnimation(game, animation, this.position.add(gap));
       }, this);
     } else {
       game.add.tween(this.sprite).to({
