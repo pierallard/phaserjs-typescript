@@ -1,7 +1,7 @@
 import Player from "../Player";
 import {LEVELS} from "./Levels";
 import Point from "../Point";
-import {Ant, GameObject, Pack, WaterBoots} from "../game_objects/GameObject";
+import {Ant, GameObject, IceBoots, Pack, WaterBoots} from "../game_objects/GameObject";
 import {
   BlockCell,
   BlueDoorCell,
@@ -75,6 +75,7 @@ export class Level {
           case 'P':
           case ' ':
           case 'a':
+          case 'i':
           case 'p': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
           default:
             console.log('Unable to create cell from ' + this.letterAt(new PIXI.Point(x, y)));
@@ -87,6 +88,7 @@ export class Level {
           case 'a': this.objects.push(new Ant(game, x, y, this.cells, objectGroup)); break;
           case 'p': this.objects.push(new Pack(game, x, y, this.cells, objectGroup)); break;
           case 'w': this.objects.push(new WaterBoots(game, x, y, this.cells, objectGroup)); break;
+          case 'i': this.objects.push(new IceBoots(game, x, y, this.cells, objectGroup)); break;
         }
       }
     }

@@ -38,7 +38,7 @@ export abstract class Cell {
     return true;
   }
 
-  forceCell(sens: SENS): Point {
+  forceCell(player: Player): Point {
     return null;
   }
 }
@@ -233,7 +233,7 @@ export class FireCell extends Cell {
     this.sprite.animations.play('DEFAULT');
   }
 
-  isDead() {
+  isDead(player: Player) {
     return true;
   }
 
@@ -249,8 +249,11 @@ export class IceCell extends Cell {
     this.sprite.frame = 17;
   }
 
-  forceCell(sens: SENS): Point {
-    switch (sens) {
+  forceCell(player: Player): Point {
+    if (player.hasIceBoots()) {
+      return null;
+    }
+    switch (player.getSens()) {
       case SENS.UP: return this.position.up();
       case SENS.DOWN: return this.position.down();
       case SENS.LEFT: return this.position.left();
@@ -266,8 +269,11 @@ export class IceCellBottomLeft extends IceCell {
     this.sprite.frame = 19;
   }
 
-  forceCell(sens: SENS): Point {
-    switch (sens) {
+  forceCell(player: Player): Point {
+    if (player.hasIceBoots()) {
+      return null;
+    }
+    switch (player.getSens()) {
       case SENS.UP: return this.position.down();
       case SENS.DOWN: return this.position.right();
       case SENS.LEFT: return this.position.up();
@@ -283,8 +289,11 @@ export class IceCellTopLeft extends IceCell {
     this.sprite.frame = 21;
   }
 
-  forceCell(sens: SENS): Point {
-    switch (sens) {
+  forceCell(player: Player): Point {
+    if (player.hasIceBoots()) {
+      return null;
+    }
+    switch (player.getSens()) {
       case SENS.UP: return this.position.right();
       case SENS.DOWN: return this.position.up();
       case SENS.LEFT: return this.position.down();
@@ -301,7 +310,7 @@ export class ForceTopCell extends Cell {
     this.sprite.animations.play('DEFAULT');
   }
 
-  forceCell(sens: SENS): Point {
+  forceCell(player: Player): Point {
     return this.position.up();
   }
 }
@@ -314,7 +323,7 @@ export class ForceBottomCell extends Cell {
     this.sprite.animations.play('DEFAULT');
   }
 
-  forceCell(sens: SENS): Point {
+  forceCell(player: Player): Point {
     return this.position.down();
   }
 }
@@ -327,7 +336,7 @@ export class ForceLeftCell extends Cell {
     this.sprite.animations.play('DEFAULT');
   }
 
-  forceCell(sens: SENS): Point {
+  forceCell(player: Player): Point {
     return this.position.left();
   }
 }
@@ -340,7 +349,7 @@ export class ForceRightCell extends Cell {
     this.sprite.animations.play('DEFAULT');
   }
 
-  forceCell(sens: SENS): Point {
+  forceCell(player: Player): Point {
     return this.position.right();
   }
 }

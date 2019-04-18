@@ -21,3 +21,6 @@ export class BagItemKey extends BagItem {
 export class BagItemWaterBoots extends BagItem {
 
 }
+export class BagItemIceBoots extends BagItem {
+
+}

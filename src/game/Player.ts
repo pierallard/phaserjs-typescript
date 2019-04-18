@@ -1,7 +1,7 @@
 import Sprite = Phaser.Sprite;
 import {BLOCKTIME, TILE_SIZE, TIME} from "./game_state/Play";
 import {COLOR, Level, GROUND_SIZE} from "./levels/Level";
-import {BagItem, BagItemKey, BagItemWaterBoots} from "./BagItem";
+import {BagItem, BagItemIceBoots, BagItemKey, BagItemWaterBoots} from "./BagItem";
 import Point from "./Point";
 import {IceCell, IceCellBottomLeft, IceCellTopLeft} from "./cells/Cell";
 import {SENS} from "./Sens";
@@ -69,7 +69,7 @@ export default class Player {
       return;
     }
 
-    const forceCell = this.level.getCellAt(this.position).forceCell(this.sens);
+    const forceCell = this.level.getCellAt(this.position).forceCell(this);
     if (forceCell) {
       this.runAnimation(game, forceCell, false, TIME / 2);
 
@@ -110,11 +110,11 @@ export default class Player {
   private runAnimation(game: Phaser.Game, newPosition: Point, removeKey: boolean = true, speed: number = TIME) {
     this.isProcessing = true;
     this.level.animateBegin(game, this, newPosition);
-    const animation = this.getSens(this.position, newPosition);
+    const animation = this.computeSens(this.position, newPosition);
     if (this.sprite.animations.currentAnim !== this.sprite.animations.getAnimation(animation + '')) {
       this.sprite.animations.play(animation + '');
     }
-    this.sens = this.getSens(this.position, newPosition);
+    this.sens = this.computeSens(this.position, newPosition);
     game.add.tween(this.sprite).to({
       x: Player.getPosition(newPosition).x,
       y: Player.getPosition(newPosition).y
@@ -144,7 +144,7 @@ export default class Player {
     }, this)
   }
 
-  private getSens(begin: Point, end: Point): SENS {
+  private computeSens(begin: Point, end: Point): SENS {
     if (begin.x < end.x) {
       return SENS.RIGHT;
     } else if (begin.x > end.x) {
@@ -263,6 +263,16 @@ export default class Player {
   hasWaterBoots(): boolean {
     return this.bag.filter((b: BagItem) => {
       return b instanceof BagItemWaterBoots;
+    }).length > 0;
+  }
+
+  getSens(): SENS {
+    return this.sens;
+  }
+
+  hasIceBoots(): boolean {
+    return this.bag.filter((b: BagItem) => {
+      return b instanceof BagItemIceBoots;
     }).length > 0;
   }
 }
