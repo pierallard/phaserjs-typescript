@@ -1,7 +1,7 @@
 import Player from "../Player";
 import {LEVELS} from "./Levels";
 import Point from "../Point";
-import {Ant, GameObject, Pack} from "../game_objects/GameObject";
+import {Ant, GameObject, Pack, WaterBoots} from "../game_objects/GameObject";
 import {
   BlockCell,
   BlueDoorCell,
@@ -71,9 +71,10 @@ export class Level {
           case '2': this.cells[y][x] = new ForceBottomCell(game, x, y, groundGroup); break;
           case '4': this.cells[y][x] = new ForceLeftCell(game, x, y, groundGroup); break;
           case '6': this.cells[y][x] = new ForceRightCell(game, x, y, groundGroup); break;
+          case 'w':
           case 'P':
-          case ' ': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
-          case 'a': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
+          case ' ':
+          case 'a':
           case 'p': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
           default:
             console.log('Unable to create cell from ' + this.letterAt(new PIXI.Point(x, y)));
@@ -85,6 +86,7 @@ export class Level {
         switch(this.letterAt(new PIXI.Point(x, y))) {
           case 'a': this.objects.push(new Ant(game, x, y, this.cells, objectGroup)); break;
           case 'p': this.objects.push(new Pack(game, x, y, this.cells, objectGroup)); break;
+          case 'w': this.objects.push(new WaterBoots(game, x, y, this.cells, objectGroup)); break;
         }
       }
     }
@@ -185,11 +187,11 @@ export class Level {
     return new Point(0, 0);
   }
 
-  getDeadPositions(): Point[] {
+  getDeadPositions(player: Player): Point[] {
     let result = [];
     for (let y = 0; y < this.cells.length; y++) {
       for (let x = 0; x < this.cells[y].length; x++) {
-        if (this.cells[y][x].isDead()) {
+        if (this.cells[y][x].isDead(player)) {
           result.push(new Point(x, y));
         }
       }

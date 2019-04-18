@@ -17,3 +17,7 @@ export class BagItemKey extends BagItem {
     return this.color;
   }
 }
+
+export class BagItemWaterBoots extends BagItem {
+
+}

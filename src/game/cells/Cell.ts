@@ -23,7 +23,7 @@ export abstract class Cell {
   animateEnd(game: Game, player: Player, endPosition: Point, level: Level) {
   }
 
-  isDead() {
+  isDead(player: Player) {
     return false;
   }
 
@@ -365,11 +365,17 @@ export class WaterCell extends Cell {
     if (this.sprite.frame === WaterCell.DIRTY) {
       this.sprite.frame = EmptyCell.EMPTY_CELL;
     } else if (this.isWater()) {
-      level.animateWaterAt(game, endPosition);
+      if (!player.hasWaterBoots()) {
+        level.animateWaterAt(game, endPosition);
+      }
     }
   }
 
-  isDead() {
+  isDead(player: Player) {
+    if (player.hasWaterBoots()) {
+      return false;
+    }
+
     if (WaterCell.WATER_ANIMATION.indexOf(<number> this.sprite.frame) !== -1) {
       return true;
     }

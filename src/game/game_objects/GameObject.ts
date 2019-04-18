@@ -6,6 +6,7 @@ import {Level} from "../levels/Level";
 import Game = Phaser.Game;
 import Group = Phaser.Group;
 import {SENS} from "../Sens";
+import {BagItemWaterBoots} from "../BagItem";
 
 export abstract class GameObject {
   protected cells: Cell[][];
@@ -178,5 +179,19 @@ export class Ant extends GameObject {
       case SENS.DOWN: return this.position.right();
       case SENS.RIGHT: return this.position.up();
     }
+  }
+}
+
+export class WaterBoots extends GameObject {
+  constructor(game: Phaser.Game, x: number, y: number, cells: Cell[][], objectGroup: Group) {
+    super(game, x, y, cells, objectGroup);
+
+    this.sprite.frame = 64 + 18;
+  }
+
+  animateEnd(player: Player, endPosition: Point, level: Level, game: Game) {
+    player.addItem(new BagItemWaterBoots());
+    this.destroy();
+    level.destroyObject(this);
   }
 }
