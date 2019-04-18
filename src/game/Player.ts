@@ -4,16 +4,14 @@ import {COLOR, Level, GROUND_SIZE} from "./levels/Level";
 import {BagItem, BagItemKey} from "./BagItem";
 import Point from "./Point";
 import {IceCell, IceCellBottomLeft, IceCellTopLeft} from "./cells/Cell";
+import {SENS} from "./Sens";
 
 export default class Player {
-  static ANIMATION_LEFT = 'LEFT';
-  static ANIMATION_RIGHT = 'RIGHT';
-  static ANIMATION_UP = 'UP';
-  static ANIMATION_DOWN = 'DOWN';
   private sprite: Sprite;
   private position: Point;
   private chips: number;
   private dead: boolean = false;
+  private sens: SENS;
 
   private leftKey: Phaser.Key;
   private rightKey: Phaser.Key;
@@ -29,6 +27,7 @@ export default class Player {
     this.level = level;
     this.bag = [];
     this.chips = 0;
+    this.sens = SENS.DOWN;
   }
 
   create(game: Phaser.Game) {
@@ -41,10 +40,10 @@ export default class Player {
     this.rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
     this.upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
     this.downKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
-    this.sprite.animations.add(Player.ANIMATION_LEFT, [101, 102, 103, 104, 105, 104, 103, 102], Phaser.Timer.SECOND * 4 / TIME, true);
-    this.sprite.animations.add(Player.ANIMATION_RIGHT, [133, 134, 135, 136, 137, 136, 135, 134], Phaser.Timer.SECOND * 4 / TIME, true);
-    this.sprite.animations.add(Player.ANIMATION_UP, [96, 97, 98, 99, 100, 99, 98, 97], Phaser.Timer.SECOND * 4 / TIME, true);
-    this.sprite.animations.add(Player.ANIMATION_DOWN, [128, 129, 130, 131, 132, 131, 130, 129], Phaser.Timer.SECOND * 4 / TIME, true);
+    this.sprite.animations.add(SENS.LEFT, [101, 102, 103, 104, 105, 104, 103, 102], Phaser.Timer.SECOND * 4 / TIME, true);
+    this.sprite.animations.add(SENS.RIGHT, [133, 134, 135, 136, 137, 136, 135, 134], Phaser.Timer.SECOND * 4 / TIME, true);
+    this.sprite.animations.add(SENS.UP, [96, 97, 98, 99, 100, 99, 98, 97], Phaser.Timer.SECOND * 4 / TIME, true);
+    this.sprite.animations.add(SENS.DOWN, [128, 129, 130, 131, 132, 131, 130, 129], Phaser.Timer.SECOND * 4 / TIME, true);
     this.sprite.animations.add('DEFAULT', [130]);
 
     game.camera.follow(this.sprite);
@@ -69,29 +68,29 @@ export default class Player {
     if (this.pressedKeys.length && !this.isProcessing) {
       const key = this.pressedKeys[0];
       if (key === this.leftKey) {
-        if (this.isCellAccessible(new Point(this.position.x - 1, this.position.y))) {
-          this.runAnimation(game, Player.ANIMATION_LEFT, -1, 0);
+        if (this.isCellAccessible(this.position.left())) {
+          this.runAnimation(game, SENS.LEFT, -1, 0);
         } else {
-          this.runBlocked(game, Player.ANIMATION_LEFT, this.leftKey);
+          this.runBlocked(game, SENS.LEFT, this.leftKey);
         }
       } else if (key === this.rightKey) {
-        if (this.isCellAccessible(new Point(this.position.x + 1, this.position.y))) {
-          this.runAnimation(game, Player.ANIMATION_RIGHT, 1, 0);
+        if (this.isCellAccessible(this.position.right())) {
+          this.runAnimation(game, SENS.RIGHT, 1, 0);
         } else {
-          this.runBlocked(game, Player.ANIMATION_RIGHT, this.rightKey);
+          this.runBlocked(game, SENS.RIGHT, this.rightKey);
         }
 
       } else if (key === this.upKey) {
-        if (this.isCellAccessible(new Point(this.position.x, this.position.y - 1))) {
-          this.runAnimation(game, Player.ANIMATION_UP, 0, -1);
+        if (this.isCellAccessible(this.position.up())) {
+          this.runAnimation(game, SENS.UP, 0, -1);
         } else {
-          this.runBlocked(game, Player.ANIMATION_UP, this.upKey);
+          this.runBlocked(game, SENS.UP, this.upKey);
         }
       } else if (key === this.downKey) {
-        if (this.isCellAccessible(new Point(this.position.x, this.position.y + 1))) {
-          this.runAnimation(game, Player.ANIMATION_DOWN, 0, 1);
+        if (this.isCellAccessible(this.position.down())) {
+          this.runAnimation(game, SENS.DOWN, 0, 1);
         } else {
-          this.runBlocked(game, Player.ANIMATION_DOWN, this.downKey);
+          this.runBlocked(game, SENS.DOWN, this.downKey);
         }
       }
     }
@@ -100,7 +99,6 @@ export default class Player {
   private runAnimation(game: Phaser.Game, animationName: string, gapX: number, gapY: number) {
     const iceSpeed = TIME / 2;
     this.isProcessing = true;
-    console.log(this.sprite.animations.currentAnim);
     if (this.sprite.animations.currentAnim !== this.sprite.animations.getAnimation(animationName)) {
       this.sprite.animations.play(animationName);
     }
@@ -110,13 +108,16 @@ export default class Player {
     const currentCell = this.level.getCellAt(this.position);
     if (currentCell instanceof IceCellBottomLeft || currentCell instanceof IceCellTopLeft) {
       newPosition = currentCell.getNewPosition(this.position, newPosition);
+      const animation = this.getAnimation(this.position, newPosition);
+      if (this.sprite.animations.currentAnim !== this.sprite.animations.getAnimation(animation)) {
+        this.sprite.animations.play(animation);
+      }
       game.add.tween(this.sprite).to({
         x: Player.getPosition(newPosition).x,
         y: Player.getPosition(newPosition).y
       }, iceSpeed, Phaser.Easing.Default, true);
       game.time.events.add(iceSpeed, () => {
         this.isProcessing = false;
-        const animation = this.getAnimation(this.position, newPosition);
         const gap = newPosition.remove(this.position);
         this.level.animateEnd(game, this, newPosition);
         this.position = newPosition;
@@ -152,13 +153,13 @@ export default class Player {
         if (!this.pressedKeys.length) {
           this.sprite.animations.stop();
           this.sprite.animations.currentAnim = null;
-          if (animationName === Player.ANIMATION_LEFT) {
+          if (animationName === SENS.LEFT) {
             this.sprite.frame = 103;
-          } else if (animationName === Player.ANIMATION_RIGHT) {
+          } else if (animationName === SENS.RIGHT) {
             this.sprite.frame = 135;
-          } else if (animationName === Player.ANIMATION_UP) {
+          } else if (animationName === SENS.UP) {
             this.sprite.frame = 98;
-          } else if (animationName === Player.ANIMATION_DOWN) {
+          } else if (animationName === SENS.DOWN) {
             this.sprite.frame = 130;
           }
         }
@@ -168,37 +169,37 @@ export default class Player {
 
   private getAnimation(begin: Point, end: Point) {
     if (begin.x < end.x) {
-      return Player.ANIMATION_RIGHT;
+      return SENS.RIGHT;
     } else if (begin.x > end.x) {
-      return Player.ANIMATION_LEFT;
+      return SENS.LEFT;
     } else if (begin.y < end.y) {
-      return Player.ANIMATION_DOWN;
+      return SENS.DOWN;
     } else {
-      return Player.ANIMATION_UP;
+      return SENS.UP;
     }
   }
 
   private runBlocked(game: Phaser.Game, animationName: string, key: Phaser.Key) {
     this.sprite.animations.stop();
     this.sprite.animations.currentAnim = null;
-    if (animationName === Player.ANIMATION_LEFT) {
+    if (animationName === SENS.LEFT) {
       this.sprite.frame = 113;
-    } else if (animationName === Player.ANIMATION_RIGHT) {
+    } else if (animationName === SENS.RIGHT) {
       this.sprite.frame = 145;
-    } else if (animationName === Player.ANIMATION_UP) {
+    } else if (animationName === SENS.UP) {
       this.sprite.frame = 108;
-    } else if (animationName === Player.ANIMATION_DOWN) {
+    } else if (animationName === SENS.DOWN) {
       this.sprite.frame = 140;
     }
     this.isProcessing = true;
     game.time.events.add(BLOCKTIME / 2, () => {
-      if (animationName === Player.ANIMATION_LEFT) {
+      if (animationName === SENS.LEFT) {
         this.sprite.frame = 103;
-      } else if (animationName === Player.ANIMATION_RIGHT) {
+      } else if (animationName === SENS.RIGHT) {
         this.sprite.frame = 135;
-      } else if (animationName === Player.ANIMATION_UP) {
+      } else if (animationName === SENS.UP) {
         this.sprite.frame = 98;
-      } else if (animationName === Player.ANIMATION_DOWN) {
+      } else if (animationName === SENS.DOWN) {
         this.sprite.frame = 130;
       }
     });

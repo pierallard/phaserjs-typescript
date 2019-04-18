@@ -5,6 +5,7 @@ import {Cell, WaterCell} from "../cells/Cell";
 import {Level} from "../levels/Level";
 import Game = Phaser.Game;
 import Group = Phaser.Group;
+import {SENS} from "../Sens";
 
 export abstract class GameObject {
   protected cells: Cell[][];
@@ -103,13 +104,6 @@ export class Pack extends GameObject {
   }
 }
 
-export enum SENS {
-  UP = 'UP',
-  DOWN = 'DOWN',
-  RIGHT = 'RIGHT',
-  LEFT = 'LEFT'
-}
-
 export class Ant extends GameObject {
   static ORDER: SENS[] = [SENS.UP, SENS.LEFT, SENS.DOWN, SENS.RIGHT];
 
@@ -121,10 +115,10 @@ export class Ant extends GameObject {
     this.sens = SENS.UP;
 
     this.sprite.frame = 32*5;
-    this.sprite.animations.add(Player.ANIMATION_LEFT, [164, 165, 166, 167], Phaser.Timer.SECOND * 4 / TIME, true);
-    this.sprite.animations.add(Player.ANIMATION_RIGHT, [196, 197, 198, 199], Phaser.Timer.SECOND * 4 / TIME, true);
-    this.sprite.animations.add(Player.ANIMATION_UP, [160, 161, 162, 163], Phaser.Timer.SECOND * 4 / TIME, true);
-    this.sprite.animations.add(Player.ANIMATION_DOWN, [192, 193, 194, 195], Phaser.Timer.SECOND * 4 / TIME, true);
+    this.sprite.animations.add(SENS.LEFT, [164, 165, 166, 167], Phaser.Timer.SECOND * 4 / TIME, true);
+    this.sprite.animations.add(SENS.RIGHT, [196, 197, 198, 199], Phaser.Timer.SECOND * 4 / TIME, true);
+    this.sprite.animations.add(SENS.UP, [160, 161, 162, 163], Phaser.Timer.SECOND * 4 / TIME, true);
+    this.sprite.animations.add(SENS.DOWN, [192, 193, 194, 195], Phaser.Timer.SECOND * 4 / TIME, true);
   }
 
   isToxic() {
@@ -162,7 +156,7 @@ export class Ant extends GameObject {
         }
       }
 
-      this.sprite.animations.play(this.getAnimationName());
+      this.sprite.animations.play(this.sens + '');
 
       game.add.tween(this.sprite).to({
         x: newPosition.x * TILE_SIZE,
@@ -179,19 +173,10 @@ export class Ant extends GameObject {
 
   private getNewCell(sens: SENS) {
     switch (sens) {
-      case SENS.UP: return this.position.add(new Point(-1, 0)); // try left
-      case SENS.LEFT: return this.position.add(new Point(0, 1)); // try bottom
-      case SENS.DOWN: return this.position.add(new Point(1, 0)); // try right
-      case SENS.RIGHT: return this.position.add(new Point(0, -1)); // try up
-    }
-  }
-
-  private getAnimationName() {
-    switch (this.sens) {
-      case SENS.UP: return Player.ANIMATION_UP;
-      case SENS.LEFT: return Player.ANIMATION_LEFT;
-      case SENS.DOWN: return Player.ANIMATION_DOWN;
-      case SENS.RIGHT: return Player.ANIMATION_RIGHT;
+      case SENS.UP: return this.position.left();
+      case SENS.LEFT: return this.position.down();
+      case SENS.DOWN: return this.position.right();
+      case SENS.RIGHT: return this.position.up();
     }
   }
 }

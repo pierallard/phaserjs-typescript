@@ -4,16 +4,26 @@ export default class Point extends PIXI.Point {
   }
 
   add(point: Point) {
-    return new Point(
-      this.x + point.x,
-      this.y + point.y
-    );
+    return new Point(this.x + point.x, this.y + point.y);
   }
 
   remove(point: Point) {
-    return new Point(
-      this.x - point.x,
-      this.y - point.y
-    );
+    return new Point(this.x - point.x, this.y - point.y);
+  }
+
+  left() {
+    return this.add(new Point(-1, 0));
+  }
+
+  right() {
+    return this.add(new Point(1, 0));
+  }
+
+  up() {
+    return this.add(new Point(0, -1));
+  }
+
+  down() {
+    return this.add(new Point(0, 1));
   }
 }
