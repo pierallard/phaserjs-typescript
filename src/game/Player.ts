@@ -69,26 +69,26 @@ export default class Player {
       const key = this.pressedKeys[0];
       if (key === this.leftKey) {
         if (this.isCellAccessible(this.position.left())) {
-          this.runAnimation(game, SENS.LEFT, this.position.left());
+          this.runAnimation(game, this.position.left());
         } else {
           this.runBlocked(game, SENS.LEFT, this.leftKey);
         }
       } else if (key === this.rightKey) {
         if (this.isCellAccessible(this.position.right())) {
-          this.runAnimation(game, SENS.RIGHT, this.position.right());
+          this.runAnimation(game, this.position.right());
         } else {
           this.runBlocked(game, SENS.RIGHT, this.rightKey);
         }
 
       } else if (key === this.upKey) {
         if (this.isCellAccessible(this.position.up())) {
-          this.runAnimation(game, SENS.UP, this.position.up());
+          this.runAnimation(game, this.position.up());
         } else {
           this.runBlocked(game, SENS.UP, this.upKey);
         }
       } else if (key === this.downKey) {
         if (this.isCellAccessible(this.position.down())) {
-          this.runAnimation(game, SENS.DOWN, this.position.down());
+          this.runAnimation(game, this.position.down());
         } else {
           this.runBlocked(game, SENS.DOWN, this.downKey);
         }
@@ -96,22 +96,19 @@ export default class Player {
     }
   }
 
-  private runAnimation(game: Phaser.Game, animationName: string, newPosition: Point) {
+  private runAnimation(game: Phaser.Game, newPosition: Point) {
     const iceSpeed = TIME / 2;
     this.isProcessing = true;
-    if (this.sprite.animations.currentAnim !== this.sprite.animations.getAnimation(animationName)) {
-      this.sprite.animations.play(animationName);
-    }
-    this.level.animateBegin(game, this, newPosition);
     const newCell = this.level.getCellAt(newPosition);
     const currentCell = this.level.getCellAt(this.position);
     if (newCell instanceof IceCell || currentCell instanceof IceCellBottomLeft || currentCell instanceof IceCellTopLeft) {
       if (currentCell instanceof IceCellBottomLeft || currentCell instanceof IceCellTopLeft) {
         newPosition = currentCell.getNewPosition(this.position, newPosition);
       }
+      this.level.animateBegin(game, this, newPosition);
       const animation = this.getAnimation(this.position, newPosition);
-      if (this.sprite.animations.currentAnim !== this.sprite.animations.getAnimation(animation)) {
-        this.sprite.animations.play(animation);
+      if (this.sprite.animations.currentAnim !== this.sprite.animations.getAnimation(animation + '')) {
+        this.sprite.animations.play(animation + '');
       }
       game.add.tween(this.sprite).to({
         x: Player.getPosition(newPosition).x,
@@ -124,9 +121,14 @@ export default class Player {
         this.position = newPosition;
         this.sprite.x = Player.getPosition(this.position).x;
         this.sprite.y = Player.getPosition(this.position).y;
-        this.runAnimation(game, animation, this.position.add(gap));
+        this.runAnimation(game, this.position.add(gap));
       }, this);
     } else {
+      this.level.animateBegin(game, this, newPosition);
+      const animation = this.getAnimation(this.position, newPosition);
+      if (this.sprite.animations.currentAnim !== this.sprite.animations.getAnimation(animation + '')) {
+        this.sprite.animations.play(animation + '');
+      }
       game.add.tween(this.sprite).to({
         x: Player.getPosition(newPosition).x,
         y: Player.getPosition(newPosition).y
@@ -141,13 +143,13 @@ export default class Player {
         if (!this.pressedKeys.length) {
           this.sprite.animations.stop();
           this.sprite.animations.currentAnim = null;
-          if (animationName === SENS.LEFT) {
+          if (animation === SENS.LEFT) {
             this.sprite.frame = 103;
-          } else if (animationName === SENS.RIGHT) {
+          } else if (animation === SENS.RIGHT) {
             this.sprite.frame = 135;
-          } else if (animationName === SENS.UP) {
+          } else if (animation === SENS.UP) {
             this.sprite.frame = 98;
-          } else if (animationName === SENS.DOWN) {
+          } else if (animation === SENS.DOWN) {
             this.sprite.frame = 130;
           }
         }
@@ -155,7 +157,7 @@ export default class Player {
     }
   }
 
-  private getAnimation(begin: Point, end: Point) {
+  private getAnimation(begin: Point, end: Point): SENS {
     if (begin.x < end.x) {
       return SENS.RIGHT;
     } else if (begin.x > end.x) {
