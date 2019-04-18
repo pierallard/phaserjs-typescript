@@ -293,6 +293,58 @@ export class IceCellTopLeft extends IceCell {
   }
 }
 
+export class ForceTopCell extends Cell {
+  constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
+    super(game, x, y, groundGroup);
+
+    this.sprite.animations.add('DEFAULT', [1, 2, 3, 4], Phaser.Timer.SECOND * 3 / TIME, true);
+    this.sprite.animations.play('DEFAULT');
+  }
+
+  forceCell(sens: SENS): Point {
+    return this.position.up();
+  }
+}
+
+export class ForceBottomCell extends Cell {
+  constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
+    super(game, x, y, groundGroup);
+
+    this.sprite.animations.add('DEFAULT', [9, 10, 11, 12], Phaser.Timer.SECOND * 3 / TIME, true);
+    this.sprite.animations.play('DEFAULT');
+  }
+
+  forceCell(sens: SENS): Point {
+    return this.position.down();
+  }
+}
+
+export class ForceLeftCell extends Cell {
+  constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
+    super(game, x, y, groundGroup);
+
+    this.sprite.animations.add('DEFAULT', [5, 6, 7, 8], Phaser.Timer.SECOND * 3 / TIME, true);
+    this.sprite.animations.play('DEFAULT');
+  }
+
+  forceCell(sens: SENS): Point {
+    return this.position.left();
+  }
+}
+
+export class ForceRightCell extends Cell {
+  constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
+    super(game, x, y, groundGroup);
+
+    this.sprite.animations.add('DEFAULT', [13, 14, 15, 16], Phaser.Timer.SECOND * 3 / TIME, true);
+    this.sprite.animations.play('DEFAULT');
+  }
+
+  forceCell(sens: SENS): Point {
+    return this.position.right();
+  }
+}
+
 export class WaterCell extends Cell {
   private static WATER_ANIMATION: number[] = [24, 25, 26];
   private static DIRTY = 23;

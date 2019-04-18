@@ -3,11 +3,26 @@ import {LEVELS} from "./Levels";
 import Point from "../Point";
 import {Ant, GameObject, Pack} from "../game_objects/GameObject";
 import {
-  BlockCell, BlueDoorCell, BlueKeyCell, Cell, ChipCell, EmptyCell, ExitCell, ExitDoor, FireCell, GreenDoorCell,
-  GreenKeyCell, IceCell, IceCellBottomLeft, IceCellTopLeft,
+  BlockCell,
+  BlueDoorCell,
+  BlueKeyCell,
+  Cell,
+  ChipCell,
+  EmptyCell,
+  ExitCell,
+  ExitDoor,
+  FireCell, ForceBottomCell, ForceLeftCell, ForceRightCell,
+  ForceTopCell,
+  GreenDoorCell,
+  GreenKeyCell,
+  IceCell,
+  IceCellBottomLeft,
+  IceCellTopLeft,
   RedDoorCell,
-  RedKeyCell, WaterCell,
-  YellowDoorCell, YellowKeyCell
+  RedKeyCell,
+  WaterCell,
+  YellowDoorCell,
+  YellowKeyCell
 } from "../cells/Cell";
 import Game = Phaser.Game;
 import {TILE_SIZE, TIME} from "../game_state/Play";
@@ -52,6 +67,10 @@ export class Level {
           case 'I': this.cells[y][x] = new IceCell(game, x, y, groundGroup); break;
           case '1': this.cells[y][x] = new IceCellBottomLeft(game, x, y, groundGroup); break;
           case '7': this.cells[y][x] = new IceCellTopLeft(game, x, y, groundGroup); break;
+          case '8': this.cells[y][x] = new ForceTopCell(game, x, y, groundGroup); break;
+          case '2': this.cells[y][x] = new ForceBottomCell(game, x, y, groundGroup); break;
+          case '4': this.cells[y][x] = new ForceLeftCell(game, x, y, groundGroup); break;
+          case '6': this.cells[y][x] = new ForceRightCell(game, x, y, groundGroup); break;
           case 'P':
           case ' ': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
           case 'a': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
