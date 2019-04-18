@@ -5,11 +5,14 @@ import {COLOR, Level} from "../levels/Level";
 import Game = Phaser.Game;
 import Point from "../Point";
 import Group = Phaser.Group;
+import {SENS} from "../Sens";
 
 export abstract class Cell {
   protected sprite: Phaser.Sprite;
+  protected position: Point;
 
   constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
+    this.position = new Point(x, y);
     this.sprite = game.add.sprite(x * TILE_SIZE, y * TILE_SIZE, 'chips', 0, groundGroup);
   }
 
@@ -33,6 +36,10 @@ export abstract class Cell {
 
   isFree(): boolean {
     return true;
+  }
+
+  forceCell(sens: SENS): Point {
+    return null;
   }
 }
 
@@ -241,6 +248,15 @@ export class IceCell extends Cell {
 
     this.sprite.frame = 17;
   }
+
+  forceCell(sens: SENS): Point {
+    switch (sens) {
+      case SENS.UP: return this.position.up();
+      case SENS.DOWN: return this.position.down();
+      case SENS.LEFT: return this.position.left();
+      case SENS.RIGHT: return this.position.right();
+    }
+  }
 }
 
 export class IceCellBottomLeft extends IceCell {
@@ -250,15 +266,12 @@ export class IceCellBottomLeft extends IceCell {
     this.sprite.frame = 19;
   }
 
-  getNewPosition(original: Point, end: Point) {
-    if (original.x > end.x) {
-      return original.add(new Point(0, -1));
-    } else if (original.y < end.y) {
-      return original.add(new Point(1, 0));
-    } else if (original.x < end.x) {
-      return original.add(new Point(-1, 0));
-    } else {
-      return original.add(new Point(0, 1));
+  forceCell(sens: SENS): Point {
+    switch (sens) {
+      case SENS.UP: return this.position.down();
+      case SENS.DOWN: return this.position.right();
+      case SENS.LEFT: return this.position.up();
+      case SENS.RIGHT: return this.position.left();
     }
   }
 }
@@ -270,15 +283,12 @@ export class IceCellTopLeft extends IceCell {
     this.sprite.frame = 21;
   }
 
-  getNewPosition(original: Point, end: Point) {
-    if (original.x > end.x) {
-      return original.add(new Point(0, 1));
-    } else if (original.y < end.y) {
-      return original.add(new Point(0, -1));
-    } else if (original.x < end.x) {
-      return original.add(new Point(-1, 0));
-    } else {
-      return original.add(new Point(1, 0));
+  forceCell(sens: SENS): Point {
+    switch (sens) {
+      case SENS.UP: return this.position.right();
+      case SENS.DOWN: return this.position.up();
+      case SENS.LEFT: return this.position.down();
+      case SENS.RIGHT: return this.position.left();
     }
   }
 }

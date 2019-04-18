@@ -65,7 +65,18 @@ export default class Player {
       this.pressedKeys.push(this.downKey);
     }
 
-    if (this.pressedKeys.length && !this.isProcessing) {
+    if (this.isProcessing) {
+      return;
+    }
+
+    const forceCell = this.level.getCellAt(this.position).forceCell(this.sens);
+    if (forceCell) {
+      this.runAnimation(game, forceCell, false, TIME / 2);
+
+      return;
+    }
+
+    if (this.pressedKeys.length) {
       const key = this.pressedKeys[0];
       if (key === this.leftKey) {
         if (this.isCellAccessible(this.position.left())) {
@@ -96,68 +107,44 @@ export default class Player {
     }
   }
 
-  private runAnimation(game: Phaser.Game, newPosition: Point) {
-    const iceSpeed = TIME / 2;
+  private runAnimation(game: Phaser.Game, newPosition: Point, removeKey: boolean = true, speed: number = TIME) {
     this.isProcessing = true;
-    const newCell = this.level.getCellAt(newPosition);
-    const currentCell = this.level.getCellAt(this.position);
-    if (newCell instanceof IceCell || currentCell instanceof IceCellBottomLeft || currentCell instanceof IceCellTopLeft) {
-      if (currentCell instanceof IceCellBottomLeft || currentCell instanceof IceCellTopLeft) {
-        newPosition = currentCell.getNewPosition(this.position, newPosition);
-      }
-      this.level.animateBegin(game, this, newPosition);
-      const animation = this.getAnimation(this.position, newPosition);
-      if (this.sprite.animations.currentAnim !== this.sprite.animations.getAnimation(animation + '')) {
-        this.sprite.animations.play(animation + '');
-      }
-      game.add.tween(this.sprite).to({
-        x: Player.getPosition(newPosition).x,
-        y: Player.getPosition(newPosition).y
-      }, iceSpeed, Phaser.Easing.Default, true);
-      game.time.events.add(iceSpeed, () => {
-        this.isProcessing = false;
-        const gap = newPosition.remove(this.position);
-        this.level.animateEnd(game, this, newPosition);
-        this.position = newPosition;
-        this.sprite.x = Player.getPosition(this.position).x;
-        this.sprite.y = Player.getPosition(this.position).y;
-        this.runAnimation(game, this.position.add(gap));
-      }, this);
-    } else {
-      this.level.animateBegin(game, this, newPosition);
-      const animation = this.getAnimation(this.position, newPosition);
-      if (this.sprite.animations.currentAnim !== this.sprite.animations.getAnimation(animation + '')) {
-        this.sprite.animations.play(animation + '');
-      }
-      game.add.tween(this.sprite).to({
-        x: Player.getPosition(newPosition).x,
-        y: Player.getPosition(newPosition).y
-      }, TIME, Phaser.Easing.Default, true);
-      game.time.events.add(TIME, () => {
-        this.isProcessing = false;
-        this.level.animateEnd(game, this, newPosition);
-        this.pressedKeys.shift();
-        this.position = newPosition;
-        this.sprite.x = Player.getPosition(this.position).x;
-        this.sprite.y = Player.getPosition(this.position).y;
-        if (!this.pressedKeys.length) {
-          this.sprite.animations.stop();
-          this.sprite.animations.currentAnim = null;
-          if (animation === SENS.LEFT) {
-            this.sprite.frame = 103;
-          } else if (animation === SENS.RIGHT) {
-            this.sprite.frame = 135;
-          } else if (animation === SENS.UP) {
-            this.sprite.frame = 98;
-          } else if (animation === SENS.DOWN) {
-            this.sprite.frame = 130;
-          }
-        }
-      }, this)
+    this.level.animateBegin(game, this, newPosition);
+    const animation = this.getSens(this.position, newPosition);
+    if (this.sprite.animations.currentAnim !== this.sprite.animations.getAnimation(animation + '')) {
+      this.sprite.animations.play(animation + '');
     }
+    this.sens = this.getSens(this.position, newPosition);
+    game.add.tween(this.sprite).to({
+      x: Player.getPosition(newPosition).x,
+      y: Player.getPosition(newPosition).y
+    }, speed, Phaser.Easing.Default, true);
+    game.time.events.add(speed, () => {
+      this.isProcessing = false;
+      this.level.animateEnd(game, this, newPosition);
+      if (removeKey) {
+        this.pressedKeys.shift();
+      }
+      this.position = newPosition;
+      this.sprite.x = Player.getPosition(this.position).x;
+      this.sprite.y = Player.getPosition(this.position).y;
+      if (!this.pressedKeys.length) {
+        this.sprite.animations.stop();
+        this.sprite.animations.currentAnim = null;
+        if (animation === SENS.LEFT) {
+          this.sprite.frame = 103;
+        } else if (animation === SENS.RIGHT) {
+          this.sprite.frame = 135;
+        } else if (animation === SENS.UP) {
+          this.sprite.frame = 98;
+        } else if (animation === SENS.DOWN) {
+          this.sprite.frame = 130;
+        }
+      }
+    }, this)
   }
 
-  private getAnimation(begin: Point, end: Point): SENS {
+  private getSens(begin: Point, end: Point): SENS {
     if (begin.x < end.x) {
       return SENS.RIGHT;
     } else if (begin.x > end.x) {
