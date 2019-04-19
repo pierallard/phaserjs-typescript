@@ -1,7 +1,6 @@
 import Player from "../Player";
 import {LEVELS} from "./Levels";
 import Point from "../Point";
-import {Ant, FireBoots, GameObject, IceBoots, Pack, WaterBoots} from "../game_objects/GameObject";
 import {Cell} from "../cells/Cell";
 import Game = Phaser.Game;
 import {TILE_SIZE, TIME} from "../game_state/Play";
@@ -15,7 +14,11 @@ import {FireCell} from "../cells/FireCell";
 import IceCell, {IceCellBottomLeft, IceCellTopLeft} from "../cells/IceCell";
 import {ForceBottomCell, ForceLeftCell, ForceRightCell, ForceTopCell} from "../cells/ForceCell";
 import EmptyCell from "../cells/EmptyCell";
-import {BlueKeyCell, ChipCell, GreenKeyCell, RedKeyCell, YellowKeyCell} from "../cells/OtherCells";
+import {
+  BlueKey, Chip, FireBoots, GreenKey, IceBoots, RedKey, WaterBoots,
+  YellowKey
+} from "../game_objects/PickableObject";
+import {Ant, GameObject, Pack} from "../game_objects/GameObject";
 
 export const GROUND_SIZE = 32;
 
@@ -42,15 +45,10 @@ export class Level {
           case 'X': this.cells[y][x] = new WallCell(game, x, y, groundGroup); break;
           case 'E': this.cells[y][x] = new ExitCell(game, x, y, groundGroup); break;
           case 'D': this.cells[y][x] = new ExitDoor(game, x, y, groundGroup); break;
-          case 'c': this.cells[y][x] = new ChipCell(game, x, y, groundGroup); break;
           case 'B': this.cells[y][x] = new BlueDoorCell(game, x, y, groundGroup); break;
           case 'Y': this.cells[y][x] = new YellowDoorCell(game, x, y, groundGroup); break;
           case 'R': this.cells[y][x] = new RedDoorCell(game, x, y, groundGroup); break;
           case 'G': this.cells[y][x] = new GreenDoorCell(game, x, y, groundGroup); break;
-          case 'b': this.cells[y][x] = new BlueKeyCell(game, x, y, groundGroup); break;
-          case 'y': this.cells[y][x] = new YellowKeyCell(game, x, y, groundGroup); break;
-          case 'r': this.cells[y][x] = new RedKeyCell(game, x, y, groundGroup); break;
-          case 'g': this.cells[y][x] = new GreenKeyCell(game, x, y, groundGroup); break;
           case 'W': this.cells[y][x] = new WaterCell(game, x, y, groundGroup); break;
           case 'F': this.cells[y][x] = new FireCell(game, x, y, groundGroup); break;
           case 'I': this.cells[y][x] = new IceCell(game, x, y, groundGroup); break;
@@ -66,7 +64,12 @@ export class Level {
           case 'a':
           case 'i':
           case 'f':
-          case 'p': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
+          case 'c':
+          case 'b':
+          case 'y':
+          case 'r':
+          case 'g':
+          case 'p':
           default:
             console.log('Unable to create cell from ' + this.letterAt(new PIXI.Point(x, y)));
             this.cells[y][x] = new EmptyCell(game, x, y, groundGroup);
@@ -75,11 +78,16 @@ export class Level {
 
       for (let x = 0; x < GROUND_SIZE; x++) {
         switch(this.letterAt(new PIXI.Point(x, y))) {
-          case 'a': this.objects.push(new Ant(game, x, y, this.cells, objectGroup)); break;
-          case 'p': this.objects.push(new Pack(game, x, y, this.cells, objectGroup)); break;
-          case 'w': this.objects.push(new WaterBoots(game, x, y, this.cells, objectGroup)); break;
-          case 'i': this.objects.push(new IceBoots(game, x, y, this.cells, objectGroup)); break;
-          case 'f': this.objects.push(new FireBoots(game, x, y, this.cells, objectGroup)); break;
+          case 'a': this.objects.push(new Ant(game, x, y, objectGroup)); break;
+          case 'p': this.objects.push(new Pack(game, x, y, objectGroup)); break;
+          case 'w': this.objects.push(new WaterBoots(game, x, y, objectGroup)); break;
+          case 'i': this.objects.push(new IceBoots(game, x, y, objectGroup)); break;
+          case 'f': this.objects.push(new FireBoots(game, x, y, objectGroup)); break;
+          case 'c': this.objects.push(new Chip(game, x, y, objectGroup)); break;
+          case 'b': this.objects.push(new BlueKey(game, x, y, groundGroup)); break;
+          case 'y': this.objects.push(new YellowKey(game, x, y, groundGroup)); break;
+          case 'r': this.objects.push(new RedKey(game, x, y, groundGroup)); break;
+          case 'g': this.objects.push(new GreenKey(game, x, y, groundGroup)); break;
         }
       }
     }

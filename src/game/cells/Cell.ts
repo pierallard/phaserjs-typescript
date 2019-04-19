@@ -5,7 +5,6 @@ import {COLOR, Level} from "../levels/Level";
 import Game = Phaser.Game;
 import Point from "../Point";
 import Group = Phaser.Group;
-import EmptyCell from "./EmptyCell";
 
 export abstract class Cell {
   protected sprite: Phaser.Sprite;

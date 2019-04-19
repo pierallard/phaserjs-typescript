@@ -1,21 +1,17 @@
 import {TILE_SIZE, TIME} from "../game_state/Play";
 import Player from "../Player";
 import Point from "../Point";
-import {Cell} from "../cells/Cell";
 import {Level} from "../levels/Level";
 import Game = Phaser.Game;
 import Group = Phaser.Group;
 import {SENS} from "../Sens";
-import {BagItemFireBoots, BagItemIceBoots, BagItemWaterBoots} from "../BagItem";
 import {WaterCell} from "../cells/WaterCell";
 
 export abstract class GameObject {
-  protected cells: Cell[][];
   protected sprite: Phaser.Sprite;
   protected position: Point;
 
-  constructor(game: Phaser.Game, x: number, y: number, cells: Cell[][], objectGroup: Group) {
-    this.cells = cells;
+  constructor(game: Phaser.Game, x: number, y: number, objectGroup: Group) {
     this.sprite = game.add.sprite(x * TILE_SIZE, y * TILE_SIZE, 'chips', 0, objectGroup);
     this.position = new Point(x, y);
   }
@@ -51,8 +47,8 @@ export abstract class GameObject {
 }
 
 export class Pack extends GameObject {
-  constructor(game: Phaser.Game, x: number, y: number, cells: Cell[][], objectGroup: Group) {
-    super(game, x, y, cells, objectGroup);
+  constructor(game: Phaser.Game, x: number, y: number, objectGroup: Group) {
+    super(game, x, y, objectGroup);
 
     this.sprite.frame = 19 + 64;
   }
@@ -112,8 +108,8 @@ export class Ant extends GameObject {
   private isMoving: boolean = false;
   private sens: SENS;
 
-  constructor(game: Phaser.Game, x: number, y: number, cells: Cell[][], objectGroup: Group) {
-    super(game, x, y, cells, objectGroup);
+  constructor(game: Phaser.Game, x: number, y: number, objectGroup: Group) {
+    super(game, x, y, objectGroup);
     this.sens = SENS.UP;
 
     this.sprite.frame = 32*5;
@@ -183,44 +179,3 @@ export class Ant extends GameObject {
   }
 }
 
-export class WaterBoots extends GameObject {
-  constructor(game: Phaser.Game, x: number, y: number, cells: Cell[][], objectGroup: Group) {
-    super(game, x, y, cells, objectGroup);
-
-    this.sprite.frame = 64 + 18;
-  }
-
-  animateEnd(player: Player, endPosition: Point, level: Level, game: Game) {
-    player.addItem(new BagItemWaterBoots());
-    this.destroy();
-    level.destroyObject(this);
-  }
-}
-
-export class IceBoots extends GameObject {
-  constructor(game: Phaser.Game, x: number, y: number, cells: Cell[][], objectGroup: Group) {
-    super(game, x, y, cells, objectGroup);
-
-    this.sprite.frame = 64 + 15;
-  }
-
-  animateEnd(player: Player, endPosition: Point, level: Level, game: Game) {
-    player.addItem(new BagItemIceBoots());
-    this.destroy();
-    level.destroyObject(this);
-  }
-}
-
-export class FireBoots extends GameObject {
-  constructor(game: Phaser.Game, x: number, y: number, cells: Cell[][], objectGroup: Group) {
-    super(game, x, y, cells, objectGroup);
-
-    this.sprite.frame = 64 + 17;
-  }
-
-  animateEnd(player: Player, endPosition: Point, level: Level, game: Game) {
-    player.addItem(new BagItemFireBoots());
-    this.destroy();
-    level.destroyObject(this);
-  }
-}

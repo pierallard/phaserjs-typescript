@@ -1,9 +1,9 @@
 import Sprite = Phaser.Sprite;
 import {BLOCKTIME, TILE_SIZE, TIME} from "./game_state/Play";
 import {COLOR, Level, GROUND_SIZE} from "./levels/Level";
-import {BagItem, BagItemFireBoots, BagItemIceBoots, BagItemKey, BagItemWaterBoots} from "./BagItem";
 import Point from "./Point";
 import {SENS} from "./Sens";
+import {PickableObject, Key, WaterBoots, IceBoots, FireBoots, Chip} from "./game_objects/PickableObject";
 
 export default class Player {
   private sprite: Sprite;
@@ -20,7 +20,7 @@ export default class Player {
   private pressedKeys: Phaser.Key[] = [];
   private isProcessing: boolean = false;
   private level: Level;
-  private bag: BagItem[];
+  private bag: PickableObject[];
 
   constructor(level: Level) {
     this.level = level;
@@ -216,8 +216,12 @@ export default class Player {
     return this.getKeyIndex(color) >= 0;
   }
 
-  addItem(bagItemKey: BagItem) {
-    this.bag.push(bagItemKey);
+  addItem(bagItemKey: PickableObject) {
+    if (bagItemKey instanceof Chip) {
+      this.addChip();
+    } else {
+      this.bag.push(bagItemKey);
+    }
   }
 
   removeKey(color: COLOR) {
@@ -231,7 +235,7 @@ export default class Player {
   getKeyIndex(color: COLOR) {
     for (let i = 0; i < this.bag.length; i++) {
       const bagItem = this.bag[i];
-      if (bagItem instanceof BagItemKey && bagItem.getColor() === color) {
+      if (bagItem instanceof Key && bagItem.getColor() === color) {
         return i;
       }
     }
@@ -239,7 +243,7 @@ export default class Player {
     return -1;
   }
 
-  addChip() {
+  private addChip() {
     this.chips++;
   }
 
@@ -260,8 +264,8 @@ export default class Player {
   }
 
   hasWaterBoots(): boolean {
-    return this.bag.filter((b: BagItem) => {
-      return b instanceof BagItemWaterBoots;
+    return this.bag.filter((b: PickableObject) => {
+      return b instanceof WaterBoots;
     }).length > 0;
   }
 
@@ -270,14 +274,14 @@ export default class Player {
   }
 
   hasIceBoots(): boolean {
-    return this.bag.filter((b: BagItem) => {
-      return b instanceof BagItemIceBoots;
+    return this.bag.filter((b: PickableObject) => {
+      return b instanceof IceBoots;
     }).length > 0;
   }
 
   hasFireBoots(): boolean {
-    return this.bag.filter((b: BagItem) => {
-      return b instanceof BagItemFireBoots;
+    return this.bag.filter((b: PickableObject) => {
+      return b instanceof FireBoots;
     }).length > 0;
   }
 }
