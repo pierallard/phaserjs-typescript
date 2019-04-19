@@ -3,6 +3,7 @@ import Player from "../Player";
 import Point from "../Point";
 import {Cell} from "./Cell";
 import Group = Phaser.Group;
+import {ForceBoots} from "../game_objects/PickableObject";
 
 export class ForceTopCell extends Cell {
   constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
@@ -13,6 +14,9 @@ export class ForceTopCell extends Cell {
   }
 
   forceCell(player: Player): Point {
+    if (player.has(ForceBoots)) {
+      return null;
+    }
     return this.position.up();
   }
 }
@@ -26,6 +30,9 @@ export class ForceBottomCell extends Cell {
   }
 
   forceCell(player: Player): Point {
+    if (player.has(ForceBoots)) {
+      return null;
+    }
     return this.position.down();
   }
 }
@@ -39,6 +46,9 @@ export class ForceLeftCell extends Cell {
   }
 
   forceCell(player: Player): Point {
+    if (player.has(ForceBoots)) {
+      return null;
+    }
     return this.position.left();
   }
 }
@@ -52,6 +62,9 @@ export class ForceRightCell extends Cell {
   }
 
   forceCell(player: Player): Point {
+    if (player.has(ForceBoots)) {
+      return null;
+    }
     return this.position.right();
   }
 }

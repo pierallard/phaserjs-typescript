@@ -37,6 +37,14 @@ export class IceBoots extends PickableObject {
   }
 }
 
+export class ForceBoots extends PickableObject {
+  constructor(game: Phaser.Game, x: number, y: number, objectGroup: Group) {
+    super(game, x, y, objectGroup);
+
+    this.sprite.frame = 64 + 16;
+  }
+}
+
 export class FireBoots extends PickableObject {
   constructor(game: Phaser.Game, x: number, y: number, objectGroup: Group) {
     super(game, x, y, objectGroup);

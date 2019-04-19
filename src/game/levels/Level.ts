@@ -15,7 +15,7 @@ import IceCell, {IceCellBottomLeft, IceCellTopLeft} from "../cells/IceCell";
 import {ForceBottomCell, ForceLeftCell, ForceRightCell, ForceTopCell} from "../cells/ForceCell";
 import EmptyCell from "../cells/EmptyCell";
 import {
-  BlueKey, Chip, FireBoots, GreenKey, IceBoots, RedKey, WaterBoots,
+  BlueKey, Chip, FireBoots, ForceBoots, GreenKey, IceBoots, RedKey, WaterBoots,
   YellowKey
 } from "../game_objects/PickableObject";
 import {Ant, GameObject, Pack} from "../game_objects/GameObject";
@@ -69,6 +69,7 @@ export class Level {
           case 'y':
           case 'r':
           case 'g':
+          case '5':
           case 'p':
           default:
             console.log('Unable to create cell from ' + this.letterAt(new PIXI.Point(x, y)));
@@ -83,6 +84,7 @@ export class Level {
           case 'w': this.objects.push(new WaterBoots(game, x, y, objectGroup)); break;
           case 'i': this.objects.push(new IceBoots(game, x, y, objectGroup)); break;
           case 'f': this.objects.push(new FireBoots(game, x, y, objectGroup)); break;
+          case '5': this.objects.push(new ForceBoots(game, x, y, groundGroup)); break;
           case 'c': this.objects.push(new Chip(game, x, y, objectGroup)); break;
           case 'b': this.objects.push(new BlueKey(game, x, y, groundGroup)); break;
           case 'y': this.objects.push(new YellowKey(game, x, y, groundGroup)); break;

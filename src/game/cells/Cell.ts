@@ -1,7 +1,6 @@
 import {TILE_SIZE} from "../game_state/Play";
-import {BagItemKey} from "../BagItem";
 import Player from "../Player";
-import {COLOR, Level} from "../levels/Level";
+import {Level} from "../levels/Level";
 import Game = Phaser.Game;
 import Point from "../Point";
 import Group = Phaser.Group;
