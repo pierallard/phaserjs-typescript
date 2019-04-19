@@ -74,5 +74,28 @@ export const LEVELS = [
       '             XXXXXX             '
     ],
     chips: 4
+  }, {
+    map: [
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '    XXXXXXXXX                   ',
+      '    XX  T  cXXXXXXXXXXXXXX      ',
+      '    Xt X XXXXX     X  S  X      ',
+      '    XX     XXXDXXE X  X cX      ',
+      '    XXXXXX tX   XXXX qXXXX      ',
+      '    XX  T  XX P X  Q  X  X      ',
+      '    Xt X XXXX   X  X  Q cX      ',
+      '    XX            qXXXXXXX      ',
+      '    XXXXXXXXXXX X  X  Q cX      ',
+      '        X       X  S  X  X      ',
+      '        X U U XXXXXX qXXXX      ',
+      '        X  V  X    X  X cX      ',
+      '        X U U X    X  S  X      ',
+      '        X     X    XXXXXXX      ',
+      '        XXXXXXX                 '
+    ],
+    chips: 9
   }
 ];
