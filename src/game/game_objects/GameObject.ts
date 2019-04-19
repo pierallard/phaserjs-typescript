@@ -1,12 +1,13 @@
 import {TILE_SIZE, TIME} from "../game_state/Play";
 import Player from "../Player";
 import Point from "../Point";
-import {Cell, WaterCell} from "../cells/Cell";
+import {Cell} from "../cells/Cell";
 import {Level} from "../levels/Level";
 import Game = Phaser.Game;
 import Group = Phaser.Group;
 import {SENS} from "../Sens";
 import {BagItemFireBoots, BagItemIceBoots, BagItemWaterBoots} from "../BagItem";
+import {WaterCell} from "../cells/WaterCell";
 
 export abstract class GameObject {
   protected cells: Cell[][];

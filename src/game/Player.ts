@@ -3,7 +3,6 @@ import {BLOCKTIME, TILE_SIZE, TIME} from "./game_state/Play";
 import {COLOR, Level, GROUND_SIZE} from "./levels/Level";
 import {BagItem, BagItemFireBoots, BagItemIceBoots, BagItemKey, BagItemWaterBoots} from "./BagItem";
 import Point from "./Point";
-import {IceCell, IceCellBottomLeft, IceCellTopLeft} from "./cells/Cell";
 import {SENS} from "./Sens";
 
 export default class Player {

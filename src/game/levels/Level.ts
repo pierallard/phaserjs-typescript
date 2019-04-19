@@ -2,31 +2,20 @@ import Player from "../Player";
 import {LEVELS} from "./Levels";
 import Point from "../Point";
 import {Ant, FireBoots, GameObject, IceBoots, Pack, WaterBoots} from "../game_objects/GameObject";
-import {
-  BlockCell,
-  BlueDoorCell,
-  BlueKeyCell,
-  Cell,
-  ChipCell,
-  EmptyCell,
-  ExitCell,
-  ExitDoor,
-  FireCell, ForceBottomCell, ForceLeftCell, ForceRightCell,
-  ForceTopCell,
-  GreenDoorCell,
-  GreenKeyCell,
-  IceCell,
-  IceCellBottomLeft,
-  IceCellTopLeft,
-  RedDoorCell,
-  RedKeyCell,
-  WaterCell,
-  YellowDoorCell,
-  YellowKeyCell
-} from "../cells/Cell";
+import {Cell} from "../cells/Cell";
 import Game = Phaser.Game;
 import {TILE_SIZE, TIME} from "../game_state/Play";
 import Group = Phaser.Group;
+import WallCell from "../cells/WallCell";
+import ExitCell from "../cells/ExitCell";
+import {ExitDoor} from "../cells/ExitDoor";
+import {BlueDoorCell, GreenDoorCell, RedDoorCell, YellowDoorCell} from "../cells/DoorCell";
+import {WaterCell} from "../cells/WaterCell";
+import {FireCell} from "../cells/FireCell";
+import IceCell, {IceCellBottomLeft, IceCellTopLeft} from "../cells/IceCell";
+import {ForceBottomCell, ForceLeftCell, ForceRightCell, ForceTopCell} from "../cells/ForceCell";
+import EmptyCell from "../cells/EmptyCell";
+import {BlueKeyCell, ChipCell, GreenKeyCell, RedKeyCell, YellowKeyCell} from "../cells/OtherCells";
 
 export const GROUND_SIZE = 32;
 
@@ -50,7 +39,7 @@ export class Level {
       this.cells[y] = [];
       for (let x = 0; x < GROUND_SIZE; x++) {
         switch(this.letterAt(new PIXI.Point(x, y))) {
-          case 'X': this.cells[y][x] = new BlockCell(game, x, y, groundGroup); break;
+          case 'X': this.cells[y][x] = new WallCell(game, x, y, groundGroup); break;
           case 'E': this.cells[y][x] = new ExitCell(game, x, y, groundGroup); break;
           case 'D': this.cells[y][x] = new ExitDoor(game, x, y, groundGroup); break;
           case 'c': this.cells[y][x] = new ChipCell(game, x, y, groundGroup); break;
