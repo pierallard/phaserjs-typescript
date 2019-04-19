@@ -19,6 +19,8 @@ import {
   YellowKey
 } from "../game_objects/PickableObject";
 import {Ant, GameObject, Pack} from "../game_objects/GameObject";
+import SwitchWall from "../cells/SwitchWall";
+import Switch from "../cells/Switch";
 
 export const GROUND_SIZE = 32;
 
@@ -58,9 +60,11 @@ export class Level {
           case '2': this.cells[y][x] = new ForceBottomCell(game, x, y, groundGroup); break;
           case '4': this.cells[y][x] = new ForceLeftCell(game, x, y, groundGroup); break;
           case '6': this.cells[y][x] = new ForceRightCell(game, x, y, groundGroup); break;
+          case 'S': this.cells[y][x] = new SwitchWall(game, x, y, groundGroup, true); break;
+          case 'Q': this.cells[y][x] = new SwitchWall(game, x, y, groundGroup, false); break;
+          case 'q': this.cells[y][x] = new Switch(game, x, y, groundGroup); break;
           case 'w':
           case 'P':
-          case ' ':
           case 'a':
           case 'i':
           case 'f':
@@ -71,6 +75,7 @@ export class Level {
           case 'g':
           case '5':
           case 'p':
+          case ' ': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
           default:
             console.log('Unable to create cell from ' + this.letterAt(new PIXI.Point(x, y)));
             this.cells[y][x] = new EmptyCell(game, x, y, groundGroup);
@@ -243,5 +248,15 @@ export class Level {
     }
 
     return true;
+  }
+
+  switchWalls() {
+    for (let y = 0; y < this.cells.length; y++) {
+      for (let x = 0; x < this.cells[y].length; x++) {
+        if (this.cells[y][x] instanceof SwitchWall) {
+          (<SwitchWall> this.cells[y][x]).switch();
+        }
+      }
+    }
   }
 }
