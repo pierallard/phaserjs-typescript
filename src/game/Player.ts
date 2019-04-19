@@ -263,25 +263,13 @@ export default class Player {
     this.sprite.destroy(true);
   }
 
-  hasWaterBoots(): boolean {
+  has(klass): boolean {
     return this.bag.filter((b: PickableObject) => {
-      return b instanceof WaterBoots;
+      return b instanceof klass;
     }).length > 0;
   }
 
   getSens(): SENS {
     return this.sens;
-  }
-
-  hasIceBoots(): boolean {
-    return this.bag.filter((b: PickableObject) => {
-      return b instanceof IceBoots;
-    }).length > 0;
-  }
-
-  hasFireBoots(): boolean {
-    return this.bag.filter((b: PickableObject) => {
-      return b instanceof FireBoots;
-    }).length > 0;
   }
 }

@@ -3,6 +3,7 @@ import Player from "../Player";
 import Point from "../Point";
 import {Cell} from "./Cell";
 import Group = Phaser.Group;
+import {IceBoots} from "../game_objects/PickableObject";
 
 export default class IceCell extends Cell {
   constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
@@ -12,7 +13,7 @@ export default class IceCell extends Cell {
   }
 
   forceCell(player: Player): Point {
-    if (player.hasIceBoots()) {
+    if (player.has(IceBoots)) {
       return null;
     }
     switch (player.getSens()) {
@@ -32,7 +33,7 @@ export class IceCellBottomLeft extends IceCell {
   }
 
   forceCell(player: Player): Point {
-    if (player.hasIceBoots()) {
+    if (player.has(IceBoots)) {
       return null;
     }
     switch (player.getSens()) {
@@ -52,7 +53,7 @@ export class IceCellTopLeft extends IceCell {
   }
 
   forceCell(player: Player): Point {
-    if (player.hasIceBoots()) {
+    if (player.has(IceBoots)) {
       return null;
     }
     switch (player.getSens()) {

@@ -5,6 +5,7 @@ import Point from "../Point";
 import {Cell} from "./Cell";
 import Group = Phaser.Group;
 import Game = Phaser.Game;
+import {FireBoots} from "../game_objects/PickableObject";
 
 export class FireCell extends Cell {
   private static FIRE_ANIMATION: number[] = [32, 33, 34];
@@ -18,7 +19,7 @@ export class FireCell extends Cell {
   }
 
   isDead(player: Player) {
-    if (player.hasFireBoots()) {
+    if (player.has(FireBoots)) {
       return false;
     }
 
@@ -26,7 +27,7 @@ export class FireCell extends Cell {
   }
 
   animateEnd(game: Game, player: Player, endPosition: Point, level: Level) {
-    if (player.hasFireBoots()) {
+    if (player.has(FireBoots)) {
       return;
     }
 

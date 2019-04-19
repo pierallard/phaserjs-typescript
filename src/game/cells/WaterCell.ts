@@ -6,6 +6,7 @@ import EmptyCell from "./EmptyCell";
 import {Cell} from "./Cell";
 import Group = Phaser.Group;
 import Game = Phaser.Game;
+import {WaterBoots} from "../game_objects/PickableObject";
 
 export class WaterCell extends Cell {
   private static WATER_ANIMATION: number[] = [24, 25, 26];
@@ -27,14 +28,14 @@ export class WaterCell extends Cell {
     if (this.sprite.frame === WaterCell.DIRTY) {
       this.sprite.frame = EmptyCell.EMPTY_CELL;
     } else if (this.isWater()) {
-      if (!player.hasWaterBoots()) {
+      if (!player.has(WaterBoots)) {
         level.animateWaterAt(game, endPosition);
       }
     }
   }
 
   isDead(player: Player) {
-    if (player.hasWaterBoots()) {
+    if (player.has(WaterBoots)) {
       return false;
     }
 
