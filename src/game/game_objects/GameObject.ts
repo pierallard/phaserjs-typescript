@@ -6,7 +6,7 @@ import {Level} from "../levels/Level";
 import Game = Phaser.Game;
 import Group = Phaser.Group;
 import {SENS} from "../Sens";
-import {BagItemIceBoots, BagItemWaterBoots} from "../BagItem";
+import {BagItemFireBoots, BagItemIceBoots, BagItemWaterBoots} from "../BagItem";
 
 export abstract class GameObject {
   protected cells: Cell[][];
@@ -205,6 +205,20 @@ export class IceBoots extends GameObject {
 
   animateEnd(player: Player, endPosition: Point, level: Level, game: Game) {
     player.addItem(new BagItemIceBoots());
+    this.destroy();
+    level.destroyObject(this);
+  }
+}
+
+export class FireBoots extends GameObject {
+  constructor(game: Phaser.Game, x: number, y: number, cells: Cell[][], objectGroup: Group) {
+    super(game, x, y, cells, objectGroup);
+
+    this.sprite.frame = 64 + 17;
+  }
+
+  animateEnd(player: Player, endPosition: Point, level: Level, game: Game) {
+    player.addItem(new BagItemFireBoots());
     this.destroy();
     level.destroyObject(this);
   }

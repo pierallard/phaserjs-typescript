@@ -234,10 +234,18 @@ export class FireCell extends Cell {
   }
 
   isDead(player: Player) {
+    if (player.hasFireBoots()) {
+      return false;
+    }
+
     return true;
   }
 
   animateEnd(game: Game, player: Player, endPosition: Point, level: Level) {
+    if (player.hasFireBoots()) {
+      return;
+    }
+
     level.animateFireAt(game, endPosition);
   }
 }

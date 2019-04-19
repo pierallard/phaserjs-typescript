@@ -17,10 +17,12 @@ export class BagItemKey extends BagItem {
     return this.color;
   }
 }
+export class BagItemIceBoots extends BagItem {
 
+}
 export class BagItemWaterBoots extends BagItem {
 
 }
-export class BagItemIceBoots extends BagItem {
+export class BagItemFireBoots extends BagItem {
 
 }

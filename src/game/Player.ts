@@ -1,7 +1,7 @@
 import Sprite = Phaser.Sprite;
 import {BLOCKTIME, TILE_SIZE, TIME} from "./game_state/Play";
 import {COLOR, Level, GROUND_SIZE} from "./levels/Level";
-import {BagItem, BagItemIceBoots, BagItemKey, BagItemWaterBoots} from "./BagItem";
+import {BagItem, BagItemFireBoots, BagItemIceBoots, BagItemKey, BagItemWaterBoots} from "./BagItem";
 import Point from "./Point";
 import {IceCell, IceCellBottomLeft, IceCellTopLeft} from "./cells/Cell";
 import {SENS} from "./Sens";
@@ -273,6 +273,12 @@ export default class Player {
   hasIceBoots(): boolean {
     return this.bag.filter((b: BagItem) => {
       return b instanceof BagItemIceBoots;
+    }).length > 0;
+  }
+
+  hasFireBoots(): boolean {
+    return this.bag.filter((b: BagItem) => {
+      return b instanceof BagItemFireBoots;
     }).length > 0;
   }
 }
