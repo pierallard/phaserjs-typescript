@@ -1,7 +1,9 @@
 import Player from "../Player";
-import {COLOR} from "../levels/Level";
+import {COLOR, Level} from "../levels/Level";
 import EmptyCell from "./EmptyCell";
 import Group = Phaser.Group;
+import Point from "../Point";
+import Game = Phaser.Game;
 
 abstract class DoorCell extends EmptyCell {
   protected color: COLOR;
@@ -13,7 +15,7 @@ abstract class DoorCell extends EmptyCell {
     return player.hasKey(this.color);
   }
 
-  animateBegin(player: Player) {
+  animatePlayerBegin(game: Game, level: Level, player: Player, endPosition: Point) {
     if (this.sprite.frame !== EmptyCell.EMPTY_CELL) {
       this.sprite.frame = EmptyCell.EMPTY_CELL;
       player.removeKey(this.color);
@@ -56,7 +58,7 @@ export class GreenDoorCell extends DoorCell {
     this.sprite.frame = 69;
   }
 
-  animateBegin(player: Player) {
+  animatePlayerBegin(game: Game, level: Level, player: Player, endPosition: Point) {
     if (this.sprite.frame !== 0) {
       this.sprite.frame = 0;
     }

@@ -18,7 +18,10 @@ export abstract class GameObject {
     return this.position;
   }
 
-  act(game: Phaser.Game, player: Player, endPosition: PIXI.Point, level: Level) {
+  animatePlayerBegin(game: Game, level: Level, player: Player, endPosition: Point) {
+  }
+
+  animatePlayerEnd(game: Game, level: Level, player: Player, endPosition: Point) {
   }
 
   canPlayerGoTo(player: Player, endPosition: PIXI.Point, level: Level): boolean {
@@ -29,8 +32,6 @@ export abstract class GameObject {
     return true;
   }
 
-  animateEnd(player: Player, endPosition: Point, level: Level, game: Game) {
-  }
 
   destroy() {
     this.sprite.destroy(true);

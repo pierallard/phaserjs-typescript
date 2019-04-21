@@ -31,13 +31,13 @@ export default class Tank extends GameObject {
     }
   }
 
-  animateEnd(player: Player, endPosition: Point, level: Level, game: Game) {
+  animatePlayerEnd(game: Game, level: Level, player: Player, endPosition: Point) {
     level.animateFireAt(game, endPosition);
     this.destroy();
   }
 
   update(game: Phaser.Game, level: Level) {
-  if (!this.isMoving) {
+    if (!this.isMoving) {
       if (this.isSwitching) {
         this.isMoving = true;
         this.setFrame();

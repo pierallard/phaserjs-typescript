@@ -13,7 +13,7 @@ export default class Play extends Phaser.State {
   private menu: Menu;
   private levelNumber: number;
 
-  constructor(game: Phaser.Game, levelNumber: number = 3) {
+  constructor(game: Phaser.Game, levelNumber: number = 4) {
     super();
     this.levelNumber = levelNumber;
     this.level = Level.getFromNumber(this.levelNumber);

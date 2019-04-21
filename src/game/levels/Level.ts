@@ -25,6 +25,8 @@ import Ant from "../game_objects/Ant";
 import Pack from "../game_objects/Pack";
 import Tank from "../game_objects/Tank";
 import TankSwitch from "../cells/TankSwitch";
+import RedButton from "../cells/RedButton";
+import {FireThrower} from "../cells/FireThrower";
 
 export const GROUND_SIZE = 32;
 
@@ -41,9 +43,12 @@ export class Level {
   private cells: Cell[][] = [];
   private objects: GameObject[] = [];
   private effectsGroup: Group;
+  private actions: number[][][];
+  private objectsGroup: Phaser.Group;
 
   create(game: Phaser.Game, groundGroup: Group, objectGroup: Group, effectsGroup: Group) {
     this.effectsGroup = effectsGroup;
+    this.objectsGroup = objectGroup;
     for (let y = 0; y < GROUND_SIZE; y++) {
       this.cells[y] = [];
       for (let x = 0; x < GROUND_SIZE; x++) {
@@ -69,6 +74,8 @@ export class Level {
           case 'Q': this.cells[y][x] = new SwitchWall(game, x, y, groundGroup, false); break;
           case 'q': this.cells[y][x] = new Switch(game, x, y, groundGroup); break;
           case 't': this.cells[y][x] = new TankSwitch(game, x, y, groundGroup); break;
+          case 's': this.cells[y][x] = new RedButton(game, x, y, groundGroup); break;
+          case 'h': this.cells[y][x] = new FireThrower(game, x, y, groundGroup); break;
           case 'w':
           case 'P':
           case 'a':
@@ -112,11 +119,21 @@ export class Level {
         }
       }
     }
+    this.actions.forEach((actions: number[][]) => {
+      const source = new Point(actions[0][0], actions[0][1]);
+      const dest = new Point(actions[1][0], actions[1][1]);
+
+      const sourceCell = this.getCellAt(source);
+      const destCell = this.getCellAt(dest);
+
+      sourceCell.setDestination(destCell);
+    })
   }
 
-  constructor(map: string[], chipsNeeded: number) {
+  constructor(map: string[], chipsNeeded: number, actions: number[][][]) {
     this.map = map;
     this.chipsNeeded = chipsNeeded;
+    this.actions = actions;
   }
 
   getChipsNeeded(): number {
@@ -171,21 +188,20 @@ export class Level {
     return this.map[point.y][point.x];
   }
 
-  animateEnd(game: Phaser.Game, player: Player, endPosition: Point) {
-    this.cells[endPosition.y][endPosition.x].animateEnd(game, player, endPosition, this);
-
+  animatePlayerEnd(game: Game, player: Player, endPosition: Point) {
+    this.cells[endPosition.y][endPosition.x].animatePlayerEnd(game, this, player, endPosition);
     for (let i = 0; i < this.objects.length; i++) {
       if (this.objects[i].getPosition().equals(endPosition)) {
-        this.objects[i].animateEnd(player, endPosition, this, game);
+        this.objects[i].animatePlayerEnd(game, this, player, endPosition);
       }
     }
   }
 
-  animateBegin(game: Phaser.Game, player: Player, endPosition: Point) {
-    this.cells[endPosition.y][endPosition.x].animateBegin(player);
+  animatePlayerBegin(game: Game, player: Player, endPosition: Point) {
+    this.cells[endPosition.y][endPosition.x].animatePlayerBegin(game, this, player, endPosition);
     for (let i = 0; i < this.objects.length; i++) {
       if (this.objects[i].getPosition().equals(endPosition)) {
-        this.objects[i].act(game, player, endPosition, this);
+        this.objects[i].animatePlayerBegin(game, this, player, endPosition);
       }
     }
   }
@@ -193,7 +209,8 @@ export class Level {
   static getFromNumber(levelNumber: number): Level {
     return new Level(
       LEVELS[levelNumber].map,
-      LEVELS[levelNumber].chips
+      LEVELS[levelNumber].chips,
+      LEVELS[levelNumber].actions
     );
   }
 
@@ -257,7 +274,7 @@ export class Level {
   }
 
   isFreeForMonster(newPosition: Point) {
-    if (!this.cells[newPosition.y][newPosition.x].isFree()) {
+    if (!this.cells[newPosition.y][newPosition.x].isFreeForMonster()) {
       return false;
     }
 
@@ -280,5 +297,23 @@ export class Level {
         (<Tank> o).switch();
       }
     });
+  }
+
+  private getObjAt(source: Point) {
+    for (let i = 0; i < this.objects.length; i++) {
+      if (this.objects[i].getPosition().equals(source)) {
+        return this.objects[i];
+      }
+    }
+
+    return undefined;
+  }
+
+  getObjectGroup(): Phaser.Group {
+    return this.objectsGroup;
+  }
+
+  addObject(object: GameObject) {
+    this.objects.push(object);
   }
 }

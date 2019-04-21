@@ -13,7 +13,7 @@ export default class WallCell extends Cell {
     return false;
   }
 
-  isFree() {
+  isFreeForMonster() {
     return false;
   }
 }

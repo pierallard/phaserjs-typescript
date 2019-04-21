@@ -108,7 +108,7 @@ export default class Player {
 
   private runAnimation(game: Phaser.Game, newPosition: Point, removeKey: boolean = true, speed: number = TIME) {
     this.isProcessing = true;
-    this.level.animateBegin(game, this, newPosition);
+    this.level.animatePlayerBegin(game, this, newPosition);
     const animation = this.computeSens(this.position, newPosition);
     if (this.sprite.animations.currentAnim !== this.sprite.animations.getAnimation(animation + '')) {
       this.sprite.animations.play(animation + '');
@@ -120,7 +120,7 @@ export default class Player {
     }, speed, Phaser.Easing.Default, true);
     game.time.events.add(speed, () => {
       this.isProcessing = false;
-      this.level.animateEnd(game, this, newPosition);
+      this.level.animatePlayerEnd(game, this, newPosition);
       if (removeKey) {
         this.pressedKeys.shift();
       }

@@ -18,25 +18,34 @@ export abstract class Cell {
     return true;
   }
 
-  animateEnd(game: Game, player: Player, endPosition: Point, level: Level) {
+  animatePlayerEnd(game: Game, level: Level, player: Player, endPosition: Point) {
   }
 
   isDead(player: Player) {
     return false;
   }
 
-  animateBegin(player: Player) {
+  animatePlayerBegin(game: Game, level: Level, player: Player, endPosition: Point) {
   }
 
   canPackGoTo(player: Player) {
     return this.canPlayerGoTo(player);
   }
 
-  isFree(): boolean {
+  isFreeForMonster(): boolean {
     return true;
   }
 
   forceCell(player: Player): Point {
     return null;
+  }
+
+  setDestination(destCell: Cell) {
+    // TODO Replace by a throw
+    console.log('Unable to set a destination for the cell ' + this.position.x + ', ' + this.position.y + ' (' + this.constructor.name + ')');
+  }
+
+  runAction(game: Game, level: Level) {
+    console.log('nope');
   }
 }

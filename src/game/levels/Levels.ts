@@ -1,4 +1,10 @@
-export const LEVELS = [
+interface LevelDescriptor {
+  map: string[],
+  chips: number,
+  actions: number[][][]
+}
+
+export const LEVELS: LevelDescriptor[] = [
   {
     map: [
       '                                ',
@@ -24,7 +30,8 @@ export const LEVELS = [
       '            X  Xg X             ',
       '            XXXXXXX             '
     ],
-    chips: 11
+    chips: 11,
+    actions: []
   },
   {
     map: [
@@ -47,7 +54,8 @@ export const LEVELS = [
       '         X  c  X                ',
       '         XXXXXXX                ',
     ],
-    chips: 4
+    chips: 4,
+    actions: []
   }, {
     map: [
       '                                ',
@@ -73,7 +81,8 @@ export const LEVELS = [
       '             X8888X             ',
       '             XXXXXX             '
     ],
-    chips: 4
+    chips: 4,
+    actions: []
   }, {
     map: [
       '                                ',
@@ -96,6 +105,39 @@ export const LEVELS = [
       '        X     X    XXXXXXX      ',
       '        XXXXXXX                 '
     ],
-    chips: 9
+    chips: 9,
+    actions: []
+  }, {
+    map: [
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '          XXXXXXXXXXX           ',
+      '          XEz       X           ',
+      '          XXX  zzz  X           ',
+      '            X   jzo X           ',
+      '            X  zzz  X           ',
+      '            X  zzz  X           ',
+      '            X   jzo X           ',
+      '            X  zzze X           ',
+      '            XXRXXXXXXXX         ',
+      '            X   q     X         ',
+      '            X XXXXX X X         ',
+      '            X   Sus X X         ',
+      '            XXXXXXXXX X         ',
+      '            XWrF      X         ',
+      '            XW F  h   X         ',
+      '            XW F    P X         ',
+      '            X         X         ',
+      '            XXXXXXXXXXX         '
+    ],
+    chips: 0,
+    actions: [
+      [[8, 16], [8, 18]],
+      [[11, 16], [11, 16]],
+      [[18, 16], [18, 19]]
+    ]
   }
 ];

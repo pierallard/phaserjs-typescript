@@ -26,7 +26,7 @@ export class FireCell extends Cell {
     return true;
   }
 
-  animateEnd(game: Game, player: Player, endPosition: Point, level: Level) {
+  animatePlayerEnd(game: Game, level: Level, player: Player, endPosition: Point) {
     if (player.has(FireBoots)) {
       return;
     }

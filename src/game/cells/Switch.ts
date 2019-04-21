@@ -11,7 +11,7 @@ export default class Switch extends Cell {
     this.sprite.frame = 40;
   }
 
-  animateEnd(game: Game, player: Player, endPosition: Point, level: Level) {
+  animatePlayerEnd(game: Game, level: Level, player: Player, endPosition: Point) {
     level.switchWalls();
   }
 }

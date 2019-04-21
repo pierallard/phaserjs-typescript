@@ -14,7 +14,7 @@ export default class Pack extends GameObject {
     this.sprite.frame = 19 + 64;
   }
 
-  act(game: Phaser.Game, player: Player, endPosition: PIXI.Point, level: Level) {
+  animatePlayerBegin(game: Game, level: Level, player: Player, endPosition: Point) {
     const newPosition = new Point(
       this.position.x + this.diff(player, endPosition).x,
       this.position.y + this.diff(player, endPosition).y
@@ -25,7 +25,7 @@ export default class Pack extends GameObject {
     }, TIME, Phaser.Easing.Default, true);
     game.time.events.add(TIME, () => {
       this.position = newPosition;
-      this.animateEnd(player, this.position, level, game);
+      this.animatePlayerEnd(game, level, player, this.position);
       this.sprite.x = this.position.x * TILE_SIZE;
       this.sprite.y = this.position.y * TILE_SIZE;
     });
@@ -44,7 +44,7 @@ export default class Pack extends GameObject {
     return false;
   }
 
-  animateEnd(player: Player, endPosition: Point, level: Level, game: Game) {
+  animatePlayerEnd(game: Game, level: Level, player: Player, endPosition: Point) {
     const cell = level.getCellAt(endPosition);
     if (cell instanceof WaterCell && cell.isWater()) {
       cell.changeAfterPack();
