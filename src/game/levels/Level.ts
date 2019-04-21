@@ -188,11 +188,11 @@ export class Level {
     return this.map[point.y][point.x];
   }
 
-  animatePlayerEnd(game: Game, player: Player, endPosition: Point) {
-    this.cells[endPosition.y][endPosition.x].animatePlayerEnd(game, this, player, endPosition);
+  animateEnd(game: Game, actor: Player|GameObject, endPosition: Point) {
+    this.cells[endPosition.y][endPosition.x].animateEnd(game, this, actor, endPosition);
     for (let i = 0; i < this.objects.length; i++) {
       if (this.objects[i].getPosition().equals(endPosition)) {
-        this.objects[i].animatePlayerEnd(game, this, player, endPosition);
+        this.objects[i].animateEnd(game, this, actor, endPosition);
       }
     }
   }

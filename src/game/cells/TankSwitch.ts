@@ -3,6 +3,7 @@ import Player from "../Player";
 import {Level} from "../levels/Level";
 import Point from "../Point";
 import Game = Phaser.Game;
+import {GameObject} from "../game_objects/GameObject";
 
 export default class TankSwitch extends Cell {
   constructor(game: Phaser.Game, x: number, y: number, groundGroup: Phaser.Group) {
@@ -11,7 +12,7 @@ export default class TankSwitch extends Cell {
     this.sprite.frame = 39;
   }
 
-  animatePlayerEnd(game: Game, level: Level, player: Player, endPosition: Point) {
+  animateEnd(game: Game, level: Level, player: Player|GameObject, endPosition: Point) {
     level.switchTanks();
   }
 }

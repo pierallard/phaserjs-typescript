@@ -31,7 +31,7 @@ export default class Tank extends GameObject {
     }
   }
 
-  animatePlayerEnd(game: Game, level: Level, player: Player, endPosition: Point) {
+  animateEnd(game: Game, level: Level, player: Player|GameObject, endPosition: Point) {
     level.animateFireAt(game, endPosition);
     this.destroy();
   }

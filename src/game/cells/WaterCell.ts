@@ -7,6 +7,7 @@ import {Cell} from "./Cell";
 import Group = Phaser.Group;
 import Game = Phaser.Game;
 import {WaterBoots} from "../game_objects/PickableObject";
+import {GameObject} from "../game_objects/GameObject";
 
 export class WaterCell extends Cell {
   private static WATER_ANIMATION: number[] = [24, 25, 26];
@@ -24,12 +25,16 @@ export class WaterCell extends Cell {
     return (WaterCell.WATER_ANIMATION.indexOf(<number> this.sprite.frame) !== -1);
   }
 
-  animatePlayerEnd(game: Game, level: Level, player: Player, endPosition: Point) {
-    if (this.sprite.frame === WaterCell.DIRTY) {
+  animateEnd(game: Game, level: Level, actor: Player|GameObject, endPosition: Point) {
+    if (this.sprite.frame === WaterCell.DIRTY && actor instanceof Player) {
       this.sprite.frame = EmptyCell.EMPTY_CELL;
     } else if (this.isWater()) {
-      if (!player.has(WaterBoots)) {
+      if ((actor instanceof Player && !actor.has(WaterBoots)) || (!(actor instanceof Player))) {
         level.animateWaterAt(game, endPosition);
+        actor.destroy();
+        if (actor instanceof GameObject) {
+          level.destroyObject(actor);
+        }
       }
     }
   }

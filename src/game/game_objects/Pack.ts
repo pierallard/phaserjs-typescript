@@ -25,7 +25,7 @@ export default class Pack extends GameObject {
     }, TIME, Phaser.Easing.Default, true);
     game.time.events.add(TIME, () => {
       this.position = newPosition;
-      this.animatePlayerEnd(game, level, player, this.position);
+      this.animateEnd(game, level, player, this.position);
       this.sprite.x = this.position.x * TILE_SIZE;
       this.sprite.y = this.position.y * TILE_SIZE;
     });
@@ -44,7 +44,7 @@ export default class Pack extends GameObject {
     return false;
   }
 
-  animatePlayerEnd(game: Game, level: Level, player: Player, endPosition: Point) {
+  animateEnd(game: Game, level: Level, player: Player|GameObject, endPosition: Point) {
     const cell = level.getCellAt(endPosition);
     if (cell instanceof WaterCell && cell.isWater()) {
       cell.changeAfterPack();

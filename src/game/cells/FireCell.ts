@@ -6,6 +6,8 @@ import {Cell} from "./Cell";
 import Group = Phaser.Group;
 import Game = Phaser.Game;
 import {FireBoots} from "../game_objects/PickableObject";
+import {GameObject} from "../game_objects/GameObject";
+import FireBall from "../game_objects/FireBall";
 
 export class FireCell extends Cell {
   private static FIRE_ANIMATION: number[] = [32, 33, 34];
@@ -26,11 +28,15 @@ export class FireCell extends Cell {
     return true;
   }
 
-  animatePlayerEnd(game: Game, level: Level, player: Player, endPosition: Point) {
-    if (player.has(FireBoots)) {
+  animateEnd(game: Game, level: Level, actor: Player|GameObject, endPosition: Point) {
+    if (actor instanceof Player && actor.has(FireBoots) || actor instanceof FireBall) {
       return;
     }
 
     level.animateFireAt(game, endPosition);
+    actor.destroy();
+    if (actor instanceof GameObject) {
+      level.destroyObject(actor);
+    }
   }
 }

@@ -4,6 +4,7 @@ import {Level} from "../levels/Level";
 import Game = Phaser.Game;
 import Point from "../Point";
 import Group = Phaser.Group;
+import {GameObject} from "../game_objects/GameObject";
 
 export abstract class Cell {
   protected sprite: Phaser.Sprite;
@@ -18,7 +19,7 @@ export abstract class Cell {
     return true;
   }
 
-  animatePlayerEnd(game: Game, level: Level, player: Player, endPosition: Point) {
+  animateEnd(game: Game, level: Level, actor: Player|GameObject, endPosition: Point) {
   }
 
   isDead(player: Player) {

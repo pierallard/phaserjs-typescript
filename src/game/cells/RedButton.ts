@@ -3,6 +3,7 @@ import {Level} from "../levels/Level";
 import Player from "../Player";
 import Point from "../Point";
 import Game = Phaser.Game;
+import {GameObject} from "../game_objects/GameObject";
 
 export default class RedButton extends Cell {
   private destination: Cell;
@@ -17,7 +18,7 @@ export default class RedButton extends Cell {
     this.destination = destCell;
   }
 
-  animatePlayerEnd(game: Game, level: Level, player: Player, endPosition: Point) {
+  animateEnd(game: Game, level: Level, player: Player|GameObject, endPosition: Point) {
     this.destination.runAction(game, level);
   }
 }

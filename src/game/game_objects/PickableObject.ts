@@ -6,10 +6,12 @@ import Point from "../Point";
 import Game = Phaser.Game;
 
 export abstract class PickableObject extends GameObject {
-  animatePlayerEnd(game: Game, level: Level, player: Player, endPosition: Point) {
-    player.addItem(this);
-    this.destroy();
-    level.destroyObject(this);
+  animateEnd(game: Game, level: Level, actor: Player|GameObject, endPosition: Point) {
+    if (actor instanceof Player) {
+      actor.addItem(this);
+      this.destroy();
+      level.destroyObject(this);
+    }
   }
 }
 

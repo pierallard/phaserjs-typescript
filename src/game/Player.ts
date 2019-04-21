@@ -120,7 +120,7 @@ export default class Player {
     }, speed, Phaser.Easing.Default, true);
     game.time.events.add(speed, () => {
       this.isProcessing = false;
-      this.level.animatePlayerEnd(game, this, newPosition);
+      this.level.animateEnd(game, this, newPosition);
       if (removeKey) {
         this.pressedKeys.shift();
       }
