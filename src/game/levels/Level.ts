@@ -56,6 +56,7 @@ export class Level {
           case 'R': this.cells[y][x] = new RedDoorCell(game, x, y, groundGroup); break;
           case 'G': this.cells[y][x] = new GreenDoorCell(game, x, y, groundGroup); break;
           case 'W': this.cells[y][x] = new WaterCell(game, x, y, groundGroup); break;
+          case 'V':
           case 'F': this.cells[y][x] = new FireCell(game, x, y, groundGroup); break;
           case 'I': this.cells[y][x] = new IceCell(game, x, y, groundGroup); break;
           case '1': this.cells[y][x] = new IceCellBottomLeft(game, x, y, groundGroup); break;
@@ -81,6 +82,7 @@ export class Level {
           case '5':
           case 'p':
           case 'T':
+          case 'U':
           case ' ': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
           default:
             console.log('Unable to create cell from ' + this.letterAt(new PIXI.Point(x, y)));
@@ -91,6 +93,11 @@ export class Level {
       for (let x = 0; x < GROUND_SIZE; x++) {
         switch(this.letterAt(new PIXI.Point(x, y))) {
           case 'a': this.objects.push(new Ant(game, x, y, objectGroup)); break;
+          case 'U':
+            this.objects.push(new Chip(game, x, y, objectGroup));
+            this.objects.push(new Pack(game, x, y, objectGroup));
+            break;
+          case 'V':
           case 'p': this.objects.push(new Pack(game, x, y, objectGroup)); break;
           case 'w': this.objects.push(new WaterBoots(game, x, y, objectGroup)); break;
           case 'i': this.objects.push(new IceBoots(game, x, y, objectGroup)); break;
