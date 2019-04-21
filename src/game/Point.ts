@@ -29,7 +29,7 @@ export default class Point extends PIXI.Point {
     return this.add(new Point(0, 1));
   }
 
-  addSens(sens: SENS) {
+  addSens(sens: SENS): Point {
     switch(sens) {
       case SENS.LEFT: return this.left();
       case SENS.RIGHT: return this.right();

@@ -18,6 +18,10 @@ export default class SwitchWall extends Cell {
     return !this.locked;
   }
 
+  isFreeForMonster() {
+    return !this.locked;
+  }
+
   switch() {
     this.locked = !this.locked;
     this.runAnimation();

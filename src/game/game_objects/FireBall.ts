@@ -1,7 +1,10 @@
 import {GameObject} from "./GameObject";
 import {SENS} from "../Sens";
 import {Level} from "../levels/Level";
-import {TILE_SIZE, TIME} from "../game_state/Play";
+import {default as Play, TILE_SIZE, TIME} from "../game_state/Play";
+import Player from "../Player";
+import Point from "../Point";
+import Game = Phaser.Game;
 
 export default class FireBall extends GameObject {
   private sens: SENS;
@@ -15,6 +18,17 @@ export default class FireBall extends GameObject {
 
     this.sprite.animations.add('DEFAULT', [176, 177, 178, 179], Phaser.Timer.SECOND * 3 / TIME, true);
     this.sprite.animations.play('DEFAULT');
+  }
+
+  isToxic() {
+    return true;
+  }
+
+  animateEnd(game: Game, level: Level, player: Player|GameObject, endPosition: Point) {
+    if (player instanceof Player) {
+      level.animateFireAt(game, endPosition);
+      this.destroy();
+    }
   }
 
   update(game: Phaser.Game, level: Level) {

@@ -27,6 +27,7 @@ import Tank from "../game_objects/Tank";
 import TankSwitch from "../cells/TankSwitch";
 import RedButton from "../cells/RedButton";
 import {FireThrower} from "../cells/FireThrower";
+import PinkBall from "../game_objects/PinkBall";
 
 export const GROUND_SIZE = 32;
 
@@ -90,6 +91,7 @@ export class Level {
           case 'p':
           case 'T':
           case 'U':
+          case 'u':
           case ' ': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
           default:
             console.log('Unable to create cell from ' + this.letterAt(new PIXI.Point(x, y)));
@@ -116,6 +118,7 @@ export class Level {
           case 'r': this.objects.push(new RedKey(game, x, y, objectGroup)); break;
           case 'g': this.objects.push(new GreenKey(game, x, y, objectGroup)); break;
           case 'T': this.objects.push(new Tank(game, x, y, objectGroup)); break;
+          case 'u': this.objects.push(new PinkBall(game, x, y, objectGroup)); break;
         }
       }
     }
