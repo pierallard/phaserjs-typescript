@@ -18,9 +18,13 @@ import {
   BlueKey, Chip, FireBoots, ForceBoots, GreenKey, IceBoots, RedKey, WaterBoots,
   YellowKey
 } from "../game_objects/PickableObject";
-import {Ant, GameObject, Pack} from "../game_objects/GameObject";
+import {GameObject} from "../game_objects/GameObject";
 import SwitchWall from "../cells/SwitchWall";
 import Switch from "../cells/Switch";
+import Ant from "../game_objects/Ant";
+import Pack from "../game_objects/Pack";
+import Tank from "../game_objects/Tank";
+import TankSwitch from "../cells/TankSwitch";
 
 export const GROUND_SIZE = 32;
 
@@ -63,6 +67,7 @@ export class Level {
           case 'S': this.cells[y][x] = new SwitchWall(game, x, y, groundGroup, true); break;
           case 'Q': this.cells[y][x] = new SwitchWall(game, x, y, groundGroup, false); break;
           case 'q': this.cells[y][x] = new Switch(game, x, y, groundGroup); break;
+          case 't': this.cells[y][x] = new TankSwitch(game, x, y, groundGroup); break;
           case 'w':
           case 'P':
           case 'a':
@@ -75,6 +80,7 @@ export class Level {
           case 'g':
           case '5':
           case 'p':
+          case 'T':
           case ' ': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
           default:
             console.log('Unable to create cell from ' + this.letterAt(new PIXI.Point(x, y)));
@@ -89,12 +95,13 @@ export class Level {
           case 'w': this.objects.push(new WaterBoots(game, x, y, objectGroup)); break;
           case 'i': this.objects.push(new IceBoots(game, x, y, objectGroup)); break;
           case 'f': this.objects.push(new FireBoots(game, x, y, objectGroup)); break;
-          case '5': this.objects.push(new ForceBoots(game, x, y, groundGroup)); break;
+          case '5': this.objects.push(new ForceBoots(game, x, y, objectGroup)); break;
           case 'c': this.objects.push(new Chip(game, x, y, objectGroup)); break;
-          case 'b': this.objects.push(new BlueKey(game, x, y, groundGroup)); break;
-          case 'y': this.objects.push(new YellowKey(game, x, y, groundGroup)); break;
-          case 'r': this.objects.push(new RedKey(game, x, y, groundGroup)); break;
-          case 'g': this.objects.push(new GreenKey(game, x, y, groundGroup)); break;
+          case 'b': this.objects.push(new BlueKey(game, x, y, objectGroup)); break;
+          case 'y': this.objects.push(new YellowKey(game, x, y, objectGroup)); break;
+          case 'r': this.objects.push(new RedKey(game, x, y, objectGroup)); break;
+          case 'g': this.objects.push(new GreenKey(game, x, y, objectGroup)); break;
+          case 'T': this.objects.push(new Tank(game, x, y, objectGroup)); break;
         }
       }
     }
@@ -242,7 +249,7 @@ export class Level {
     })
   }
 
-  isFreeForBug(newPosition: Point) {
+  isFreeForMonster(newPosition: Point) {
     if (!this.cells[newPosition.y][newPosition.x].isFree()) {
       return false;
     }
@@ -258,5 +265,13 @@ export class Level {
         }
       }
     }
+  }
+
+  switchTanks() {
+    this.objects.forEach((o) => {
+      if (o instanceof Tank) {
+        (<Tank> o).switch();
+      }
+    });
   }
 }
