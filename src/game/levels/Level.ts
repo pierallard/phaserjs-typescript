@@ -55,11 +55,12 @@ export class Level {
   private effectsGroup: Group;
   private actions: number[][][];
   private objectsGroup: Phaser.Group;
+  private player: Player;
 
   create(game: Phaser.Game, groundGroup: Group, objectGroup: Group, effectsGroup: Group) {
     this.effectsGroup = effectsGroup;
     this.objectsGroup = objectGroup;
-    this.addObject(new Player(game, this, objectGroup));
+    this.player = <Player> this.addObject(new Player(game, this, objectGroup));
     for (let y = 0; y < GROUND_SIZE; y++) {
       this.cells[y] = [];
       for (let x = 0; x < GROUND_SIZE; x++) {
@@ -354,13 +355,11 @@ export class Level {
 
   addObject(object: GameObject|Player) {
     this.objects.push(object);
+
+    return object;
   }
 
   getPlayer(): Player {
-    for (let i = 0; i < this.objects.length; i++) {
-      if (this.objects[i] instanceof Player) {
-        return <Player> this.objects[i];
-      }
-    }
+    return this.player;
   }
 }
