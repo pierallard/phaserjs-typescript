@@ -33,7 +33,8 @@ export class Ghost extends GameObject {
             newPosition = this.position.addSens(this.sens);
             if (!level.canMonsterGo(this.position, newPosition)) {
               this.sens = Ghost.ORDER[(Ghost.ORDER.indexOf(this.sens) + 1) % Ghost.ORDER.length];
-              newPosition = this.position;
+              this.isMoving = false;
+              return;
             }
           }
         }

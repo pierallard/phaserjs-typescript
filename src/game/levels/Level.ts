@@ -45,7 +45,7 @@ export class Level {
   protected map = [];
   protected chipsNeeded: number;
   private cells: Cell[][] = [];
-  private objects: GameObject[] = [];
+  private objects: (GameObject|Player)[] = [];
   private effectsGroup: Group;
   private actions: number[][][];
   private objectsGroup: Phaser.Group;
@@ -166,12 +166,11 @@ export class Level {
     if (!this.cells[endPosition.y][endPosition.x].canPlayerGoTo(player)) {
       return false;
     }
-    if (!this.cells[sourcePosition.y][sourcePosition.x].canPlayerGoOut()) {
+    if (!this.cells[sourcePosition.y][sourcePosition.x].canPlayerGoOut(this, player)) {
       return false;
     }
     for (let i = 0; i < this.objects.length; i++) {
       if (this.objects[i].getPosition().equals(endPosition)) {
-        console.log('ask player accessible for ' + this.objects[i].getPosition().x + ', ' + this.objects[i].getPosition().y);
         return this.objects[i].canPlayerGoTo(player, endPosition, this);
       }
     }
@@ -290,7 +289,7 @@ export class Level {
     if (!this.cells[newPosition.y][newPosition.x].isFreeForMonster()) {
       return false;
     }
-    if (!this.cells[sourcePosition.y][sourcePosition.x].canPlayerGoOut()) {
+    if (!this.cells[sourcePosition.y][sourcePosition.x].canPlayerGoOut(this, null)) {
       return false;
     }
 
@@ -315,7 +314,7 @@ export class Level {
     });
   }
 
-  private getObjAt(source: Point) {
+  getObjectAt(source: Point) {
     for (let i = 0; i < this.objects.length; i++) {
       if (this.objects[i].getPosition().equals(source)) {
         return this.objects[i];
@@ -329,7 +328,7 @@ export class Level {
     return this.objectsGroup;
   }
 
-  addObject(object: GameObject) {
+  addObject(object: GameObject|Player) {
     this.objects.push(object);
   }
 }

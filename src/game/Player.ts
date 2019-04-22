@@ -1,9 +1,11 @@
-import Sprite = Phaser.Sprite;
 import {BLOCKTIME, TILE_SIZE, TIME} from "./game_state/Play";
 import {COLOR, Level, GROUND_SIZE} from "./levels/Level";
 import Point from "./Point";
 import {SENS} from "./Sens";
-import {PickableObject, Key, WaterBoots, IceBoots, FireBoots, Chip} from "./game_objects/PickableObject";
+import {PickableObject, Key, Chip} from "./game_objects/PickableObject";
+import Sprite = Phaser.Sprite;
+import Game = Phaser.Game;
+import {GameObject} from "./game_objects/GameObject";
 
 export default class Player {
   private sprite: Sprite;
@@ -48,7 +50,7 @@ export default class Player {
     game.camera.follow(this.sprite);
   }
 
-  update(game: Phaser.Game) {
+  update(game: Phaser.Game, level: Level) {
     if (this.dead) {
       return;
     }
@@ -192,7 +194,6 @@ export default class Player {
   }
 
   render(game: Phaser.Game) {
-    //game.debug.cameraInfo(game.camera, 0, 10);
     game.debug.text(this.getPosition().x + ',' + this.getPosition().y, 0, 10);
   }
 
@@ -271,5 +272,25 @@ export default class Player {
 
   getSens(): SENS {
     return this.sens;
+  }
+
+  canPlayerGoTo(player: Player, endPosition: PIXI.Point, level: Level): boolean {
+    return false; // TODO Heritage from GameObject
+  }
+
+  canPackGoTo(player: Player, endPosition: Point, level: Level): boolean {
+    return false; // TODO Heritage from GameObject
+  }
+
+  animateEnd(game: Game, level: Level, actor: Player|GameObject, endPosition: Point) {
+    // TODO Heritage from GameObject
+  }
+
+  animatePlayerBegin(game: Game, level: Level, player: Player, endPosition: Point) {
+    // TODO Heritage from GameObject
+  }
+
+  isToxic(): boolean {
+    return false; // TODO Heritage from GameObject
   }
 }

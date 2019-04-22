@@ -15,11 +15,15 @@ export abstract class Cell {
     this.sprite = game.add.sprite(x * TILE_SIZE, y * TILE_SIZE, 'chips', 0, groundGroup);
   }
 
+  getPosition() {
+    return this.position;
+  }
+
   canPlayerGoTo(player: Player) {
     return true;
   }
 
-  canPlayerGoOut() {
+  canPlayerGoOut(level: Level, player: Player) {
     return true;
   }
 
@@ -50,7 +54,7 @@ export abstract class Cell {
     console.log('Unable to set a destination for the cell ' + this.position.x + ', ' + this.position.y + ' (' + this.constructor.name + ')');
   }
 
-  runAction(game: Game, level: Level) {
+  activate(game: Game, level: Level) {
     console.log('nope');
   }
 }

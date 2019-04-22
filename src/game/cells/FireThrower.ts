@@ -19,10 +19,9 @@ export class FireThrower extends Cell {
     return false;
   }
 
-  runAction(game: Game, level: Level) {
+  activate(game: Game, level: Level) {
     level.addObject(
       new FireBall(game, this.position.x, this.position.y, level.getObjectGroup(), SENS.LEFT)
     );
-    console.log('throw !');
   }
 }

@@ -19,6 +19,7 @@ export default class Play extends Phaser.State {
     this.level = Level.getFromNumber(this.levelNumber);
     this.player = new Player(this.level);
     this.menu = new Menu(this.level, this.player);
+    this.level.addObject(this.player);
   }
 
   public create(game: Phaser.Game) {
@@ -36,7 +37,6 @@ export default class Play extends Phaser.State {
   }
 
   public update(game: Phaser.Game) {
-    this.player.update(game);
     this.menu.update(game);
     this.level.update(game);
     if (this.hasFinished()) {
