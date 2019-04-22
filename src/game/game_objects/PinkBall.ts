@@ -20,11 +20,10 @@ export default class PinkBall extends GameObject {
     if (!this.isMoving) {
       this.isMoving = true;
       let newPosition = this.position.addSens(this.sens);
-      console.log(newPosition);
-      if (!level.isFreeForMonster(newPosition)) {
+      if (!level.canMonsterGo(this.position, newPosition)) {
         this.sens = this.revertSens();
         newPosition = this.position.addSens(this.sens);
-        if (!level.isFreeForMonster(newPosition)) {
+        if (!level.canMonsterGo(this.position, newPosition)) {
           this.sens = this.revertSens();
           newPosition = this.position;
         }

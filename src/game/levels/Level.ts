@@ -30,6 +30,7 @@ import {FireThrower} from "../cells/FireThrower";
 import PinkBall from "../game_objects/PinkBall";
 import {BrownButton} from "../cells/BrownButton";
 import {Glue} from "../cells/Glue";
+import {Ghost} from "../game_objects/Ghost";
 
 export const GROUND_SIZE = 32;
 
@@ -96,6 +97,7 @@ export class Level {
           case 'T':
           case 'U':
           case 'u':
+          case 'e':
           case ' ': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
           default:
             console.log('Unable to create cell from ' + this.letterAt(new PIXI.Point(x, y)));
@@ -123,6 +125,7 @@ export class Level {
           case 'g': this.objects.push(new GreenKey(game, x, y, objectGroup)); break;
           case 'T': this.objects.push(new Tank(game, x, y, objectGroup)); break;
           case 'u': this.objects.push(new PinkBall(game, x, y, objectGroup)); break;
+          case 'e': this.objects.push(new Ghost(game, x, y, objectGroup)); break;
         }
       }
     }
@@ -283,8 +286,11 @@ export class Level {
     })
   }
 
-  isFreeForMonster(newPosition: Point) {
+  canMonsterGo(sourcePosition: Point, newPosition: Point) {
     if (!this.cells[newPosition.y][newPosition.x].isFreeForMonster()) {
+      return false;
+    }
+    if (!this.cells[sourcePosition.y][sourcePosition.x].canPlayerGoOut()) {
       return false;
     }
 

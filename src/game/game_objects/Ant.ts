@@ -8,7 +8,7 @@ import Group = Phaser.Group;
 import Game = Phaser.Game;
 
 export default class Ant extends GameObject {
-  static ORDER: SENS[] = [SENS.UP, SENS.LEFT, SENS.DOWN, SENS.RIGHT];
+  private static ORDER: SENS[] = [SENS.UP, SENS.LEFT, SENS.DOWN, SENS.RIGHT];
 
   private isMoving: boolean = false;
   private sens: SENS;
@@ -39,19 +39,19 @@ export default class Ant extends GameObject {
       let sens = this.sens;
       let newPosition = this.getNewCell(sens);
       this.sens = Ant.ORDER[(Ant.ORDER.indexOf(this.sens) + 1) % Ant.ORDER.length];
-      if (!level.isFreeForMonster(newPosition)) {
+      if (!level.canMonsterGo(this.position, newPosition)) {
         sens = Ant.ORDER[(Ant.ORDER.indexOf(sens) + 3) % Ant.ORDER.length];
         newPosition = this.getNewCell(sens);
         this.sens = Ant.ORDER[(Ant.ORDER.indexOf(this.sens) + 3) % Ant.ORDER.length];
-        if (!level.isFreeForMonster(newPosition)) {
+        if (!level.canMonsterGo(this.position, newPosition)) {
           sens = Ant.ORDER[(Ant.ORDER.indexOf(sens) + 3) % Ant.ORDER.length];
           newPosition = this.getNewCell(sens);
           this.sens = Ant.ORDER[(Ant.ORDER.indexOf(this.sens) + 3) % Ant.ORDER.length];
-          if (!level.isFreeForMonster(newPosition)) {
+          if (!level.canMonsterGo(this.position, newPosition)) {
             sens = Ant.ORDER[(Ant.ORDER.indexOf(sens) + 3) % Ant.ORDER.length];
             newPosition = this.getNewCell(sens);
             this.sens = Ant.ORDER[(Ant.ORDER.indexOf(this.sens) + 3) % Ant.ORDER.length];
-            if (!level.isFreeForMonster(newPosition)) {
+            if (!level.canMonsterGo(this.position, newPosition)) {
               newPosition = this.getPosition();
               this.sens = Ant.ORDER[(Ant.ORDER.indexOf(this.sens) + 3) % Ant.ORDER.length];
             }
