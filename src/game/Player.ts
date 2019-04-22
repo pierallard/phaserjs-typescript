@@ -164,10 +164,10 @@ export default class Player extends GameObject {
     } else if (sens === SENS.DOWN) {
       this.sprite.frame = 140;
     }
-    this.level.animatePlayerBegin(game, this, this.position.addSens(sens));
+
     this.isProcessing = true;
     game.time.events.add(BLOCKTIME / 2, () => {
-      this.level.animateEnd(game, this, this.position.addSens(sens));
+      this.level.animatePush(game, this, this.position.addSens(sens));
       if (sens === SENS.LEFT) {
         this.sprite.frame = 103;
       } else if (sens === SENS.RIGHT) {

@@ -30,6 +30,9 @@ export abstract class Cell {
   animateEnd(game: Game, level: Level, actor: GameObject, endPosition: Point) {
   }
 
+  animatePush(game: Game, level: Level, actor: GameObject, endPosition: Point) {
+  }
+
   isDead(player: Player) {
     return false;
   }

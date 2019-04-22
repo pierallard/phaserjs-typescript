@@ -14,7 +14,7 @@ export class InvisibleWall extends WallCell {
     this.visibleAfterHit = visibleAfterHit;
   }
 
-  animateEnd(game: Game, level: Level, player: GameObject, endPosition: Point) {
+  animatePush(game: Game, level: Level, player: GameObject, endPosition: Point) {
     if (this.visibleAfterHit) {
       this.sprite.frame = 14 + 32;
     }

@@ -197,7 +197,6 @@ export class Level {
 
     for (let i = 0; i < this.objects.length; i++) {
       if (this.objects[i].getPosition().equals(endPosition)) {
-        console.log('ask pack accessible for ' + this.objects[i].getPosition().x + ', ' + this.objects[i].getPosition().y);
         return this.objects[i].canPackGoTo(player, endPosition, this);
       }
     }
@@ -217,6 +216,15 @@ export class Level {
     for (let i = 0; i < this.objects.length; i++) {
       if (this.objects[i].getPosition().equals(endPosition)) {
         this.objects[i].animateEnd(game, this, actor, endPosition);
+      }
+    }
+  }
+
+  animatePush(game: Game, actor: GameObject, endPosition: Point) {
+    this.cells[endPosition.y][endPosition.x].animatePush(game, this, actor, endPosition);
+    for (let i = 0; i < this.objects.length; i++) {
+      if (this.objects[i].getPosition().equals(endPosition)) {
+        this.objects[i].animatePush(game, this, actor, endPosition);
       }
     }
   }

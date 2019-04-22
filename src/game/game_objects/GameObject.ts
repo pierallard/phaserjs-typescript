@@ -26,6 +26,9 @@ export abstract class GameObject {
   animateEnd(game: Game, level: Level, actor: GameObject, endPosition: Point) {
   }
 
+  animatePush(game: Game, level: Level, actor: GameObject, endPosition: Point) {
+  }
+
   canPlayerGoTo(player: GameObject, endPosition: PIXI.Point, level: Level): boolean {
     return true;
   }
