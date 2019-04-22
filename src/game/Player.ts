@@ -153,27 +153,28 @@ export default class Player extends GameObject {
     }
   }
 
-  private runBlocked(game: Phaser.Game, animationName: string, key: Phaser.Key) {
+  private runBlocked(game: Phaser.Game, sens: SENS, key: Phaser.Key) {
     this.sprite.animations.stop();
     this.sprite.animations.currentAnim = null;
-    if (animationName === SENS.LEFT) {
+    if (sens === SENS.LEFT) {
       this.sprite.frame = 113;
-    } else if (animationName === SENS.RIGHT) {
+    } else if (sens === SENS.RIGHT) {
       this.sprite.frame = 145;
-    } else if (animationName === SENS.UP) {
+    } else if (sens === SENS.UP) {
       this.sprite.frame = 108;
-    } else if (animationName === SENS.DOWN) {
+    } else if (sens === SENS.DOWN) {
       this.sprite.frame = 140;
     }
+    this.level.animatePlayerBegin(game, this, this.position.addSens(sens));
     this.isProcessing = true;
     game.time.events.add(BLOCKTIME / 2, () => {
-      if (animationName === SENS.LEFT) {
+      if (sens === SENS.LEFT) {
         this.sprite.frame = 103;
-      } else if (animationName === SENS.RIGHT) {
+      } else if (sens === SENS.RIGHT) {
         this.sprite.frame = 135;
-      } else if (animationName === SENS.UP) {
+      } else if (sens === SENS.UP) {
         this.sprite.frame = 98;
-      } else if (animationName === SENS.DOWN) {
+      } else if (sens === SENS.DOWN) {
         this.sprite.frame = 130;
       }
     });

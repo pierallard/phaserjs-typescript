@@ -139,5 +139,29 @@ export const LEVELS: LevelDescriptor[] = [
       [[16, 11], [18, 11]],
       [[18, 16], [18, 19]]
     ]
+  }, {
+    map: [
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '        AAAAAAAAAAAAAAAAA       ',
+      '        A               A       ',
+      '        A               A       ',
+      '        AACAACXXXXXCAAAAA       ',
+      '        Ac H  X   X  J cA       ',
+      '        Ac H  X   C  J cA       ',
+      '        Ac H  C P X  J cA       ',
+      '        Ac H  X   X  J cA       ',
+      '        AAAAAAXXDXXAAAAAA       ',
+      '               XEX              ',
+      '               XXX'
+    ],
+    chips: 4,
+    actions: [],
   }
 ];
