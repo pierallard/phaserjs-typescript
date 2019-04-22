@@ -23,7 +23,7 @@ export abstract class Cell {
     return true;
   }
 
-  canPlayerGoOut(level: Level, player: GameObject) {
+  canPlayerGoOut(level: Level, player: GameObject, endPosition: Point) {
     return true;
   }
 

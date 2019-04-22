@@ -37,6 +37,7 @@ import {InvisibleWall} from "../cells/InvisibleWall";
 import {Teleport} from "../cells/Teleport";
 import {Thief} from "../cells/Thief";
 import {BuildingWall} from "../cells/BuildingWall";
+import {CellWithWallDown} from "../cells/CellWithWall";
 
 export const GROUND_SIZE = 32;
 
@@ -97,6 +98,7 @@ export class Level {
           case 'M': this.cells[y][x] = new Teleport(game, x, y, groundGroup, this); break;
           case 'K': this.cells[y][x] = new Thief(game, x, y, groundGroup); break;
           case 'L': this.cells[y][x] = new BuildingWall(game, x, y, groundGroup); break;
+          case 'N': this.cells[y][x] = new CellWithWallDown(game, x, y, groundGroup); break;
           case 'w':
           case 'P':
           case 'a':
@@ -183,7 +185,7 @@ export class Level {
     if (!this.cells[endPosition.y][endPosition.x].canPlayerGoTo(actor)) {
       return false;
     }
-    if (!this.cells[sourcePosition.y][sourcePosition.x].canPlayerGoOut(this, actor)) {
+    if (!this.cells[sourcePosition.y][sourcePosition.x].canPlayerGoOut(this, actor, endPosition)) {
       return false;
     }
     for (let i = 0; i < this.objects.length; i++) {
@@ -314,7 +316,7 @@ export class Level {
     if (!this.cells[newPosition.y][newPosition.x].isFreeForMonster()) {
       return false;
     }
-    if (!this.cells[sourcePosition.y][sourcePosition.x].canPlayerGoOut(this, null)) {
+    if (!this.cells[sourcePosition.y][sourcePosition.x].canPlayerGoOut(this, null, newPosition)) {
       return false;
     }
 
