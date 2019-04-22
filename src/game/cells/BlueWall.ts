@@ -5,13 +5,24 @@ import Point from "../Point";
 import Game = Phaser.Game;
 
 export class BlueWall extends WallCell {
-  constructor(game: Phaser.Game, x: number, y: number, groundGroup: Phaser.Group) {
+  private isWall: boolean;
+
+  constructor(game: Phaser.Game, x: number, y: number, groundGroup: Phaser.Group, isWall: boolean) {
     super(game, x, y, groundGroup);
 
     this.sprite.frame = 20 + 32;
+    this.isWall = isWall;
   }
 
-  animatePlayerBegin(game: Game, level: Level, player: Player, endPosition: Point) {
-    this.sprite.frame = 14 + 32;
+  animateEnd(game: Game, level: Level, player: Player, endPosition: Point) {
+    if (this.isWall) {
+      this.sprite.frame = 14 + 32;
+    } else {
+      this.sprite.frame = 0;
+    }
+  }
+
+  canPlayerGoTo(player: Player) {
+    return !this.isWall;
   }
 }

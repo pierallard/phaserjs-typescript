@@ -33,6 +33,7 @@ import {Glue} from "../cells/Glue";
 import {Ghost} from "../game_objects/Ghost";
 import {Bomb} from "../game_objects/Bomb";
 import {BlueWall} from "../cells/BlueWall";
+import {InvisibleWall} from "../cells/InvisibleWall";
 
 export const GROUND_SIZE = 32;
 
@@ -85,7 +86,10 @@ export class Level {
           case 'j': this.cells[y][x] = new BrownButton(game, x, y, groundGroup); break;
           case 'h': this.cells[y][x] = new FireThrower(game, x, y, groundGroup); break;
           case 'o': this.cells[y][x] = new Glue(game, x, y, groundGroup); break;
-          case 'A': this.cells[y][x] = new BlueWall(game, x, y, groundGroup); break;
+          case 'A': this.cells[y][x] = new BlueWall(game, x, y, groundGroup, true); break;
+          case 'C': this.cells[y][x] = new BlueWall(game, x, y, groundGroup, false); break;
+          case 'H': this.cells[y][x] = new InvisibleWall(game, x, y, groundGroup, false); break;
+          case 'J': this.cells[y][x] = new InvisibleWall(game, x, y, groundGroup, true); break;
           case 'w':
           case 'P':
           case 'a':
