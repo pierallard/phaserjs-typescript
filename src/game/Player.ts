@@ -10,7 +10,6 @@ import Group = Phaser.Group;
 export default class Player extends GameObject {
   private chips: number;
   private dead: boolean = false;
-  private sens: SENS;
 
   private leftKey: Phaser.Key;
   private rightKey: Phaser.Key;
@@ -115,16 +114,16 @@ export default class Player extends GameObject {
     game.add.tween(this.sprite).to({
       x: Player.getPosition(newPosition).x,
       y: Player.getPosition(newPosition).y
-    }, speed, Phaser.Easing.Default, true);
+    }, speed - Phaser.Timer.SECOND / 30, Phaser.Easing.Default, true);
     game.time.events.add(speed, () => {
       this.isProcessing = false;
-      this.level.animateEnd(game, this, newPosition);
       if (removeKey) {
         this.pressedKeys.shift();
       }
       this.position = newPosition;
       this.sprite.x = Player.getPosition(this.position).x;
       this.sprite.y = Player.getPosition(this.position).y;
+      this.level.animateEnd(game, this, newPosition);
       if (!this.pressedKeys.length) {
         this.sprite.animations.stop();
         this.sprite.animations.currentAnim = null;
@@ -268,15 +267,11 @@ export default class Player extends GameObject {
     }).length > 0;
   }
 
-  getSens(): SENS {
-    return this.sens;
-  }
-
-  canPlayerGoTo(player: Player, endPosition: PIXI.Point, level: Level): boolean {
+  canPlayerGoTo(player: GameObject, endPosition: PIXI.Point, level: Level): boolean {
     return false; // TODO Heritage from GameObject
   }
 
-  canPackGoTo(player: Player, endPosition: Point, level: Level): boolean {
+  canPackGoTo(player: GameObject, endPosition: Point, level: Level): boolean {
     return false; // TODO Heritage from GameObject
   }
 
@@ -290,5 +285,11 @@ export default class Player extends GameObject {
 
   isToxic(): boolean {
     return false; // TODO Heritage from GameObject
+  }
+
+  teleportTo(destination: Point) {
+    super.teleportTo(destination);
+    this.sprite.x = Player.getPosition(this.position).x;
+    this.sprite.y = Player.getPosition(this.position).y;
   }
 }

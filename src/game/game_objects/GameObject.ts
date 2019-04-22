@@ -4,10 +4,12 @@ import Point from "../Point";
 import {Level} from "../levels/Level";
 import Game = Phaser.Game;
 import Group = Phaser.Group;
+import {SENS} from "../Sens";
 
 export abstract class GameObject {
   protected sprite: Phaser.Sprite;
   protected position: Point;
+  protected sens: SENS;
 
   constructor(game: Phaser.Game, x: number, y: number, objectGroup: Group) {
     this.sprite = game.add.sprite(x * TILE_SIZE, y * TILE_SIZE, 'chips', 0, objectGroup);
@@ -24,11 +26,11 @@ export abstract class GameObject {
   animateEnd(game: Game, level: Level, actor: GameObject, endPosition: Point) {
   }
 
-  canPlayerGoTo(player: Player, endPosition: PIXI.Point, level: Level): boolean {
+  canPlayerGoTo(player: GameObject, endPosition: PIXI.Point, level: Level): boolean {
     return true;
   }
 
-  canPackGoTo(player: Player, endPosition: Point, level: Level) {
+  canPackGoTo(player: GameObject, endPosition: Point, level: Level) {
     return true;
   }
 
@@ -41,5 +43,15 @@ export abstract class GameObject {
   }
 
   update(game: Phaser.Game, level: Level) {
+  }
+
+  teleportTo(destination: Point) {
+    this.position = destination;
+    this.sprite.x = this.position.x * TILE_SIZE;
+    this.sprite.y = this.position.y * TILE_SIZE;
+  }
+
+  getSens() {
+    return this.sens;
   }
 }

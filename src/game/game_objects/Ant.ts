@@ -1,6 +1,5 @@
 import {SENS} from "../Sens";
 import {TILE_SIZE, TIME} from "../game_state/Play";
-import Player from "../Player";
 import {Level} from "../levels/Level";
 import Point from "../Point";
 import {GameObject} from "./GameObject";
@@ -11,7 +10,6 @@ export default class Ant extends GameObject {
   private static ORDER: SENS[] = [SENS.UP, SENS.LEFT, SENS.DOWN, SENS.RIGHT];
 
   private isMoving: boolean = false;
-  private sens: SENS;
 
   constructor(game: Phaser.Game, x: number, y: number, objectGroup: Group) {
     super(game, x, y, objectGroup);

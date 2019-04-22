@@ -8,7 +8,6 @@ export class Ghost extends GameObject {
   private static ORDER: SENS[] = [SENS.UP, SENS.LEFT, SENS.DOWN, SENS.RIGHT];
   
   private isMoving: boolean;
-  private sens: SENS;
 
   constructor(game: Phaser.Game, x: number, y: number, objectGroup: Phaser.Group) {
     super(game, x, y, objectGroup);

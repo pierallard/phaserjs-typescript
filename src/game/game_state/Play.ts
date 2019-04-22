@@ -1,4 +1,3 @@
-import Player from "../Player";
 import {Level, GROUND_SIZE} from "../levels/Level";
 import {PIXELS_WIDTH} from "../../app";
 import Menu from "../Menu";
@@ -12,7 +11,7 @@ export default class Play extends Phaser.State {
   private menu: Menu;
   private levelNumber: number;
 
-  constructor(game: Phaser.Game, levelNumber: number = 5) {
+  constructor(game: Phaser.Game, levelNumber: number = 6) {
     super();
     this.levelNumber = levelNumber;
     this.level = Level.getFromNumber(this.levelNumber);

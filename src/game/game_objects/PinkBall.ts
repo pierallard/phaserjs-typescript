@@ -5,7 +5,6 @@ import {SENS} from "../Sens";
 
 export default class PinkBall extends GameObject {
   private isMoving: boolean;
-  private sens: SENS;
 
   constructor(game: Phaser.Game, x: number, y: number, objectGroup: Phaser.Group) {
     super(game, x, y, objectGroup);

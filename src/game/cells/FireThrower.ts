@@ -8,6 +8,7 @@ import {SENS} from "../Sens";
 
 export class FireThrower extends Cell {
   private fireSprite: Phaser.Sprite;
+
   constructor(game: Phaser.Game, x: number, y: number, groundGroup: Phaser.Group) {
     super(game, x, y, groundGroup);
 

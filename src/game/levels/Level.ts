@@ -34,6 +34,7 @@ import {Ghost} from "../game_objects/Ghost";
 import {Bomb} from "../game_objects/Bomb";
 import {BlueWall} from "../cells/BlueWall";
 import {InvisibleWall} from "../cells/InvisibleWall";
+import {Teleport} from "../cells/Teleport";
 
 export const GROUND_SIZE = 32;
 
@@ -90,6 +91,7 @@ export class Level {
           case 'C': this.cells[y][x] = new BlueWall(game, x, y, groundGroup, false); break;
           case 'H': this.cells[y][x] = new InvisibleWall(game, x, y, groundGroup, false); break;
           case 'J': this.cells[y][x] = new InvisibleWall(game, x, y, groundGroup, true); break;
+          case 'M': this.cells[y][x] = new Teleport(game, x, y, groundGroup, this); break;
           case 'w':
           case 'P':
           case 'a':
@@ -172,23 +174,23 @@ export class Level {
     return new Point(0, 0);
   }
 
-  canPlayerMoveTo(player: Player, sourcePosition: Point, endPosition: Point) {
-    if (!this.cells[endPosition.y][endPosition.x].canPlayerGoTo(player)) {
+  canPlayerMoveTo(actor: GameObject, sourcePosition: Point, endPosition: Point) {
+    if (!this.cells[endPosition.y][endPosition.x].canPlayerGoTo(actor)) {
       return false;
     }
-    if (!this.cells[sourcePosition.y][sourcePosition.x].canPlayerGoOut(this, player)) {
+    if (!this.cells[sourcePosition.y][sourcePosition.x].canPlayerGoOut(this, actor)) {
       return false;
     }
     for (let i = 0; i < this.objects.length; i++) {
       if (this.objects[i].getPosition().equals(endPosition)) {
-        return this.objects[i].canPlayerGoTo(player, endPosition, this);
+        return this.objects[i].canPlayerGoTo(actor, endPosition, this);
       }
     }
 
     return true;
   }
 
-  canPackGoTo(player: Player, endPosition: Point) {
+  canPackGoTo(player: GameObject, endPosition: Point) {
     if (!this.cells[endPosition.y][endPosition.x].canPackGoTo(player)) {
       return false;
     }

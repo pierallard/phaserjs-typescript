@@ -3,6 +3,7 @@ import {Level} from "../levels/Level";
 import Player from "../Player";
 import Point from "../Point";
 import Game = Phaser.Game;
+import {GameObject} from "../game_objects/GameObject";
 
 export class BlueWall extends WallCell {
   private isWall: boolean;
@@ -14,7 +15,7 @@ export class BlueWall extends WallCell {
     this.isWall = isWall;
   }
 
-  animateEnd(game: Game, level: Level, player: Player, endPosition: Point) {
+  animateEnd(game: Game, level: Level, player: GameObject, endPosition: Point) {
     if (this.isWall) {
       this.sprite.frame = 14 + 32;
     } else {

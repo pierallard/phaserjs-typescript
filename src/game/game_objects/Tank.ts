@@ -1,13 +1,11 @@
 import {GameObject} from "./GameObject";
 import {SENS} from "../Sens";
-import Player from "../Player";
 import {Level} from "../levels/Level";
 import Point from "../Point";
 import Game = Phaser.Game;
 import {TILE_SIZE, TIME} from "../game_state/Play";
 
 export default class Tank extends GameObject {
-  private sens: SENS;
   private isMoving: boolean;
   private isSwitching: boolean;
 

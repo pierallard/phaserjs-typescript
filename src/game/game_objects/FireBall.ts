@@ -7,7 +7,6 @@ import Point from "../Point";
 import Game = Phaser.Game;
 
 export default class FireBall extends GameObject {
-  private sens: SENS;
   private isMoving: boolean;
 
   constructor(game: Phaser.Game, x: number, y: number, objectGroup: Phaser.Group, sens: SENS) {

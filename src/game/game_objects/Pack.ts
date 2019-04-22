@@ -15,10 +15,7 @@ export default class Pack extends GameObject {
   }
 
   animatePlayerBegin(game: Game, level: Level, player: Player, endPosition: Point) {
-    const newPosition = new Point(
-      this.position.x + this.diff(player, endPosition).x,
-      this.position.y + this.diff(player, endPosition).y
-    );
+    const newPosition = this.position.add(player.getPosition().remove(endPosition));
     game.add.tween(this.sprite).to({
       x: newPosition.x * TILE_SIZE,
       y: newPosition.y * TILE_SIZE
@@ -31,12 +28,8 @@ export default class Pack extends GameObject {
     });
   }
 
-  canPlayerGoTo(player: Player, endPosition: PIXI.Point, level: Level) {
-    const newPosition = new Point(
-      this.position.x + this.diff(player, endPosition).x,
-      this.position.y + this.diff(player, endPosition).y
-    );
-
+  canPlayerGoTo(player: GameObject, endPosition: Point, level: Level) {
+    const newPosition = this.position.add(player.getPosition().remove(endPosition));
     return level.canPackGoTo(player, newPosition);
   }
 
