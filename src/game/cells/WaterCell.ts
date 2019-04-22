@@ -25,7 +25,7 @@ export class WaterCell extends Cell {
     return (WaterCell.WATER_ANIMATION.indexOf(<number> this.sprite.frame) !== -1);
   }
 
-  animateEnd(game: Game, level: Level, actor: Player|GameObject, endPosition: Point) {
+  animateEnd(game: Game, level: Level, actor: GameObject, endPosition: Point) {
     if (this.sprite.frame === WaterCell.DIRTY && actor instanceof Player) {
       this.sprite.frame = EmptyCell.EMPTY_CELL;
     } else if (this.isWater()) {

@@ -1,19 +1,16 @@
 import {PIXELS_WIDTH} from "../app";
 import BitmapText = Phaser.BitmapText;
-import Player from "./Player";
 import {TIME} from "./game_state/Play";
 import {Level} from "./levels/Level";
 
 export default class Menu {
   private chipsLeftBitmap: BitmapText;
   private level: Level;
-  private player: Player;
   private chipsLeft: number;
   private changeTime: number;
 
-  constructor(level: Level, player: Player) {
+  constructor(level: Level) {
     this.level = level;
-    this.player = player;
   }
 
   create(game: Phaser.Game) {
@@ -64,6 +61,6 @@ export default class Menu {
   }
 
   private getChipsLeft(): number {
-    return Math.max(this.level.getChipsNeeded() - this.player.getChips(), 0)
+    return Math.max(this.level.getChipsNeeded() - this.level.getPlayer().getChips(), 0)
   }
 }

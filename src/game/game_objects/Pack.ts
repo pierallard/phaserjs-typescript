@@ -44,7 +44,7 @@ export default class Pack extends GameObject {
     return false;
   }
 
-  animateEnd(game: Game, level: Level, player: Player|GameObject, endPosition: Point) {
+  animateEnd(game: Game, level: Level, player: GameObject, endPosition: Point) {
     const cell = level.getCellAt(endPosition);
     if (cell instanceof WaterCell && cell.isWater()) {
       cell.changeAfterPack();

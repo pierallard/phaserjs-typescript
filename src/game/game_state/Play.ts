@@ -8,7 +8,6 @@ export const TIME = Phaser.Timer.SECOND / 4;
 export const BLOCKTIME = TIME / 1.5;
 
 export default class Play extends Phaser.State {
-  private player: Player;
   private level: Level;
   private menu: Menu;
   private levelNumber: number;
@@ -17,9 +16,7 @@ export default class Play extends Phaser.State {
     super();
     this.levelNumber = levelNumber;
     this.level = Level.getFromNumber(this.levelNumber);
-    this.player = new Player(this.level);
-    this.menu = new Menu(this.level, this.player);
-    this.level.addObject(this.player);
+    this.menu = new Menu(this.level);
   }
 
   public create(game: Phaser.Game) {
@@ -32,7 +29,6 @@ export default class Play extends Phaser.State {
     game.add.existing(objectGroup);
     game.add.existing(effectsGroup);
     this.level.create(game, groundGroup, objectGroup, effectsGroup);
-    this.player.create(game);
     this.menu.create(game);
   }
 
@@ -43,7 +39,7 @@ export default class Play extends Phaser.State {
       this.state.add('Level' + (this.levelNumber + 1), new Play(game, this.levelNumber + 1));
       this.state.start('Level' + (this.levelNumber + 1));
     } else if (this.isDead()) {
-      this.player.destroy();
+      this.level.getPlayer().destroy();
       game.time.events.add(TIME * 3, () => {
         this.state.states[this.state.current] = new Play(game, this.levelNumber);
         this.state.restart(true);
@@ -52,19 +48,19 @@ export default class Play extends Phaser.State {
   }
 
   public render(game: Phaser.Game) {
-    this.player.render(game);
+    this.level.getPlayer().render(game);
   }
 
   private hasFinished(): boolean {
     return (
-      this.player.getPosition().equals(this.level.getEndPosition())
+      this.level.getPlayer().getPosition().equals(this.level.getEndPosition())
     );
   }
 
   private isDead() {
-    const deadPositions = this.level.getDeadPositions(this.player);
+    const deadPositions = this.level.getDeadPositions(this.level.getPlayer());
     for (let i = 0; i < deadPositions.length; i++) {
-      if (this.player.getPosition().equals(deadPositions[i])) {
+      if (this.level.getPlayer().getPosition().equals(deadPositions[i])) {
         return true;
       }
     }

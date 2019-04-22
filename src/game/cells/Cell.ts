@@ -27,7 +27,7 @@ export abstract class Cell {
     return true;
   }
 
-  animateEnd(game: Game, level: Level, actor: Player|GameObject, endPosition: Point) {
+  animateEnd(game: Game, level: Level, actor: GameObject, endPosition: Point) {
   }
 
   isDead(player: Player) {

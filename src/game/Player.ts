@@ -3,13 +3,11 @@ import {COLOR, Level, GROUND_SIZE} from "./levels/Level";
 import Point from "./Point";
 import {SENS} from "./Sens";
 import {PickableObject, Key, Chip} from "./game_objects/PickableObject";
-import Sprite = Phaser.Sprite;
 import Game = Phaser.Game;
 import {GameObject} from "./game_objects/GameObject";
+import Group = Phaser.Group;
 
-export default class Player {
-  private sprite: Sprite;
-  private position: Point;
+export default class Player extends GameObject {
   private chips: number;
   private dead: boolean = false;
   private sens: SENS;
@@ -24,14 +22,12 @@ export default class Player {
   private level: Level;
   private bag: PickableObject[];
 
-  constructor(level: Level) {
+  constructor(game: Game, level: Level, objectGroup: Group) {
+    super(game, level.getPlayerPosition().x, level.getPlayerPosition().y, objectGroup);
     this.level = level;
     this.bag = [];
     this.chips = 0;
     this.sens = SENS.DOWN;
-  }
-
-  create(game: Phaser.Game) {
     this.position = this.level.getPlayerPosition();
     this.pressedKeys = [];
     this.isProcessing = false;
@@ -282,7 +278,7 @@ export default class Player {
     return false; // TODO Heritage from GameObject
   }
 
-  animateEnd(game: Game, level: Level, actor: Player|GameObject, endPosition: Point) {
+  animateEnd(game: Game, level: Level, actor: GameObject, endPosition: Point) {
     // TODO Heritage from GameObject
   }
 

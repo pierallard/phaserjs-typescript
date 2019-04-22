@@ -18,7 +18,7 @@ export default class RedButton extends Cell {
     this.destination = destCell;
   }
 
-  animateEnd(game: Game, level: Level, player: Player|GameObject, endPosition: Point) {
+  animateEnd(game: Game, level: Level, player: GameObject, endPosition: Point) {
     this.destination.activate(game, level);
   }
 }

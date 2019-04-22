@@ -24,7 +24,7 @@ export default class FireBall extends GameObject {
     return true;
   }
 
-  animateEnd(game: Game, level: Level, player: Player|GameObject, endPosition: Point) {
+  animateEnd(game: Game, level: Level, player: GameObject, endPosition: Point) {
     if (player instanceof Player) {
       level.animateFireAt(game, endPosition);
       this.destroy();

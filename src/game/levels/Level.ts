@@ -53,6 +53,7 @@ export class Level {
   create(game: Phaser.Game, groundGroup: Group, objectGroup: Group, effectsGroup: Group) {
     this.effectsGroup = effectsGroup;
     this.objectsGroup = objectGroup;
+    this.addObject(new Player(game, this, objectGroup));
     for (let y = 0; y < GROUND_SIZE; y++) {
       this.cells[y] = [];
       for (let x = 0; x < GROUND_SIZE; x++) {
@@ -107,25 +108,25 @@ export class Level {
 
       for (let x = 0; x < GROUND_SIZE; x++) {
         switch(this.letterAt(new PIXI.Point(x, y))) {
-          case 'a': this.objects.push(new Ant(game, x, y, objectGroup)); break;
+          case 'a': this.addObject(new Ant(game, x, y, objectGroup)); break;
           case 'U':
-            this.objects.push(new Chip(game, x, y, objectGroup));
-            this.objects.push(new Pack(game, x, y, objectGroup));
+            this.addObject(new Chip(game, x, y, objectGroup));
+            this.addObject(new Pack(game, x, y, objectGroup));
             break;
           case 'V':
-          case 'p': this.objects.push(new Pack(game, x, y, objectGroup)); break;
-          case 'w': this.objects.push(new WaterBoots(game, x, y, objectGroup)); break;
-          case 'i': this.objects.push(new IceBoots(game, x, y, objectGroup)); break;
-          case 'f': this.objects.push(new FireBoots(game, x, y, objectGroup)); break;
-          case '5': this.objects.push(new ForceBoots(game, x, y, objectGroup)); break;
-          case 'c': this.objects.push(new Chip(game, x, y, objectGroup)); break;
-          case 'b': this.objects.push(new BlueKey(game, x, y, objectGroup)); break;
-          case 'y': this.objects.push(new YellowKey(game, x, y, objectGroup)); break;
-          case 'r': this.objects.push(new RedKey(game, x, y, objectGroup)); break;
-          case 'g': this.objects.push(new GreenKey(game, x, y, objectGroup)); break;
-          case 'T': this.objects.push(new Tank(game, x, y, objectGroup)); break;
-          case 'u': this.objects.push(new PinkBall(game, x, y, objectGroup)); break;
-          case 'e': this.objects.push(new Ghost(game, x, y, objectGroup)); break;
+          case 'p': this.addObject(new Pack(game, x, y, objectGroup)); break;
+          case 'w': this.addObject(new WaterBoots(game, x, y, objectGroup)); break;
+          case 'i': this.addObject(new IceBoots(game, x, y, objectGroup)); break;
+          case 'f': this.addObject(new FireBoots(game, x, y, objectGroup)); break;
+          case '5': this.addObject(new ForceBoots(game, x, y, objectGroup)); break;
+          case 'c': this.addObject(new Chip(game, x, y, objectGroup)); break;
+          case 'b': this.addObject(new BlueKey(game, x, y, objectGroup)); break;
+          case 'y': this.addObject(new YellowKey(game, x, y, objectGroup)); break;
+          case 'r': this.addObject(new RedKey(game, x, y, objectGroup)); break;
+          case 'g': this.addObject(new GreenKey(game, x, y, objectGroup)); break;
+          case 'T': this.addObject(new Tank(game, x, y, objectGroup)); break;
+          case 'u': this.addObject(new PinkBall(game, x, y, objectGroup)); break;
+          case 'e': this.addObject(new Ghost(game, x, y, objectGroup)); break;
         }
       }
     }
@@ -200,7 +201,7 @@ export class Level {
     return this.map[point.y][point.x];
   }
 
-  animateEnd(game: Game, actor: Player|GameObject, endPosition: Point) {
+  animateEnd(game: Game, actor: GameObject, endPosition: Point) {
     this.cells[endPosition.y][endPosition.x].animateEnd(game, this, actor, endPosition);
     for (let i = 0; i < this.objects.length; i++) {
       if (this.objects[i].getPosition().equals(endPosition)) {
@@ -330,5 +331,13 @@ export class Level {
 
   addObject(object: GameObject|Player) {
     this.objects.push(object);
+  }
+
+  getPlayer(): Player {
+    for (let i = 0; i < this.objects.length; i++) {
+      if (this.objects[i] instanceof Player) {
+        return <Player> this.objects[i];
+      }
+    }
   }
 }

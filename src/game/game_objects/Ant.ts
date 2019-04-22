@@ -28,7 +28,7 @@ export default class Ant extends GameObject {
     return true;
   }
 
-  animateEnd(game: Game, level: Level, player: Player|GameObject, endPosition: Point) {
+  animateEnd(game: Game, level: Level, player: GameObject, endPosition: Point) {
     level.animateFireAt(game, endPosition);
     this.destroy();
   }
