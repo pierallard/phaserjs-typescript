@@ -54,6 +54,7 @@ export class Ghost extends GameObject {
       game.time.events.add(TIME, () => {
         this.isMoving = false;
         this.position = newPosition;
+        level.animateEnd(game, this, this.position);
         this.sprite.x = this.position.x * TILE_SIZE;
         this.sprite.y = this.position.y * TILE_SIZE;
       }, this);

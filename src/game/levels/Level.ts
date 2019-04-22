@@ -31,6 +31,7 @@ import PinkBall from "../game_objects/PinkBall";
 import {BrownButton} from "../cells/BrownButton";
 import {Glue} from "../cells/Glue";
 import {Ghost} from "../game_objects/Ghost";
+import {Bomb} from "../game_objects/Bomb";
 
 export const GROUND_SIZE = 32;
 
@@ -99,6 +100,7 @@ export class Level {
           case 'U':
           case 'u':
           case 'e':
+          case 'z':
           case ' ': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
           default:
             console.log('Unable to create cell from ' + this.letterAt(new PIXI.Point(x, y)));
@@ -127,6 +129,7 @@ export class Level {
           case 'T': this.addObject(new Tank(game, x, y, objectGroup)); break;
           case 'u': this.addObject(new PinkBall(game, x, y, objectGroup)); break;
           case 'e': this.addObject(new Ghost(game, x, y, objectGroup)); break;
+          case 'z': this.addObject(new Bomb(game, x, y, objectGroup)); break;
         }
       }
     }
