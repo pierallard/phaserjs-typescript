@@ -182,7 +182,7 @@ export const LEVELS: LevelDescriptor[] = [
       '         X8X   MXM X F8X8X      ',
       '         X8XXXXXXXXXXXXX8X      ',
       '         X8W X MXM NNX668X      ',
-      '         X8W X  X  EDX8XXX      ',
+      '         X8W X  X  DEX8XXX      ',
       '         X8W X fXKXXXX8X        ',
       '         X8W L  X   c 8X        ',
       '         XXXXXXXXXXXXXXX        '

@@ -292,4 +292,8 @@ export default class Player extends GameObject {
     this.sprite.x = Player.getPosition(this.position).x;
     this.sprite.y = Player.getPosition(this.position).y;
   }
+
+  removeAllItems() {
+    this.bag = [];
+  }
 }

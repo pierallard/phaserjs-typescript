@@ -35,6 +35,8 @@ import {Bomb} from "../game_objects/Bomb";
 import {BlueWall} from "../cells/BlueWall";
 import {InvisibleWall} from "../cells/InvisibleWall";
 import {Teleport} from "../cells/Teleport";
+import {Thief} from "../cells/Thief";
+import {BuildingWall} from "../cells/BuildingWall";
 
 export const GROUND_SIZE = 32;
 
@@ -92,6 +94,8 @@ export class Level {
           case 'H': this.cells[y][x] = new InvisibleWall(game, x, y, groundGroup, false); break;
           case 'J': this.cells[y][x] = new InvisibleWall(game, x, y, groundGroup, true); break;
           case 'M': this.cells[y][x] = new Teleport(game, x, y, groundGroup, this); break;
+          case 'K': this.cells[y][x] = new Thief(game, x, y, groundGroup); break;
+          case 'L': this.cells[y][x] = new BuildingWall(game, x, y, groundGroup); break;
           case 'w':
           case 'P':
           case 'a':
