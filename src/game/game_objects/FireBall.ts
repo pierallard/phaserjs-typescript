@@ -1,7 +1,7 @@
 import {GameObject} from "./GameObject";
 import {SENS} from "../Sens";
 import {Level} from "../levels/Level";
-import {default as Play, TILE_SIZE, TIME} from "../game_state/Play";
+import {TILE_SIZE, TIME} from "../game_state/Play";
 import Player from "../Player";
 import Point from "../Point";
 import Game = Phaser.Game;

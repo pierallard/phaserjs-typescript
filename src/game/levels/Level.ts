@@ -28,6 +28,8 @@ import TankSwitch from "../cells/TankSwitch";
 import RedButton from "../cells/RedButton";
 import {FireThrower} from "../cells/FireThrower";
 import PinkBall from "../game_objects/PinkBall";
+import {BrownButton} from "../cells/BrownButton";
+import {Glue} from "../cells/Glue";
 
 export const GROUND_SIZE = 32;
 
@@ -76,7 +78,9 @@ export class Level {
           case 'q': this.cells[y][x] = new Switch(game, x, y, groundGroup); break;
           case 't': this.cells[y][x] = new TankSwitch(game, x, y, groundGroup); break;
           case 's': this.cells[y][x] = new RedButton(game, x, y, groundGroup); break;
+          case 'j': this.cells[y][x] = new BrownButton(game, x, y, groundGroup); break;
           case 'h': this.cells[y][x] = new FireThrower(game, x, y, groundGroup); break;
+          case 'o': this.cells[y][x] = new Glue(game, x, y, groundGroup); break;
           case 'w':
           case 'P':
           case 'a':
@@ -155,8 +159,11 @@ export class Level {
     return new Point(0, 0);
   }
 
-  canPlayerGoTo(player: Player, endPosition: Point) {
+  canPlayerMoveTo(player: Player, sourcePosition: Point, endPosition: Point) {
     if (!this.cells[endPosition.y][endPosition.x].canPlayerGoTo(player)) {
+      return false;
+    }
+    if (!this.cells[sourcePosition.y][sourcePosition.x].canPlayerGoOut()) {
       return false;
     }
     for (let i = 0; i < this.objects.length; i++) {

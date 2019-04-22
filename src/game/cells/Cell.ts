@@ -19,6 +19,10 @@ export abstract class Cell {
     return true;
   }
 
+  canPlayerGoOut() {
+    return true;
+  }
+
   animateEnd(game: Game, level: Level, actor: Player|GameObject, endPosition: Point) {
   }
 

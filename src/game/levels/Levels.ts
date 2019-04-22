@@ -115,7 +115,7 @@ export const LEVELS: LevelDescriptor[] = [
       '                                ',
       '                                ',
       '          XXXXXXXXXXX           ',
-      '          XEz       X           ',
+      '          XEz      PX           ',
       '          XXX  zzz  X           ',
       '            X   jzo X           ',
       '            X  zzz  X           ',

@@ -78,26 +78,26 @@ export default class Player {
     if (this.pressedKeys.length) {
       const key = this.pressedKeys[0];
       if (key === this.leftKey) {
-        if (this.isCellAccessible(this.position.left())) {
+        if (this.canMoveTo(this.position.left())) {
           this.runAnimation(game, this.position.left());
         } else {
           this.runBlocked(game, SENS.LEFT, this.leftKey);
         }
       } else if (key === this.rightKey) {
-        if (this.isCellAccessible(this.position.right())) {
+        if (this.canMoveTo(this.position.right())) {
           this.runAnimation(game, this.position.right());
         } else {
           this.runBlocked(game, SENS.RIGHT, this.rightKey);
         }
 
       } else if (key === this.upKey) {
-        if (this.isCellAccessible(this.position.up())) {
+        if (this.canMoveTo(this.position.up())) {
           this.runAnimation(game, this.position.up());
         } else {
           this.runBlocked(game, SENS.UP, this.upKey);
         }
       } else if (key === this.downKey) {
-        if (this.isCellAccessible(this.position.down())) {
+        if (this.canMoveTo(this.position.down())) {
           this.runAnimation(game, this.position.down());
         } else {
           this.runBlocked(game, SENS.DOWN, this.downKey);
@@ -196,7 +196,7 @@ export default class Player {
     game.debug.text(this.getPosition().x + ',' + this.getPosition().y, 0, 10);
   }
 
-  private isCellAccessible(point: Point) {
+  private canMoveTo(point: Point) {
     if (point.x < 0) {
       return false;
     }
@@ -209,7 +209,7 @@ export default class Player {
     if (point.y >= GROUND_SIZE) {
       return false;
     }
-    return this.level.canPlayerGoTo(this, point);
+    return this.level.canPlayerMoveTo(this, this.position, point);
   }
 
   hasKey(color: COLOR) {

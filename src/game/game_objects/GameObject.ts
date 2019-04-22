@@ -32,7 +32,6 @@ export abstract class GameObject {
     return true;
   }
 
-
   destroy() {
     this.sprite.destroy(true);
   }
