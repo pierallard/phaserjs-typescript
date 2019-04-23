@@ -15,37 +15,37 @@ export default class Pack extends GameObject {
   }
 
   animatePlayerBegin(game: Game, level: Level, player: Player, endPosition: Point) {
-    const newPosition = this.position.add(player.getPosition().remove(endPosition));
+    const packNewPosition = this.position.add(endPosition.remove(player.getPosition()));
     game.add.tween(this.sprite).to({
-      x: newPosition.x * TILE_SIZE,
-      y: newPosition.y * TILE_SIZE
+      x: packNewPosition.x * TILE_SIZE,
+      y: packNewPosition.y * TILE_SIZE
     }, TIME, Phaser.Easing.Default, true);
     game.time.events.add(TIME, () => {
-      this.position = newPosition;
-      this.animateEnd(game, level, player, this.position);
+      this.position = packNewPosition;
+      level.animateEnd(game, this, this.position);
       this.sprite.x = this.position.x * TILE_SIZE;
       this.sprite.y = this.position.y * TILE_SIZE;
     });
   }
 
-  canPlayerGoTo(player: GameObject, endPosition: Point, level: Level) {
-    const newPosition = this.position.add(player.getPosition().remove(endPosition));
-    return level.canPackGoTo(player, newPosition);
+  canPlayerGoTo(actor: GameObject, endPosition: Point, level: Level) {
+    const packNewPosition = this.position.add(endPosition.remove(actor.getPosition()));
+    return level.canPackGoTo(this, packNewPosition);
   }
 
   canPackGoTo(player: Player, endPosition: Point, level: Level) {
     return false;
   }
 
-  animateEnd(game: Game, level: Level, player: GameObject, endPosition: Point) {
-    const cell = level.getCellAt(endPosition);
-    if (cell instanceof WaterCell && cell.isWater()) {
-      cell.changeAfterPack();
-      level.animateWaterAt(game, endPosition);
-      this.destroy();
-      level.destroyObject(this);
-    }
-  }
+  // animateEnd(game: Game, level: Level, player: GameObject, endPosition: Point) {
+  //   const cell = level.getCellAt(endPosition);
+  //   if (cell instanceof WaterCell && cell.isWater()) {
+  //     cell.changeAfterPack();
+  //     level.animateWaterAt(game, endPosition);
+  //     this.destroy();
+  //     level.destroyObject(this);
+  //   }
+  // }
 
   private diff(player: Player, endPosition: PIXI.Point): PIXI.Point {
     const playerPosition = player.getPosition();

@@ -6,17 +6,25 @@ import {PickableObject, Key, Chip} from "./game_objects/PickableObject";
 import Game = Phaser.Game;
 import {GameObject} from "./game_objects/GameObject";
 import Group = Phaser.Group;
+import IceCell from "./cells/IceCell";
+import {ForceBottomCell, ForceLeftCell, ForceRightCell, ForceTopCell} from "./cells/ForceCell";
+
+enum MOVES {
+  FORCED,
+  NORMAL
+}
 
 export default class Player extends GameObject {
   private chips: number;
   private dead: boolean = false;
 
-  private leftKey: Phaser.Key;
-  private rightKey: Phaser.Key;
-  private upKey: Phaser.Key;
-  private downKey: Phaser.Key;
+  private readonly leftKey: Phaser.Key;
+  private readonly rightKey: Phaser.Key;
+  private readonly upKey: Phaser.Key;
+  private readonly downKey: Phaser.Key;
+  private readonly pressedKeys: Phaser.Key[] = [];
 
-  private pressedKeys: Phaser.Key[] = [];
+  private lastMove: MOVES = null;
   private isProcessing: boolean = false;
   private level: Level;
   private bag: PickableObject[];
@@ -65,41 +73,17 @@ export default class Player extends GameObject {
       return;
     }
 
-    const forceCell = this.level.getCellAt(this.position).forceCell(this);
-    if (forceCell) {
-      this.runAnimation(game, forceCell, false, TIME / 2);
+    const pressedKey = this.pressedKeys.length > 0;
+    const isForceCell = this.level.getCellAt(this.position) instanceof ForceBottomCell ||
+      this.level.getCellAt(this.position) instanceof ForceRightCell ||
+      this.level.getCellAt(this.position) instanceof ForceLeftCell ||
+      this.level.getCellAt(this.position) instanceof ForceTopCell;
+    const isIceCell = this.level.getCellAt(this.position) instanceof IceCell;
 
-      return;
-    }
-
-    if (this.pressedKeys.length) {
-      const key = this.pressedKeys[0];
-      if (key === this.leftKey) {
-        if (this.canMoveTo(this.position.left())) {
-          this.runAnimation(game, this.position.left());
-        } else {
-          this.runBlocked(game, SENS.LEFT, this.leftKey);
-        }
-      } else if (key === this.rightKey) {
-        if (this.canMoveTo(this.position.right())) {
-          this.runAnimation(game, this.position.right());
-        } else {
-          this.runBlocked(game, SENS.RIGHT, this.rightKey);
-        }
-
-      } else if (key === this.upKey) {
-        if (this.canMoveTo(this.position.up())) {
-          this.runAnimation(game, this.position.up());
-        } else {
-          this.runBlocked(game, SENS.UP, this.upKey);
-        }
-      } else if (key === this.downKey) {
-        if (this.canMoveTo(this.position.down())) {
-          this.runAnimation(game, this.position.down());
-        } else {
-          this.runBlocked(game, SENS.DOWN, this.downKey);
-        }
-      }
+    if (isIceCell || isForceCell && this.lastMove === MOVES.NORMAL || isForceCell && this.lastMove === MOVES.FORCED && !pressedKey) {
+      this.animeByForce(game);
+    } else if (pressedKey) {
+      this.animeByKey(game);
     }
   }
 
@@ -295,5 +279,42 @@ export default class Player extends GameObject {
 
   removeAllItems() {
     this.bag = [];
+  }
+
+  private animeByKey(game: Game) {
+    const key = this.pressedKeys[0];
+    this.lastMove = MOVES.NORMAL;
+    if (key === this.leftKey) {
+      if (this.canMoveTo(this.position.left())) {
+        this.runAnimation(game, this.position.left());
+      } else {
+        this.runBlocked(game, SENS.LEFT, this.leftKey);
+      }
+    } else if (key === this.rightKey) {
+      if (this.canMoveTo(this.position.right())) {
+        this.runAnimation(game, this.position.right());
+      } else {
+        this.runBlocked(game, SENS.RIGHT, this.rightKey);
+      }
+
+    } else if (key === this.upKey) {
+      if (this.canMoveTo(this.position.up())) {
+        this.runAnimation(game, this.position.up());
+      } else {
+        this.runBlocked(game, SENS.UP, this.upKey);
+      }
+    } else if (key === this.downKey) {
+      if (this.canMoveTo(this.position.down())) {
+        this.runAnimation(game, this.position.down());
+      } else {
+        this.runBlocked(game, SENS.DOWN, this.downKey);
+      }
+    }
+  }
+
+  private animeByForce(game) {
+    this.lastMove = MOVES.FORCED;
+    const forceCell = this.level.getCellAt(this.position).forceCell(this);
+    this.runAnimation(game, forceCell, false, TIME / 2);
   }
 }

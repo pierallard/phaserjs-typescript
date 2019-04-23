@@ -64,3 +64,43 @@ export class IceCellTopLeft extends IceCell {
     }
   }
 }
+
+export class IceCellBottomRight extends IceCell {
+  constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
+    super(game, x, y, groundGroup);
+
+    this.sprite.frame = 18;
+  }
+
+  forceCell(player: Player): Point {
+    if (player.has(IceBoots)) {
+      return null;
+    }
+    switch (player.getSens()) {
+      case SENS.UP: return this.position.down();
+      case SENS.DOWN: return this.position.left();
+      case SENS.LEFT: return this.position.right();
+      case SENS.RIGHT: return this.position.up();
+    }
+  }
+}
+
+export class IceCellTopRight extends IceCell {
+  constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
+    super(game, x, y, groundGroup);
+
+    this.sprite.frame = 20;
+  }
+
+  forceCell(player: Player): Point {
+    if (player.has(IceBoots)) {
+      return null;
+    }
+    switch (player.getSens()) {
+      case SENS.UP: return this.position.left();
+      case SENS.DOWN: return this.position.up();
+      case SENS.LEFT: return this.position.right();
+      case SENS.RIGHT: return this.position.down();
+    }
+  }
+}

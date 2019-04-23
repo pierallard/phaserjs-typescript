@@ -15,7 +15,7 @@ abstract class DoorCell extends EmptyCell {
     return player.hasKey(this.color);
   }
 
-  animatePlayerBegin(game: Game, level: Level, player: Player, endPosition: Point) {
+  animateEnd(game: Game, level: Level, player: Player, endPosition: Point) {
     if (this.sprite.frame !== EmptyCell.EMPTY_CELL) {
       this.sprite.frame = EmptyCell.EMPTY_CELL;
       player.removeKey(this.color);

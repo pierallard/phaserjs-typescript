@@ -13,6 +13,10 @@ export class Glue extends Cell {
   }
 
   canPlayerGoOut(level: Level, player: Player) {
+    if (!this.source) {
+      console.log('Unknown Glue source at ' + this.position.x + ', ' + this.position.y);
+      return;
+    }
     if (level.getObjectAt(this.source.getPosition())) {
       return true;
     }

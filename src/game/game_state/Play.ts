@@ -4,12 +4,12 @@ import Menu from "../Menu";
 
 export const TILE_SIZE = 12;
 export const TIME = Phaser.Timer.SECOND / 4;
-export const BLOCKTIME = TIME / 1.5;
+export const BLOCKTIME = TIME / 3;
 
 export default class Play extends Phaser.State {
-  private level: Level;
+  private readonly level: Level;
+  private readonly levelNumber: number;
   private menu: Menu;
-  private levelNumber: number;
 
   constructor(game: Phaser.Game, levelNumber: number = 9) {
     super();

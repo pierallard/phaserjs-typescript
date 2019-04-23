@@ -251,7 +251,7 @@ export const LEVELS: LevelDescriptor[] = [
       'XXXO  a  a  a OXXXXXXXXXXXX XXXX',
       'XXXOacOOOOOOOOOXXXXXXXXXXX o   X',
       'X  O  a  a  a O D            & X',
-      'X XOOOOOOOOOxaOXXXXXXXXXXX  j  X',
+      'X XOOOOOOOOOcaOXXXXXXXXXXX  j  X',
       'X XO a  a  a  OI9XX7III9XX  p  X',
       'X XOOOOOOOOOOOOXIXXIXXXIXX     X',
       'X XXXXX XXXXXXXXIXXIXbXIXXXXXXXX',
@@ -279,7 +279,9 @@ export const LEVELS: LevelDescriptor[] = [
       'X   é XXXXXXXXXXXXXXFIIII III FX',
       'XXXXXXXXXXXXXXXXXXXXFFFFFFFFFFFX'
     ],
-    actions: [],
+    actions: [
+      [[28, 5], [27, 3]]
+    ],
     chips: 9,
   }
 ];

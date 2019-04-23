@@ -11,7 +11,7 @@ import {ExitDoor} from "../cells/ExitDoor";
 import {BlueDoorCell, GreenDoorCell, RedDoorCell, YellowDoorCell} from "../cells/DoorCell";
 import {WaterCell} from "../cells/WaterCell";
 import {FireCell} from "../cells/FireCell";
-import IceCell, {IceCellBottomLeft, IceCellTopLeft} from "../cells/IceCell";
+import IceCell, {IceCellBottomLeft, IceCellBottomRight, IceCellTopLeft, IceCellTopRight} from "../cells/IceCell";
 import {ForceBottomCell, ForceLeftCell, ForceRightCell, ForceTopCell} from "../cells/ForceCell";
 import EmptyCell from "../cells/EmptyCell";
 import {
@@ -41,6 +41,8 @@ import {CellWithWallDown} from "../cells/CellWithWall";
 import {Concrete} from "../cells/Concrete";
 import {Sand} from "../cells/Sand";
 import {Mouth} from "../game_objects/Mouth";
+import FireBall from "../game_objects/FireBall";
+import {SENS} from "../Sens";
 
 export const GROUND_SIZE = 32;
 
@@ -82,6 +84,8 @@ export class Level {
           case 'I': this.cells[y][x] = new IceCell(game, x, y, groundGroup); break;
           case '1': this.cells[y][x] = new IceCellBottomLeft(game, x, y, groundGroup); break;
           case '7': this.cells[y][x] = new IceCellTopLeft(game, x, y, groundGroup); break;
+          case '9': this.cells[y][x] = new IceCellTopRight(game, x, y, groundGroup); break;
+          case '3': this.cells[y][x] = new IceCellBottomRight(game, x, y, groundGroup); break;
           case '8': this.cells[y][x] = new ForceTopCell(game, x, y, groundGroup); break;
           case '2': this.cells[y][x] = new ForceBottomCell(game, x, y, groundGroup); break;
           case '4': this.cells[y][x] = new ForceLeftCell(game, x, y, groundGroup); break;
@@ -122,6 +126,10 @@ export class Level {
           case 'e':
           case 'z':
           case 'd':
+          case 'è':
+          case 'é':
+          case '(':
+          case '&':
           case ' ': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
           default:
             console.log('Unable to create cell from ' + this.letterAt(new PIXI.Point(x, y)));
@@ -152,6 +160,10 @@ export class Level {
           case 'e': this.addObject(new Ghost(game, x, y, objectGroup)); break;
           case 'z': this.addObject(new Bomb(game, x, y, objectGroup)); break;
           case 'd': this.addObject(new Mouth(game, x, y, objectGroup)); break;
+          case 'è': this.addObject(new FireBall(game, x, y, objectGroup, SENS.LEFT)); break;
+          case 'é': this.addObject(new FireBall(game, x, y, objectGroup, SENS.RIGHT)); break;
+          case '(': this.addObject(new FireBall(game, x, y, objectGroup, SENS.DOWN)); break;
+          case '&': this.addObject(new FireBall(game, x, y, objectGroup, SENS.UP)); break;
         }
       }
     }

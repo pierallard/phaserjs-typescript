@@ -23,6 +23,14 @@ export class BlueWall extends WallCell {
     }
   }
 
+  animateEnd(game: Game, level: Level, player: GameObject, endPosition: Point) {
+    if (this.isWall) {
+      this.sprite.frame = 14 + 32;
+    } else {
+      this.sprite.frame = 0;
+    }
+  }
+
   canPlayerGoTo(player: Player) {
     return !this.isWall;
   }

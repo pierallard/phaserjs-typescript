@@ -7,6 +7,7 @@ import Point from "../Point";
 import Game = Phaser.Game;
 
 export default class FireBall extends GameObject {
+  private static ORDER: SENS[] = [SENS.UP, SENS.LEFT, SENS.DOWN, SENS.RIGHT];
   private isMoving: boolean;
 
   constructor(game: Phaser.Game, x: number, y: number, objectGroup: Phaser.Group, sens: SENS) {
@@ -33,7 +34,25 @@ export default class FireBall extends GameObject {
   update(game: Phaser.Game, level: Level) {
     if (!this.isMoving) {
       this.isMoving = true;
-      const newPosition = this.position.addSens(this.sens);
+      let newPosition = this.position.addSens(this.sens);
+      if (!level.canMonsterGo(this.position, newPosition)) {
+        this.sens = FireBall.ORDER[(FireBall.ORDER.indexOf(this.sens) + 1) % FireBall.ORDER.length];
+        newPosition = this.position.addSens(this.sens);
+        if (!level.canMonsterGo(this.position, newPosition)) {
+          this.sens = FireBall.ORDER[(FireBall.ORDER.indexOf(this.sens) + 1) % FireBall.ORDER.length];
+          newPosition = this.position.addSens(this.sens);
+          if (!level.canMonsterGo(this.position, newPosition)) {
+            this.sens = FireBall.ORDER[(FireBall.ORDER.indexOf(this.sens) + 1) % FireBall.ORDER.length];
+            newPosition = this.position.addSens(this.sens);
+            if (!level.canMonsterGo(this.position, newPosition)) {
+              this.sens = FireBall.ORDER[(FireBall.ORDER.indexOf(this.sens) + 1) % FireBall.ORDER.length];
+              this.isMoving = false;
+              return;
+            }
+          }
+        }
+      }
+
       game.add.tween(this.sprite).to({
         x: newPosition.x * TILE_SIZE,
         y: newPosition.y * TILE_SIZE
