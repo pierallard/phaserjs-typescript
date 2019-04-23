@@ -215,5 +215,34 @@ export const LEVELS: LevelDescriptor[] = [
     ],
     chips: 3,
     actions: []
+  }, {
+    map: [
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      '                                ',
+      'XXXXXXXXXXXXXXXXXXXXX           ',
+      'XXXXXXXXXXXXXXXXXXXXX           ',
+      'XXOOOOOOOOOOOOOOOOOXX           ',
+      'XXOOZZZZZZZZZZZZZOOXX           ',
+      'XXOOZZZZZZZZZZZZZOOXX           ',
+      'XXOOZZ         ZZOOXX           ',
+      'XXOOZZ         ZZOOXX           ',
+      'XXOOZZ         ZZOOXX           ',
+      'XXOOZZ         ZZOOXX           ',
+      'XPOOZZ   dc    ZZOODE           ',
+      'XXOOZZ         ZZOOXX           ',
+      'XXOOZZ         ZZOOXX           ',
+      'XXOOZZ         ZZOOXX           ',
+      'XXOOZZ         ZZOOXX           ',
+      'XXOOZZZZZZZZZZZZZOOXX           ',
+      'XXOOZZZZZZZZZZZZZOOXX           ',
+      'XXOOOOOOOOOOOOOOOOOXX           ',
+      'XXXXXXXXXXXXXXXXXXXXX           ',
+      'XXXXXXXXXXXXXXXXXXXXX           '
+    ],
+    actions: [],
+    chips: 1,
   }
 ];

@@ -38,6 +38,9 @@ import {Teleport} from "../cells/Teleport";
 import {Thief} from "../cells/Thief";
 import {BuildingWall} from "../cells/BuildingWall";
 import {CellWithWallDown} from "../cells/CellWithWall";
+import {Concrete} from "../cells/Concrete";
+import {Sand} from "../cells/Sand";
+import {Mouth} from "../game_objects/Mouth";
 
 export const GROUND_SIZE = 32;
 
@@ -99,6 +102,8 @@ export class Level {
           case 'K': this.cells[y][x] = new Thief(game, x, y, groundGroup); break;
           case 'L': this.cells[y][x] = new BuildingWall(game, x, y, groundGroup); break;
           case 'N': this.cells[y][x] = new CellWithWallDown(game, x, y, groundGroup); break;
+          case 'O': this.cells[y][x] = new Concrete(game, x, y, groundGroup); break;
+          case 'Z': this.cells[y][x] = new Sand(game, x, y, groundGroup); break;
           case 'w':
           case 'P':
           case 'a':
@@ -116,6 +121,7 @@ export class Level {
           case 'u':
           case 'e':
           case 'z':
+          case 'd':
           case ' ': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
           default:
             console.log('Unable to create cell from ' + this.letterAt(new PIXI.Point(x, y)));
@@ -145,6 +151,7 @@ export class Level {
           case 'u': this.addObject(new PinkBall(game, x, y, objectGroup)); break;
           case 'e': this.addObject(new Ghost(game, x, y, objectGroup)); break;
           case 'z': this.addObject(new Bomb(game, x, y, objectGroup)); break;
+          case 'd': this.addObject(new Mouth(game, x, y, objectGroup)); break;
         }
       }
     }

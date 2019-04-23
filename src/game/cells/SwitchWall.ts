@@ -1,6 +1,6 @@
 import {Cell} from "./Cell";
 import {TIME} from "../game_state/Play";
-import Player from "../Player";
+import {GameObject} from "../game_objects/GameObject";
 
 export default class SwitchWall extends Cell {
   private locked: boolean;
@@ -14,7 +14,7 @@ export default class SwitchWall extends Cell {
     this.runAnimation();
   }
 
-  canPlayerGoTo(player: Player) {
+  canPlayerGoTo(player: GameObject) {
     return !this.locked;
   }
 
