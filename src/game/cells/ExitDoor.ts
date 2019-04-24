@@ -15,7 +15,7 @@ export class ExitDoor extends Cell {
   }
 
   canActorGoToMe(player: GameObject): boolean {
-    return player instanceof Player && player.canExit();
+    return this.sprite.frame === EmptyCell.EMPTY_CELL || (player instanceof Player && player.canExit());
   }
 
   animatePlayerBegin(game: Game, level: Level, player: Player, endPosition: Point) {

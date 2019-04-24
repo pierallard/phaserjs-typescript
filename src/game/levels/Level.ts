@@ -130,6 +130,10 @@ export class Level {
           case 'é':
           case '(':
           case '&':
+          case '_':
+          case 'ç':
+          case 'à':
+          case ')':
           case ' ': this.cells[y][x] = new EmptyCell(game, x, y, groundGroup); break;
           default:
             console.log('Unable to create cell from ' + this.letterAt(new PIXI.Point(x, y)));
@@ -142,6 +146,22 @@ export class Level {
           case 'a': this.addObject(new Ant(game, x, y, objectGroup)); break;
           case 'U':
             this.addObject(new Chip(game, x, y, objectGroup));
+            this.addObject(new Pack(game, x, y, objectGroup));
+            break;
+          case '_':
+            this.addObject(new ForceBoots(game, x, y, objectGroup));
+            this.addObject(new Pack(game, x, y, objectGroup));
+            break;
+          case 'ç':
+            this.addObject(new FireBoots(game, x, y, objectGroup));
+            this.addObject(new Pack(game, x, y, objectGroup));
+            break;
+          case 'à':
+            this.addObject(new WaterBoots(game, x, y, objectGroup));
+            this.addObject(new Pack(game, x, y, objectGroup));
+            break;
+          case ')':
+            this.addObject(new IceBoots(game, x, y, objectGroup));
             this.addObject(new Pack(game, x, y, objectGroup));
             break;
           case 'V':

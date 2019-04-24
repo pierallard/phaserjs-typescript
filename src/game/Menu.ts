@@ -53,6 +53,9 @@ export default class Menu {
 
   create(game: Game) {
     this.chipsLeft = this.getChipsLeft();
+    if (this.chipsLeft === 0) {
+      this.changeTime = game.time.now + TIME * 2;
+    }
 
     const menu = game.add.sprite(PIXELS_WIDTH, 0, 'menu');
     menu.fixedToCamera = true;
