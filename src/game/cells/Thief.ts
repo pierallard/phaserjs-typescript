@@ -12,9 +12,9 @@ export class Thief extends Cell {
     this.sprite.frame = 37;
   }
 
-  animateEnd(game: Game, level: Level, player: GameObject, endPosition: Point) {
-    if (player instanceof Player) {
-      player.removeAllItems();
+  animateEnd(game: Game, level: Level, actor: GameObject, endPosition: Point) {
+    if (actor instanceof Player) {
+      actor.removeAllItems();
     }
   }
 }

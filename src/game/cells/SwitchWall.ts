@@ -14,7 +14,7 @@ export default class SwitchWall extends Cell {
     this.runAnimation();
   }
 
-  canPlayerGoTo(player: GameObject) {
+  canPlayerGoTo(actor: GameObject) {
     return !this.locked;
   }
 

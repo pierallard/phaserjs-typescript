@@ -15,7 +15,7 @@ export class BlueWall extends WallCell {
     this.isWall = isWall;
   }
 
-  animatePush(game: Game, level: Level, player: GameObject, endPosition: Point) {
+  animatePush(game: Game, level: Level, actor: GameObject, endPosition: Point) {
     if (this.isWall) {
       this.sprite.frame = 14 + 32;
     } else {
@@ -23,7 +23,7 @@ export class BlueWall extends WallCell {
     }
   }
 
-  animateEnd(game: Game, level: Level, player: GameObject, endPosition: Point) {
+  animateEnd(game: Game, level: Level, actor: GameObject, endPosition: Point) {
     if (this.isWall) {
       this.sprite.frame = 14 + 32;
     } else {

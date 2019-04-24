@@ -11,8 +11,8 @@ export class CellWithWallUp extends Cell {
     this.sprite.frame = 47;
   }
 
-  canActorGoOutOfMe(level: Level, player: GameObject, endPosition: Point): boolean {
-    return !player.getPosition().up().equals(endPosition);
+  canActorGoOutOfMe(level: Level, actor: GameObject, endPosition: Point): boolean {
+    return !actor.getPosition().up().equals(endPosition);
   }
 }
 
@@ -23,8 +23,8 @@ export class CellWithWallLeft extends Cell {
     this.sprite.frame = 48;
   }
 
-  canActorGoOutOfMe(level: Level, player: GameObject, endPosition: Point): boolean {
-    return !player.getPosition().left().equals(endPosition);
+  canActorGoOutOfMe(level: Level, actor: GameObject, endPosition: Point): boolean {
+    return !actor.getPosition().left().equals(endPosition);
   }
 }
 
@@ -35,8 +35,8 @@ export class CellWithWallDown extends Cell {
     this.sprite.frame = 49;
   }
 
-  canActorGoOutOfMe(level: Level, player: GameObject, endPosition: Point): boolean {
-    return !player.getPosition().down().equals(endPosition);
+  canActorGoOutOfMe(level: Level, actor: GameObject, endPosition: Point): boolean {
+    return !actor.getPosition().down().equals(endPosition);
   }
 }
 
@@ -47,8 +47,8 @@ export class CellWithWallRight extends Cell {
     this.sprite.frame = 50;
   }
 
-  canActorGoOutOfMe(level: Level, player: GameObject, endPosition: Point): boolean {
-    return !player.getPosition().right().equals(endPosition);
+  canActorGoOutOfMe(level: Level, actor: GameObject, endPosition: Point): boolean {
+    return !actor.getPosition().right().equals(endPosition);
   }
 }
 

@@ -41,12 +41,4 @@ export default class Pack extends GameObject {
   //     level.destroyObject(this);
   //   }
   // }
-
-  private diff(player: Player, endPosition: PIXI.Point): PIXI.Point {
-    const playerPosition = player.getPosition();
-    return new PIXI.Point(
-      endPosition.x - playerPosition.x,
-      endPosition.y - playerPosition.y
-    );
-  }
 }
