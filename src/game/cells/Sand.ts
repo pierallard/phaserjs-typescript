@@ -2,6 +2,7 @@ import {Cell} from "./Cell";
 import {Level} from "../levels/Level";
 import {GameObject} from "../game_objects/GameObject";
 import Point from "../Point";
+import Player from "../Player";
 
 export class Sand extends Cell {
   private dirty: boolean;
@@ -18,7 +19,11 @@ export class Sand extends Cell {
     this.sprite.frame = 0;
   }
 
-  canActorGoToMe(): boolean {
+  canActorGoToMe(actor: GameObject): boolean {
+    if (actor instanceof Player) {
+      return true;
+    }
+
     return !this.dirty;
   }
 }

@@ -20,14 +20,10 @@ export default class FireBall extends GameObject {
     this.sprite.animations.play('DEFAULT');
   }
 
-  isToxic() {
-    return true;
-  }
-
   animateEnd(game: Game, level: Level, player: GameObject, endPosition: Point) {
     if (player instanceof Player) {
       level.animateFireAt(game, endPosition);
-      this.destroy();
+      level.destroyObject(player);
     }
   }
 

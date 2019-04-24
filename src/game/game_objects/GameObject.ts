@@ -37,10 +37,6 @@ export abstract class GameObject {
     this.sprite.destroy(true);
   }
 
-  isToxic(): boolean {
-    return false;
-  }
-
   update(game: Phaser.Game, level: Level) {
   }
 

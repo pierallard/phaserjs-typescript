@@ -227,6 +227,7 @@ export class Level {
     this.cells[endPosition.y][endPosition.x].animateEnd(game, this, actor, endPosition);
     for (let i = 0; i < this.objects.length; i++) {
       if (this.objects[i].getPosition().equals(endPosition)) {
+        actor.animateEnd(game, this, this.objects[i], endPosition);
         this.objects[i].animateEnd(game, this, actor, endPosition);
       }
     }
@@ -268,25 +269,6 @@ export class Level {
     }
 
     return new Point(0, 0);
-  }
-
-  getDeadPositions(player: Player): Point[] {
-    let result = [];
-    for (let y = 0; y < this.cells.length; y++) {
-      for (let x = 0; x < this.cells[y].length; x++) {
-        if (this.cells[y][x].isDead(player)) {
-          result.push(new Point(x, y));
-        }
-      }
-    }
-
-    for (let i = 0; i < this.objects.length; i++) {
-      if (this.objects[i].isToxic()) {
-        result.push(this.objects[i].getPosition());
-      }
-    }
-
-    return result;
   }
 
   getCellAt(endPosition: Point): Cell {
@@ -355,7 +337,16 @@ export class Level {
     return object;
   }
 
-  getPlayer(): Player {
+  getPlayer(searchOnMap: boolean = false): Player {
+    if (searchOnMap) {
+      for (let i = 0; i < this.objects.length; i++) {
+        if (this.objects[i] instanceof Player) {
+          return <Player> this.objects[i];
+        }
+      }
+
+      return null;
+    }
     return this.player;
   }
 }

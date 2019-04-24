@@ -5,6 +5,7 @@ import Point from "../Point";
 import {GameObject} from "./GameObject";
 import Group = Phaser.Group;
 import Game = Phaser.Game;
+import Player from "../Player";
 
 export default class Ant extends GameObject {
   private static ORDER: SENS[] = [SENS.UP, SENS.LEFT, SENS.DOWN, SENS.RIGHT];
@@ -26,9 +27,11 @@ export default class Ant extends GameObject {
     return true;
   }
 
-  animateEnd(game: Game, level: Level, player: GameObject, endPosition: Point) {
-    level.animateFireAt(game, endPosition);
-    this.destroy();
+  animateEnd(game: Game, level: Level, actor: GameObject, endPosition: Point) {
+    if (actor instanceof Player) {
+      level.animateFireAt(game, endPosition);
+      level.destroyObject(actor);
+    }
   }
 
   update(game: Game, level: Level) {
@@ -66,6 +69,7 @@ export default class Ant extends GameObject {
       game.time.events.add(TIME, () => {
         this.isMoving = false;
         this.position = newPosition;
+        level.animateEnd(game, this, this.position);
         this.sprite.x = this.position.x * TILE_SIZE;
         this.sprite.y = this.position.y * TILE_SIZE;
       }, this);
