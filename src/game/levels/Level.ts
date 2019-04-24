@@ -273,18 +273,6 @@ export class Level {
     );
   }
 
-  getEndPosition(): Point {
-    for (let y = 0; y < GROUND_SIZE; y++) {
-      for (let x = 0; x < GROUND_SIZE; x++) {
-        if (this.letterAt(new PIXI.Point(x, y)) === 'E') {
-          return new Point(x, y);
-        }
-      }
-    }
-
-    return new Point(0, 0);
-  }
-
   getCellAt(endPosition: Point): Cell {
     return this.cells[endPosition.y][endPosition.x];
   }

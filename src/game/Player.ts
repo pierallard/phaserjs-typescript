@@ -103,11 +103,14 @@ export default class Player extends GameObject {
     game.add.tween(this.sprite).to({
       x: Player.getPosition(newPosition).x,
       y: Player.getPosition(newPosition).y
-    }, speed - Phaser.Timer.SECOND / 30, Phaser.Easing.Default, true);
+    }, speed - Phaser.Timer.SECOND / 100, Phaser.Easing.Default, true);
     game.time.events.add(speed, () => {
       this.isProcessing = false;
       if (removeKey) {
-        this.pressedKeys.shift();
+        const pressedKey = this.pressedKeys[0];
+        if (!pressedKey.isDown) {
+          this.pressedKeys.shift();
+        }
       }
       this.position = newPosition;
       this.sprite.x = Player.getPosition(this.position).x;

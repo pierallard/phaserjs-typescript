@@ -1,6 +1,7 @@
 import {Level, GROUND_SIZE} from "../levels/Level";
 import {PIXELS_WIDTH} from "../../app";
 import Menu from "../Menu";
+import ExitCell from "../cells/ExitCell";
 
 export const TILE_SIZE = 12;
 export const TIME = Phaser.Timer.SECOND / 4;
@@ -11,7 +12,7 @@ export default class Play extends Phaser.State {
   private readonly levelNumber: number;
   private menu: Menu;
 
-  constructor(game: Phaser.Game, levelNumber: number = 12) {
+  constructor(game: Phaser.Game, levelNumber: number = 13) {
     super();
     this.levelNumber = levelNumber;
     this.level = Level.getFromNumber(this.levelNumber);
@@ -51,9 +52,7 @@ export default class Play extends Phaser.State {
   }
 
   private hasFinished(): boolean {
-    return (
-      this.level.getPlayer().getPosition().equals(this.level.getEndPosition())
-    );
+    return this.level.getCellAt(this.level.getPlayer().getPosition()) instanceof ExitCell;
   }
 
   private isDead() {
