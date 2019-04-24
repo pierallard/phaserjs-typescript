@@ -31,7 +31,7 @@ export class BlueWall extends WallCell {
     }
   }
 
-  canPlayerGoTo(player: Player) {
+  canActorGoToMe(player: Player) {
     return !this.isWall;
   }
 }

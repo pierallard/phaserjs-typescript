@@ -9,7 +9,7 @@ export default class WallCell extends Cell {
     this.sprite.frame = 14 + 32;
   }
 
-  canPlayerGoTo(player: Player) {
+  canActorGoToMe(player: Player) {
     return false;
   }
 }

@@ -8,7 +8,7 @@ import Game = Phaser.Game;
 abstract class DoorCell extends EmptyCell {
   protected color: COLOR;
 
-  canPlayerGoTo(player: Player) {
+  canActorGoToMe(player: Player) {
     if (this.sprite.frame === EmptyCell.EMPTY_CELL) {
       return true;
     }

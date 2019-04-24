@@ -16,7 +16,7 @@ export class FireThrower extends Cell {
     this.fireSprite = game.add.sprite(x * TILE_SIZE, y * TILE_SIZE, 'chips', 179, groundGroup);
   }
 
-  canPlayerGoTo(player: Player) {
+  canActorGoToMe(player: Player) {
     return false;
   }
 

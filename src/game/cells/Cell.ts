@@ -19,7 +19,7 @@ export abstract class Cell {
     return this.position;
   }
 
-  canPlayerGoTo(actor: GameObject) {
+  canActorGoToMe(actor: GameObject) {
     return true;
   }
 
@@ -33,19 +33,7 @@ export abstract class Cell {
   animatePush(game: Game, level: Level, actor: GameObject, endPosition: Point) {
   }
 
-  isDead(player: Player) {
-    return false;
-  }
-
   animatePlayerBegin(game: Game, level: Level, player: Player, endPosition: Point) {
-  }
-
-  canPackGoTo(actor: GameObject) {
-    return this.canPlayerGoTo(actor);
-  }
-
-  canActorGoToMe(monster: GameObject): boolean {
-    return this.canPlayerGoTo(monster);
   }
 
   forceCell(player: Player): Point {

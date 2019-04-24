@@ -8,6 +8,7 @@ import {GameObject} from "./game_objects/GameObject";
 import Group = Phaser.Group;
 import IceCell from "./cells/IceCell";
 import {ForceBottomCell, ForceLeftCell, ForceRightCell, ForceTopCell} from "./cells/ForceCell";
+import {Teleport} from "./cells/Teleport";
 
 enum MOVES {
   FORCED,
@@ -74,11 +75,15 @@ export default class Player extends GameObject {
     }
 
     const pressedKey = this.pressedKeys.length > 0;
-    const isForceCell = this.level.getCellAt(this.position) instanceof ForceBottomCell ||
+    const forceCell = this.level.getCellAt(this.position).forceCell(this);
+    const isForceCell = forceCell && (
+      this.level.getCellAt(this.position) instanceof ForceBottomCell ||
       this.level.getCellAt(this.position) instanceof ForceRightCell ||
       this.level.getCellAt(this.position) instanceof ForceLeftCell ||
-      this.level.getCellAt(this.position) instanceof ForceTopCell;
-    const isIceCell = this.level.getCellAt(this.position) instanceof IceCell;
+      this.level.getCellAt(this.position) instanceof ForceTopCell);
+    const isIceCell = forceCell && (
+      this.level.getCellAt(this.position) instanceof IceCell ||
+      this.level.getCellAt(this.position) instanceof Teleport);
 
     if (isIceCell || isForceCell && this.lastMove === MOVES.NORMAL || isForceCell && this.lastMove === MOVES.FORCED && !pressedKey) {
       this.animeByForce(game);
@@ -179,18 +184,6 @@ export default class Player extends GameObject {
   }
 
   private canMoveTo(point: Point) {
-    if (point.x < 0) {
-      return false;
-    }
-    if (point.x >= GROUND_SIZE) {
-      return false;
-    }
-    if (point.y < 0) {
-      return false;
-    }
-    if (point.y >= GROUND_SIZE) {
-      return false;
-    }
     return this.level.isMoveAllowed(this, this.position, point);
   }
 

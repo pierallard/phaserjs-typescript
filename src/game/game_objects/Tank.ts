@@ -4,6 +4,7 @@ import {Level} from "../levels/Level";
 import Point from "../Point";
 import Game = Phaser.Game;
 import {TILE_SIZE, TIME} from "../game_state/Play";
+import Player from "../Player";
 
 export default class Tank extends GameObject {
   private isMoving: boolean;
@@ -30,8 +31,11 @@ export default class Tank extends GameObject {
   }
 
   animateEnd(game: Game, level: Level, actor: GameObject, endPosition: Point) {
-    level.animateFireAt(game, endPosition);
-    this.destroy();
+    if (actor instanceof Player) {
+      level.animateFireAt(game, endPosition);
+      actor.destroy();
+      level.destroyObject(actor);
+    }
   }
 
   update(game: Phaser.Game, level: Level) {

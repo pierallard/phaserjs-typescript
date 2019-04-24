@@ -20,14 +20,6 @@ export class FireCell extends Cell {
     this.sprite.animations.play('DEFAULT');
   }
 
-  isDead(player: Player) {
-    if (player.has(FireBoots)) {
-      return false;
-    }
-
-    return true;
-  }
-
   animateEnd(game: Game, level: Level, actor: GameObject, endPosition: Point) {
     if (actor instanceof Player && actor.has(FireBoots) || actor instanceof FireBall) {
       return;

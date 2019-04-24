@@ -13,7 +13,7 @@ export class ExitDoor extends Cell {
     this.sprite.frame = 70;
   }
 
-  canPlayerGoTo(player: Player): boolean {
+  canActorGoToMe(player: Player): boolean {
     return player.canExit();
   }
 

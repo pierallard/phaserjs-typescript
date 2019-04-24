@@ -20,7 +20,7 @@ export class BuildingWall extends Cell {
     this.isBuilt = true;
   }
 
-  canPlayerGoTo(player: Player) {
+  canActorGoToMe(player: Player) {
     return !this.isBuilt;
   }
 }

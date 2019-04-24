@@ -201,6 +201,18 @@ export class Level {
   }
 
   isMoveAllowed(actor: GameObject, sourcePosition: Point, endPosition: Point) {
+    if (endPosition.x < 0) {
+      return false;
+    }
+    if (endPosition.x >= GROUND_SIZE) {
+      return false;
+    }
+    if (endPosition.y < 0) {
+      return false;
+    }
+    if (endPosition.y >= GROUND_SIZE) {
+      return false;
+    }
     if (!this.cells[endPosition.y][endPosition.x].canActorGoToMe(actor)) {
       return false;
     }
@@ -209,7 +221,9 @@ export class Level {
     }
     for (let i = 0; i < this.objects.length; i++) {
       if (this.objects[i].getPosition().equals(endPosition)) {
-        return this.objects[i].canActorGoToMe(actor, endPosition, this);
+        if (!this.objects[i].canActorGoToMe(actor, endPosition, this)) {
+          return false;
+        }
       }
     }
 

@@ -27,9 +27,14 @@ export default class Pack extends GameObject {
     });
   }
 
-  canActorGoToMe(actor: GameObject, endPosition: Point, level: Level) {
-    const packNewPosition = this.position.add(endPosition.remove(actor.getPosition()));
-    return level.isMoveAllowed(this, this.position, packNewPosition);
+  canActorGoToMe(actor: GameObject, endPosition: Point, level: Level): boolean {
+    if (actor instanceof Player) {
+      // Try to move
+      const packNewPosition = this.position.add(endPosition.remove(actor.getPosition()));
+      return level.isMoveAllowed(this, this.position, packNewPosition);
+    } else {
+      return false;
+    }
   }
 
   // animateEnd(game: Game, level: Level, player: GameObject, endPosition: Point) {

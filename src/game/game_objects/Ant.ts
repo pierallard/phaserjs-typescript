@@ -85,7 +85,7 @@ export default class Ant extends GameObject {
     }
   }
 
-  canActorGoToMe(actor: GameObject, endPosition: PIXI.Point, level: Level): boolean {
+  canActorGoToMe(actor: GameObject, endPosition: Point, level: Level): boolean {
     return !(actor instanceof Ant);
   }
 }
