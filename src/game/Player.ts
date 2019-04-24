@@ -59,15 +59,17 @@ export default class Player extends GameObject {
       return;
     }
 
-    if (this.leftKey.justDown) {
-      this.pressedKeys.push(this.leftKey);
-    } else if (this.rightKey.justDown) {
-      this.pressedKeys.push(this.rightKey);
-    }
-    if (this.upKey.justDown) {
-      this.pressedKeys.push(this.upKey);
-    } else if (this.downKey.justDown) {
-      this.pressedKeys.push(this.downKey);
+    if (!this.pressedKeys.length) {
+      if (this.leftKey.justDown) {
+        this.pressedKeys.push(this.leftKey);
+      } else if (this.rightKey.justDown) {
+        this.pressedKeys.push(this.rightKey);
+      }
+      if (this.upKey.justDown) {
+        this.pressedKeys.push(this.upKey);
+      } else if (this.downKey.justDown) {
+        this.pressedKeys.push(this.downKey);
+      }
     }
 
     if (this.isProcessing) {

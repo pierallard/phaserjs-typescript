@@ -4,7 +4,6 @@ import {Level} from "../levels/Level";
 import {GameObject} from "../game_objects/GameObject";
 import Point from "../Point";
 import Game = Phaser.Game;
-import Player from "../Player";
 
 export class Teleport extends Cell {
   constructor(game: Phaser.Game, x: number, y: number, groundGroup: Phaser.Group, level: Level) {
@@ -19,7 +18,7 @@ export class Teleport extends Cell {
     actor.teleportTo(destination.getPosition());
   }
 
-  forceCell(player: Player): Point {
+  forceCell(player: GameObject): Point {
     return this.position.addSens(player.getSens());
   }
 

@@ -25,8 +25,8 @@ export class ForceTopCell extends ForceCell {
     this.sprite.animations.play('DEFAULT');
   }
 
-  forceCell(player: Player): Point {
-    if (player.has(ForceBoots)) {
+  forceCell(actor: GameObject): Point {
+    if (actor instanceof Player && actor.has(ForceBoots)) {
       return null;
     }
     return this.position.up();
@@ -41,8 +41,8 @@ export class ForceBottomCell extends ForceCell {
     this.sprite.animations.play('DEFAULT');
   }
 
-  forceCell(player: Player): Point {
-    if (player.has(ForceBoots)) {
+  forceCell(actor: GameObject): Point {
+    if (actor instanceof Player && actor.has(ForceBoots)) {
       return null;
     }
     return this.position.down();
@@ -57,8 +57,8 @@ export class ForceLeftCell extends ForceCell {
     this.sprite.animations.play('DEFAULT');
   }
 
-  forceCell(player: Player): Point {
-    if (player.has(ForceBoots)) {
+  forceCell(actor: GameObject): Point {
+    if (actor instanceof Player && actor.has(ForceBoots)) {
       return null;
     }
     return this.position.left();
@@ -73,8 +73,8 @@ export class ForceRightCell extends ForceCell {
     this.sprite.animations.play('DEFAULT');
   }
 
-  forceCell(player: Player): Point {
-    if (player.has(ForceBoots)) {
+  forceCell(actor: GameObject): Point {
+    if (actor instanceof Player && actor.has(ForceBoots)) {
       return null;
     }
     return this.position.right();

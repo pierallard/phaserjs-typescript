@@ -5,6 +5,7 @@ import {Cell} from "./Cell";
 import Group = Phaser.Group;
 import {IceBoots} from "../game_objects/PickableObject";
 import {Level} from "../levels/Level";
+import {GameObject} from "../game_objects/GameObject";
 
 export default class IceCell extends Cell {
   constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
@@ -13,11 +14,11 @@ export default class IceCell extends Cell {
     this.sprite.frame = 17;
   }
 
-  protected subForceCell(player: Player): Point {
-    if (player.has(IceBoots)) {
+  protected subForceCell(actor: GameObject): Point {
+    if (actor instanceof Player && actor.has(IceBoots)) {
       return null;
     }
-    switch (player.getSens()) {
+    switch (actor.getSens()) {
       case SENS.UP: return this.position.up();
       case SENS.DOWN: return this.position.down();
       case SENS.LEFT: return this.position.left();
@@ -25,10 +26,10 @@ export default class IceCell extends Cell {
     }
   }
 
-  forceCell(player: Player, level: Level) {
-    const forceCell = this.subForceCell(player);
-    if (forceCell !== null && !level.isMoveAllowed(player, player.getPosition(), forceCell)) {
-      return player.getPosition().addReverseSens(player.getSens());
+  forceCell(actor: Player, level: Level) {
+    const forceCell = this.subForceCell(actor);
+    if (forceCell !== null && !level.isMoveAllowed(actor, actor.getPosition(), forceCell)) {
+      return actor.getPosition().addReverseSens(actor.getSens());
     }
 
     return forceCell;
@@ -42,11 +43,11 @@ export class IceCellBottomLeft extends IceCell {
     this.sprite.frame = 19;
   }
 
-  protected subForceCell(player: Player): Point {
-    if (player.has(IceBoots)) {
+  protected subForceCell(actor: GameObject): Point {
+    if (actor instanceof Player && actor.has(IceBoots)) {
       return null;
     }
-    switch (player.getSens()) {
+    switch (actor.getSens()) {
       case SENS.UP: return this.position.down();
       case SENS.DOWN: return this.position.right();
       case SENS.LEFT: return this.position.up();
@@ -62,11 +63,11 @@ export class IceCellTopLeft extends IceCell {
     this.sprite.frame = 21;
   }
 
-  protected subForceCell(player: Player): Point {
-    if (player.has(IceBoots)) {
+  protected subForceCell(actor: GameObject): Point {
+    if (actor instanceof Player && actor.has(IceBoots)) {
       return null;
     }
-    switch (player.getSens()) {
+    switch (actor.getSens()) {
       case SENS.UP: return this.position.right();
       case SENS.DOWN: return this.position.up();
       case SENS.LEFT: return this.position.down();
@@ -82,11 +83,11 @@ export class IceCellBottomRight extends IceCell {
     this.sprite.frame = 18;
   }
 
-  protected subForceCell(player: Player): Point {
-    if (player.has(IceBoots)) {
+  protected subForceCell(actor: GameObject): Point {
+    if (actor instanceof Player && actor.has(IceBoots)) {
       return null;
     }
-    switch (player.getSens()) {
+    switch (actor.getSens()) {
       case SENS.UP: return this.position.down();
       case SENS.DOWN: return this.position.left();
       case SENS.LEFT: return this.position.right();
@@ -102,11 +103,11 @@ export class IceCellTopRight extends IceCell {
     this.sprite.frame = 20;
   }
 
-  protected subForceCell(player: Player): Point {
-    if (player.has(IceBoots)) {
+  protected subForceCell(actor: GameObject): Point {
+    if (actor instanceof Player && actor.has(IceBoots)) {
       return null;
     }
-    switch (player.getSens()) {
+    switch (actor.getSens()) {
       case SENS.UP: return this.position.left();
       case SENS.DOWN: return this.position.up();
       case SENS.LEFT: return this.position.right();

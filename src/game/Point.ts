@@ -36,6 +36,8 @@ export default class Point extends PIXI.Point {
       case SENS.UP: return this.up();
       case SENS.DOWN: return this.down();
     }
+
+    throw "sens is null!"
   }
 
   addReverseSens(sens: SENS) {
@@ -45,5 +47,7 @@ export default class Point extends PIXI.Point {
       case SENS.UP: return this.down();
       case SENS.DOWN: return this.up();
     }
+
+    throw "sens is null!"
   }
 }
