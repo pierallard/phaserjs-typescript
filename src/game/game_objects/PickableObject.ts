@@ -4,6 +4,7 @@ import Player from "../Player";
 import {COLOR, Level} from "../levels/Level";
 import Point from "../Point";
 import Game = Phaser.Game;
+import {Mouth} from "./Mouth";
 
 export abstract class PickableObject extends GameObject {
   animateEnd(game: Game, level: Level, actor: GameObject, endPosition: Point) {
@@ -20,6 +21,10 @@ export class Chip extends PickableObject {
     super(game, x, y, objectGroup);
 
     this.sprite.frame = 74;
+  }
+
+  canActorGoToMe(actor: GameObject, endPosition: Point, level: Level): boolean {
+    return !(actor instanceof Mouth);
   }
 }
 

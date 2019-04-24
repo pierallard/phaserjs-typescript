@@ -5,6 +5,7 @@ import EmptyCell from "./EmptyCell";
 import {Level} from "../levels/Level";
 import Point from "../Point";
 import Game = Phaser.Game;
+import {GameObject} from "../game_objects/GameObject";
 
 export class ExitDoor extends Cell {
   constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
@@ -13,8 +14,8 @@ export class ExitDoor extends Cell {
     this.sprite.frame = 70;
   }
 
-  canActorGoToMe(player: Player): boolean {
-    return player.canExit();
+  canActorGoToMe(player: GameObject): boolean {
+    return player instanceof Player && player.canExit();
   }
 
   animatePlayerBegin(game: Game, level: Level, player: Player, endPosition: Point) {

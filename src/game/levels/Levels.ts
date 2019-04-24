@@ -358,5 +358,42 @@ export const LEVELS: LevelDescriptor[] = [
     ],
     chips: 3,
     actions: []
+  }, {
+    map: [
+      'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+      'XccccccccccccccccccccccccccccccX',
+      'XccccccccccccccccccccccccccccccX',
+      'XccccccccccccccccccccccccccccccX',
+      'XccccXcccccccXXXXXXcccccccXccccX',
+      'XcccXXccccccccccccccccccccXXcccX',
+      'XccccccccccccccccccccccccccccccX',
+      'XccccccccccccccccccccccccccccccX',
+      'Xccccccx       P        cccccccX',
+      'Xccccccx cccccccccccccc cccccccX',
+      'Xccccccx cccccccccccccc cccccccX',
+      'Xccccccx cccccccccccccc cccccccX',
+      'Xccccccx cccccccccccccc cccccccX',
+      'XcccXccx cccccccccccccc cccXcccX',
+      'XcccXccx cccccXDDXccccc cccXcccX',
+      'XcccXccx cccccXEEXccccc cccXcccX',
+      'XcccXccx cccccXEEXccccc cccXcccX',
+      'XcccXccx cccccXDDXccccc cccXcccX',
+      'XcccXccx cccccccccccccc cccXcccX',
+      'Xccccccx cccccccccccccc cccccccX',
+      'Xccccccx cccccccccccccc cccccccX',
+      'Xccccccx cccccccccccccc cccccccX',
+      'Xccccccx cccccccccccccc cccccccX',
+      'Xccccccx       dd       cccccccX',
+      'XccccccccccccccccccccccccccccccX',
+      'XccccccccccccccccccccccccccccccX',
+      'XcccXXccccccccccccccccccccXXcccX',
+      'XccccXcccccccXXXXXXcccccccXccccX',
+      'XccccccccccccccccccccccccccccccX',
+      'XccccccccccccccccccccccccccccccX',
+      'XccccccccccccccccccccccccccccccX',
+      'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+    ],
+    chips: 652,
+    actions: []
   }
 ];

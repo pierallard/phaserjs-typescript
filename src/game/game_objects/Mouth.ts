@@ -15,8 +15,11 @@ export class Mouth extends GameObject {
     this.sprite.animations.add('DEFAULT', [200, 201, 202, 203]);
   }
 
-  isToxic(): boolean {
-    return true;
+  canActorGoToMe(actor: GameObject, endPosition: Point, level: Level): boolean {
+    if (actor === this) {
+      return true;
+    }
+    return !(actor instanceof Mouth);
   }
 
   update(game: Game, level: Level) {
