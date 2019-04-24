@@ -75,7 +75,7 @@ export default class Player extends GameObject {
     }
 
     const pressedKey = this.pressedKeys.length > 0;
-    const forceCell = this.level.getCellAt(this.position).forceCell(this);
+    const forceCell = this.level.getCellAt(this.position).forceCell(this, level);
     const isForceCell = forceCell && (
       this.level.getCellAt(this.position) instanceof ForceBottomCell ||
       this.level.getCellAt(this.position) instanceof ForceRightCell ||
@@ -86,7 +86,7 @@ export default class Player extends GameObject {
       this.level.getCellAt(this.position) instanceof Teleport);
 
     if (isIceCell || isForceCell && this.lastMove === MOVES.NORMAL || isForceCell && this.lastMove === MOVES.FORCED && !pressedKey) {
-      this.animeByForce(game);
+      this.animeByForce(game, level);
     } else if (pressedKey) {
       this.animeByKey(game);
     }
@@ -297,9 +297,9 @@ export default class Player extends GameObject {
     }
   }
 
-  private animeByForce(game) {
+  private animeByForce(game, level: Level) {
     this.lastMove = MOVES.FORCED;
-    const forceCell = this.level.getCellAt(this.position).forceCell(this);
+    const forceCell = this.level.getCellAt(this.position).forceCell(this, level);
     this.runAnimation(game, forceCell, false, TIME / 2);
   }
 }

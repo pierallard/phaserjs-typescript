@@ -4,8 +4,20 @@ import Point from "../Point";
 import {Cell} from "./Cell";
 import Group = Phaser.Group;
 import {ForceBoots} from "../game_objects/PickableObject";
+import {GameObject} from "../game_objects/GameObject";
+import FireBall from "../game_objects/FireBall";
 
-export class ForceTopCell extends Cell {
+abstract class ForceCell extends Cell {
+  canActorGoToMe(actor: GameObject): boolean {
+    if (actor instanceof FireBall) {
+      return false;
+    }
+
+    return true;
+  }
+}
+
+export class ForceTopCell extends ForceCell {
   constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
     super(game, x, y, groundGroup);
 
@@ -21,7 +33,7 @@ export class ForceTopCell extends Cell {
   }
 }
 
-export class ForceBottomCell extends Cell {
+export class ForceBottomCell extends ForceCell {
   constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
     super(game, x, y, groundGroup);
 
@@ -37,7 +49,7 @@ export class ForceBottomCell extends Cell {
   }
 }
 
-export class ForceLeftCell extends Cell {
+export class ForceLeftCell extends ForceCell {
   constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
     super(game, x, y, groundGroup);
 
@@ -53,7 +65,7 @@ export class ForceLeftCell extends Cell {
   }
 }
 
-export class ForceRightCell extends Cell {
+export class ForceRightCell extends ForceCell {
   constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
     super(game, x, y, groundGroup);
 

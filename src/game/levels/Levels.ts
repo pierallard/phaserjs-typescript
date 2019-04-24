@@ -321,5 +321,42 @@ export const LEVELS: LevelDescriptor[] = [
     ],
     chips: 0,
     actions: []
+  }, {
+    map: [
+      'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+      'Xc     IIIIIIIIIIIIIIIIII    D  ',
+      'XXXXXXXXXXXXXXXIXXXXXXXXXXXXXXX ',
+      'Xc     WWWWWWWXIXFFFFFFFF    cX ',
+      'XXXXXXXXXXXXXWXIXFXXXXXXXXXXXXX ',
+      'XXXXXXXXXXXXXWXIXFXXXXXXXXXXXXX ',
+      'X       X   XWXIXFX           X ',
+      'X XXXXX2X X XWXIXFX XXXXXXXXX X ',
+      'X   X   X X XWXIXFX   X       X ',
+      'XXX X&r X X XWXIXFXXX X XXXXX8X ',
+      'X   X   X X XWXIXFX   X X   6 X ',
+      'X XXX2XXX X XWXIXFX XXX X beX X ',
+      'X X       X XWXIXFX X 4 6   X X ',
+      'X X XXX8XXX XWXIXFX X XXXXXXX X ',
+      'X X X   X   XWXIXFX 4 X   X   X ',
+      'X X X X2X2XXXWXIXFXXX X X X XXX ',
+      'X   X X   XwB     RfX   X X   X ',
+      'X XXX XXX XXX  P  XXXXXXX8XXX X ',
+      'X2X   6 X   4     6         X X ',
+      'X X XXX XXX2X8XYX2XXX XXXXX8X X ',
+      'X 6 X X X   X XiX X   X     X X ',
+      'X X XXX X XXX XXX X XXX X XXX X ',
+      'X X 6   X   6     X   4 X2X   X ',
+      'X XXX XXXXX X XXXXXXX X X X XXX ',
+      'X   X X 6   X X   4   X X 4 XE  ',
+      'X X X X X XXX X XXXXXXX X XXXXXX',
+      'X X X   X X 6    4  X   X     XX',
+      'X2X XXXXX X XXXXXXX X XXXXXXX XX',
+      'X X       X   X   X X       X2XX',
+      'X XXXXXXX8XXX Xay X XXXXXXX8X XX',
+      'X          6  O   O   6       XX',
+      'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+    ],
+    chips: 3,
+    actions: []
   }
 ];

@@ -7,7 +7,7 @@ import Point from "../Point";
 import Game = Phaser.Game;
 
 export default class FireBall extends GameObject {
-  private static ORDER: SENS[] = [SENS.UP, SENS.LEFT, SENS.DOWN, SENS.RIGHT];
+  private static ORDER: SENS[] = [SENS.UP, SENS.RIGHT, SENS.DOWN, SENS.LEFT];
   private isMoving: boolean;
 
   constructor(game: Phaser.Game, x: number, y: number, objectGroup: Phaser.Group, sens: SENS) {

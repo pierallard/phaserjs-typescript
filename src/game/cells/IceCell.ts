@@ -4,6 +4,7 @@ import Point from "../Point";
 import {Cell} from "./Cell";
 import Group = Phaser.Group;
 import {IceBoots} from "../game_objects/PickableObject";
+import {Level} from "../levels/Level";
 
 export default class IceCell extends Cell {
   constructor(game: Phaser.Game, x: number, y: number, groundGroup: Group) {
@@ -12,7 +13,7 @@ export default class IceCell extends Cell {
     this.sprite.frame = 17;
   }
 
-  forceCell(player: Player): Point {
+  protected subForceCell(player: Player): Point {
     if (player.has(IceBoots)) {
       return null;
     }
@@ -23,6 +24,15 @@ export default class IceCell extends Cell {
       case SENS.RIGHT: return this.position.right();
     }
   }
+
+  forceCell(player: Player, level: Level) {
+    const forceCell = this.subForceCell(player);
+    if (forceCell !== null && !level.isMoveAllowed(player, player.getPosition(), forceCell)) {
+      return player.getPosition().addReverseSens(player.getSens());
+    }
+
+    return forceCell;
+  }
 }
 
 export class IceCellBottomLeft extends IceCell {
@@ -32,7 +42,7 @@ export class IceCellBottomLeft extends IceCell {
     this.sprite.frame = 19;
   }
 
-  forceCell(player: Player): Point {
+  protected subForceCell(player: Player): Point {
     if (player.has(IceBoots)) {
       return null;
     }
@@ -52,7 +62,7 @@ export class IceCellTopLeft extends IceCell {
     this.sprite.frame = 21;
   }
 
-  forceCell(player: Player): Point {
+  protected subForceCell(player: Player): Point {
     if (player.has(IceBoots)) {
       return null;
     }
@@ -72,7 +82,7 @@ export class IceCellBottomRight extends IceCell {
     this.sprite.frame = 18;
   }
 
-  forceCell(player: Player): Point {
+  protected subForceCell(player: Player): Point {
     if (player.has(IceBoots)) {
       return null;
     }
@@ -92,7 +102,7 @@ export class IceCellTopRight extends IceCell {
     this.sprite.frame = 20;
   }
 
-  forceCell(player: Player): Point {
+  protected subForceCell(player: Player): Point {
     if (player.has(IceBoots)) {
       return null;
     }

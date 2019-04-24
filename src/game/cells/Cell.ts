@@ -36,7 +36,7 @@ export abstract class Cell {
   animatePlayerBegin(game: Game, level: Level, player: Player, endPosition: Point) {
   }
 
-  forceCell(player: Player): Point {
+  forceCell(player: Player, level: Level): Point {
     return null;
   }
 
