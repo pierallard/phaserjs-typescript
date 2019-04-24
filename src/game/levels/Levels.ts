@@ -283,5 +283,43 @@ export const LEVELS: LevelDescriptor[] = [
       [[28, 5], [27, 3]]
     ],
     chips: 9,
+  }, {
+    map: [
+      ' F XXXXXXXXXXXXXXX XXX F XXXXX  ',
+      'XPX               X   F X     F ',
+      'X X X  XXXXXXXX F X F   X F F  X',
+      'X X X X        F   F F  X  F X X',
+      'X  F  X  XX  F        F X    X X',
+      'X     X X  F  X XXX  F   XXXX  X',
+      'X F XX  X F  XX    F  F        X',
+      'X  F X  X  F   XXXX  X  X  F F X',
+      ' X    F X F F        X  X X F F ',
+      ' XXX X  X  F F XXXXXXXXX  X    X',
+      'X    X  X                 X F  X',
+      'X X F  X X X XXXXXXXXXXXX X  F X',
+      'X X  F X  X X            F  F  X',
+      'X X F          F F F F    F  F X',
+      'X X  XXXXXXX XX F F F F  F  F  X',
+      'X X         F          X  F  X X',
+      'X X  F F F F   F F F F X F F X X',
+      'X  XX F F F F X F F F  X  F  X X',
+      'X             X     EF X F   X X',
+      'X XXXX XXXXXXX   XXXX  X  F F  X',
+      'X     F         X      X F   X X',
+      ' XXX   XXXXXXX  X XXX  X  XX X X',
+      'X   X         F X    X X     X X',
+      'X X X XX XX  F  X F XX X F F X X',
+      'X X X   X  F  F  F F  F F F F  X',
+      'X X X F X F  X               F X',
+      'X  F F  X    XXXXXXXXXXXX XXX  X',
+      'Xa       XXXX                  X',
+      'X F F F F      XXXXXXXXXXXXXXX X',
+      ' F F F F   XXXX                X',
+      'F         F     F F F F F F F F ',
+      ' XXXXXXXXX XXXXX F F F F F F F  '
+
+    ],
+    chips: 0,
+    actions: []
   }
 ];

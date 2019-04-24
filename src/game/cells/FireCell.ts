@@ -31,4 +31,8 @@ export class FireCell extends Cell {
       level.destroyObject(actor);
     }
   }
+
+  canActorGoToMe(actor: GameObject): boolean {
+    return actor instanceof Player;
+  }
 }
