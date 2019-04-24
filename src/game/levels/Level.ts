@@ -200,30 +200,16 @@ export class Level {
     return new Point(0, 0);
   }
 
-  canPlayerMoveTo(actor: GameObject, sourcePosition: Point, endPosition: Point) {
-    if (!this.cells[endPosition.y][endPosition.x].canPlayerGoTo(actor)) {
+  isMoveAllowed(actor: GameObject, sourcePosition: Point, endPosition: Point) {
+    if (!this.cells[endPosition.y][endPosition.x].canActorGoToMe(actor)) {
       return false;
     }
-    if (!this.cells[sourcePosition.y][sourcePosition.x].canPlayerGoOut(this, actor, endPosition)) {
+    if (!this.cells[sourcePosition.y][sourcePosition.x].canActorGoOutOfMe(this, actor, endPosition)) {
       return false;
     }
     for (let i = 0; i < this.objects.length; i++) {
       if (this.objects[i].getPosition().equals(endPosition)) {
-        return this.objects[i].canPlayerGoTo(actor, endPosition, this);
-      }
-    }
-
-    return true;
-  }
-
-  canPackGoTo(player: GameObject, endPosition: Point) {
-    if (!this.cells[endPosition.y][endPosition.x].canPackGoTo(player)) {
-      return false;
-    }
-
-    for (let i = 0; i < this.objects.length; i++) {
-      if (this.objects[i].getPosition().equals(endPosition)) {
-        return this.objects[i].canPackGoTo(player, endPosition, this);
+        return this.objects[i].canActorGoToMe(actor, endPosition, this);
       }
     }
 
@@ -329,17 +315,6 @@ export class Level {
     this.objects.forEach((o) => {
       o.update(game, this);
     })
-  }
-
-  canMonsterGo(sourcePosition: Point, newPosition: Point) {
-    if (!this.cells[newPosition.y][newPosition.x].isFreeForMonster()) {
-      return false;
-    }
-    if (!this.cells[sourcePosition.y][sourcePosition.x].canPlayerGoOut(this, null, newPosition)) {
-      return false;
-    }
-
-    return true;
   }
 
   switchWalls() {

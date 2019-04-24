@@ -23,8 +23,4 @@ export class BuildingWall extends Cell {
   canPlayerGoTo(player: Player) {
     return !this.isBuilt;
   }
-
-  isFreeForMonster() {
-    return !this.isBuilt;
-  }
 }

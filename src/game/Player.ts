@@ -191,7 +191,7 @@ export default class Player extends GameObject {
     if (point.y >= GROUND_SIZE) {
       return false;
     }
-    return this.level.canPlayerMoveTo(this, this.position, point);
+    return this.level.isMoveAllowed(this, this.position, point);
   }
 
   hasKey(color: COLOR) {
@@ -249,14 +249,6 @@ export default class Player extends GameObject {
     return this.bag.filter((b: PickableObject) => {
       return b instanceof klass;
     }).length > 0;
-  }
-
-  canPlayerGoTo(player: GameObject, endPosition: PIXI.Point, level: Level): boolean {
-    return false; // TODO Heritage from GameObject
-  }
-
-  canPackGoTo(player: GameObject, endPosition: Point, level: Level): boolean {
-    return false; // TODO Heritage from GameObject
   }
 
   animateEnd(game: Game, level: Level, actor: GameObject, endPosition: Point) {

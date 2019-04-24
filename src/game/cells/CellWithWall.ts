@@ -11,7 +11,7 @@ export class CellWithWallUp extends Cell {
     this.sprite.frame = 47;
   }
 
-  canPlayerGoOut(level: Level, player: GameObject, endPosition: Point): boolean {
+  canActorGoOutOfMe(level: Level, player: GameObject, endPosition: Point): boolean {
     return !player.getPosition().up().equals(endPosition);
   }
 }
@@ -23,7 +23,7 @@ export class CellWithWallLeft extends Cell {
     this.sprite.frame = 48;
   }
 
-  canPlayerGoOut(level: Level, player: GameObject, endPosition: Point): boolean {
+  canActorGoOutOfMe(level: Level, player: GameObject, endPosition: Point): boolean {
     return !player.getPosition().left().equals(endPosition);
   }
 }
@@ -35,7 +35,7 @@ export class CellWithWallDown extends Cell {
     this.sprite.frame = 49;
   }
 
-  canPlayerGoOut(level: Level, player: GameObject, endPosition: Point): boolean {
+  canActorGoOutOfMe(level: Level, player: GameObject, endPosition: Point): boolean {
     return !player.getPosition().down().equals(endPosition);
   }
 }
@@ -47,7 +47,7 @@ export class CellWithWallRight extends Cell {
     this.sprite.frame = 50;
   }
 
-  canPlayerGoOut(level: Level, player: GameObject, endPosition: Point): boolean {
+  canActorGoOutOfMe(level: Level, player: GameObject, endPosition: Point): boolean {
     return !player.getPosition().right().equals(endPosition);
   }
 }

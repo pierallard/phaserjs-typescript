@@ -41,7 +41,7 @@ export default class Tank extends GameObject {
         this.setFrame();
 
         const newPosition = this.sens === SENS.UP ? this.position.up() : this.position.down();
-        if (!level.canMonsterGo(this.position, newPosition)) {
+        if (!level.isMoveAllowed(this, this.position, newPosition)) {
           this.isMoving = false;
           this.isSwitching = false;
           return;

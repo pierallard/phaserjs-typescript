@@ -21,16 +21,16 @@ export class Ghost extends GameObject {
     if (!this.isMoving) {
       this.isMoving = true;
       let newPosition = this.position.addSens(this.sens);
-      if (!level.canMonsterGo(this.position, newPosition)) {
+      if (!level.isMoveAllowed(this, this.position, newPosition)) {
         this.sens = Ghost.ORDER[(Ghost.ORDER.indexOf(this.sens) + 1) % Ghost.ORDER.length];
         newPosition = this.position.addSens(this.sens);
-        if (!level.canMonsterGo(this.position, newPosition)) {
+        if (!level.isMoveAllowed(this, this.position, newPosition)) {
           this.sens = Ghost.ORDER[(Ghost.ORDER.indexOf(this.sens) + 1) % Ghost.ORDER.length];
           newPosition = this.position.addSens(this.sens);
-          if (!level.canMonsterGo(this.position, newPosition)) {
+          if (!level.isMoveAllowed(this, this.position, newPosition)) {
             this.sens = Ghost.ORDER[(Ghost.ORDER.indexOf(this.sens) + 1) % Ghost.ORDER.length];
             newPosition = this.position.addSens(this.sens);
-            if (!level.canMonsterGo(this.position, newPosition)) {
+            if (!level.isMoveAllowed(this, this.position, newPosition)) {
               this.sens = Ghost.ORDER[(Ghost.ORDER.indexOf(this.sens) + 1) % Ghost.ORDER.length];
               this.isMoving = false;
               return;

@@ -1,4 +1,5 @@
 import {Cell} from "./Cell";
+import {GameObject} from "../game_objects/GameObject";
 
 export class Concrete extends Cell {
   constructor(game: Phaser.Game, x: number, y: number, groundGroup: Phaser.Group) {
@@ -7,7 +8,7 @@ export class Concrete extends Cell {
     this.sprite.frame = 22;
   }
 
-  isFreeForMonster(): boolean {
+  canActorGoToMe(player: GameObject): boolean {
     return false;
   }
 }

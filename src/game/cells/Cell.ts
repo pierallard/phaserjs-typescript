@@ -23,7 +23,7 @@ export abstract class Cell {
     return true;
   }
 
-  canPlayerGoOut(level: Level, player: GameObject, endPosition: Point) {
+  canActorGoOutOfMe(level: Level, player: GameObject, endPosition: Point) {
     return true;
   }
 
@@ -44,8 +44,8 @@ export abstract class Cell {
     return this.canPlayerGoTo(player);
   }
 
-  isFreeForMonster(): boolean {
-    return true;
+  canActorGoToMe(monster: GameObject): boolean {
+    return this.canPlayerGoTo(monster);
   }
 
   forceCell(player: Player): Point {

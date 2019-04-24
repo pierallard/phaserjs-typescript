@@ -35,16 +35,16 @@ export default class FireBall extends GameObject {
     if (!this.isMoving) {
       this.isMoving = true;
       let newPosition = this.position.addSens(this.sens);
-      if (!level.canMonsterGo(this.position, newPosition)) {
+      if (!level.isMoveAllowed(this, this.position, newPosition)) {
         this.sens = FireBall.ORDER[(FireBall.ORDER.indexOf(this.sens) + 1) % FireBall.ORDER.length];
         newPosition = this.position.addSens(this.sens);
-        if (!level.canMonsterGo(this.position, newPosition)) {
+        if (!level.isMoveAllowed(this, this.position, newPosition)) {
           this.sens = FireBall.ORDER[(FireBall.ORDER.indexOf(this.sens) + 1) % FireBall.ORDER.length];
           newPosition = this.position.addSens(this.sens);
-          if (!level.canMonsterGo(this.position, newPosition)) {
+          if (!level.isMoveAllowed(this, this.position, newPosition)) {
             this.sens = FireBall.ORDER[(FireBall.ORDER.indexOf(this.sens) + 1) % FireBall.ORDER.length];
             newPosition = this.position.addSens(this.sens);
-            if (!level.canMonsterGo(this.position, newPosition)) {
+            if (!level.isMoveAllowed(this, this.position, newPosition)) {
               this.sens = FireBall.ORDER[(FireBall.ORDER.indexOf(this.sens) + 1) % FireBall.ORDER.length];
               this.isMoving = false;
               return;

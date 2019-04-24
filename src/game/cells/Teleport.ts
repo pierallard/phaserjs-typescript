@@ -28,7 +28,7 @@ export class Teleport extends Cell {
     let y = this.position.y;
     while (!(
       level.getCellAt(new Point(x, y)) instanceof Teleport &&
-      level.canPlayerMoveTo(actor, new Point(x, y), (new Point(x, y)).addSens(actor.getSens()))
+      level.isMoveAllowed(actor, new Point(x, y), (new Point(x, y)).addSens(actor.getSens()))
     )) {
       x = x - 1;
       if (x < 0) {

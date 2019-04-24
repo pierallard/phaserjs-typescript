@@ -55,7 +55,7 @@ export class Mouth extends GameObject {
       this.position.right()
     ];
     const availablePositions = possiblePositions.filter((position) => {
-      return level.canMonsterGo(this.position, position);
+      return level.isMoveAllowed(this, this.position, position);
     });
     const sortedPositions = availablePositions.sort((pos1: Point, pos2: Point) => {
       return Mouth.getDist(level.getPlayer().getPosition(), pos1) - Mouth.getDist(level.getPlayer().getPosition(), pos2);

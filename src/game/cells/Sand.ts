@@ -18,7 +18,7 @@ export class Sand extends Cell {
     this.sprite.frame = 0;
   }
 
-  isFreeForMonster(): boolean {
+  canActorGoToMe(): boolean {
     return !this.dirty;
   }
 }

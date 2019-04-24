@@ -12,8 +12,4 @@ export default class WallCell extends Cell {
   canPlayerGoTo(player: Player) {
     return false;
   }
-
-  isFreeForMonster() {
-    return false;
-  }
 }

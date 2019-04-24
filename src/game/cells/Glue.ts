@@ -12,7 +12,7 @@ export class Glue extends Cell {
     this.sprite.frame = 36;
   }
 
-  canPlayerGoOut(level: Level, player: Player) {
+  canActorGoOutOfMe(level: Level, player: Player) {
     if (!this.source) {
       console.log('Unknown Glue source at ' + this.position.x + ', ' + this.position.y);
       return;

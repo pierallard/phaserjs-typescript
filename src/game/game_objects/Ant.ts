@@ -37,19 +37,19 @@ export default class Ant extends GameObject {
       let sens = this.sens;
       let newPosition = this.getNewCell(sens);
       this.sens = Ant.ORDER[(Ant.ORDER.indexOf(this.sens) + 1) % Ant.ORDER.length];
-      if (!level.canMonsterGo(this.position, newPosition)) {
+      if (!level.isMoveAllowed(this, this.position, newPosition)) {
         sens = Ant.ORDER[(Ant.ORDER.indexOf(sens) + 3) % Ant.ORDER.length];
         newPosition = this.getNewCell(sens);
         this.sens = Ant.ORDER[(Ant.ORDER.indexOf(this.sens) + 3) % Ant.ORDER.length];
-        if (!level.canMonsterGo(this.position, newPosition)) {
+        if (!level.isMoveAllowed(this, this.position, newPosition)) {
           sens = Ant.ORDER[(Ant.ORDER.indexOf(sens) + 3) % Ant.ORDER.length];
           newPosition = this.getNewCell(sens);
           this.sens = Ant.ORDER[(Ant.ORDER.indexOf(this.sens) + 3) % Ant.ORDER.length];
-          if (!level.canMonsterGo(this.position, newPosition)) {
+          if (!level.isMoveAllowed(this, this.position, newPosition)) {
             sens = Ant.ORDER[(Ant.ORDER.indexOf(sens) + 3) % Ant.ORDER.length];
             newPosition = this.getNewCell(sens);
             this.sens = Ant.ORDER[(Ant.ORDER.indexOf(this.sens) + 3) % Ant.ORDER.length];
-            if (!level.canMonsterGo(this.position, newPosition)) {
+            if (!level.isMoveAllowed(this, this.position, newPosition)) {
               newPosition = this.getPosition();
               this.sens = Ant.ORDER[(Ant.ORDER.indexOf(this.sens) + 3) % Ant.ORDER.length];
             }
@@ -80,5 +80,8 @@ export default class Ant extends GameObject {
       case SENS.RIGHT: return this.position.up();
     }
   }
-}
 
+  canActorGoToMe(actor: GameObject, endPosition: PIXI.Point, level: Level): boolean {
+    return !(actor instanceof Ant);
+  }
+}
