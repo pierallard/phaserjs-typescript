@@ -1,4 +1,4 @@
-/// <reference path="../lib/phaser.d.ts"/>
+/// <reference path="../dist/lib/phaser.d.ts"/>
 
 import Boot from "./game/game_state/Boot";
 import Preload from "./game/game_state/Preload";
